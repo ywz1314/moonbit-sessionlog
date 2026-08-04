@@ -1,0 +1,28 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "PaiGack/sessionlog/lib/validation"
+
+import {
+  "PaiGack/sessionlog/lib/core",
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+}
+
+// Values
+pub fn validate_session(@core.Session) -> Array[ValidationError]
+
+// Errors
+
+// Types and methods
+pub enum ValidationError {
+  InvalidPain(String, Int)
+  InvalidRPE(String, Int)
+  InvalidReps(String, Int)
+  InvalidDuration(Int)
+  InvalidCompletion(String, Double)
+  InvalidDate(String)
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+
+// Type aliases
+
+// Traits
+

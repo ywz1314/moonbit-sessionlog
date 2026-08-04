@@ -1,0 +1,36 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "PaiGack/sessionlog/lib/progression"
+
+import {
+  "PaiGack/sessionlog/lib/core",
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+}
+
+// Values
+pub fn analyze_progression(@core.Movement) -> ProgressionAdvice
+
+// Errors
+
+// Types and methods
+pub(all) struct ProgressionAdvice {
+  movement_name : String
+  state : ProgressionState
+  reason : String
+  suggested_reps : Int
+  suggested_sets : Int
+  suggested_resistance : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub impl Show for ProgressionAdvice
+
+pub(all) enum ProgressionState {
+  Progression
+  Maintenance
+  Regression
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub impl Show for ProgressionState
+
+// Type aliases
+
+// Traits
+
