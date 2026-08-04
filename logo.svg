@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <!-- Background -->
+  <rect width="512" height="512" rx="96" fill="#0f172a"/>
+  
+  <!-- Outer glowing ring representing tracking/loops -->
+  <circle cx="256" cy="256" r="180" fill="none" stroke="url(#ringGradient)" stroke-width="24" stroke-linecap="round" stroke-dasharray="800 300"/>
+  
+  <!-- Inner digital grid pattern (subtle) -->
+  <circle cx="256" cy="256" r="130" fill="none" stroke="#334155" stroke-width="2" stroke-dasharray="5 5"/>
+  <line x1="256" y1="126" x2="256" y2="386" stroke="#334155" stroke-width="2" stroke-dasharray="5 5"/>
+  <line x1="126" y1="256" x2="386" y2="256" stroke="#334155" stroke-width="2" stroke-dasharray="5 5"/>
+
+  <!-- Stylized rehabilitation/recovery figure pathway (pain -> recovery) -->
+  <!-- Left curve (Pain/Red-Orange) rising to Right curve (Recovery/Green-Teal) -->
+  <path d="M 160 360 C 160 220, 240 180, 256 180 C 272 180, 352 220, 352 360" fill="none" stroke="url(#spineGradient)" stroke-width="32" stroke-linecap="round"/>
+  
+  <!-- Stylized joints/progress nodes -->
+  <!-- Low pain/stable joint (green) -->
+  <circle cx="256" cy="180" r="20" fill="#0ea5e9" filter="url(#glow)"/>
+  
+  <!-- Left joint (moderate pain - orange) -->
+  <circle cx="190" cy="270" r="14" fill="#f97316"/>
+  
+  <!-- Right joint (fully recovered - green) -->
+  <circle cx="322" cy="270" r="14" fill="#10b981" filter="url(#glow)"/>
+
+  <!-- Gradients and filters -->
+  <defs>
+    <!-- Glow filter -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    
+    <!-- Outer ring gradient (Teal to Blue) -->
+    <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0ea5e9"/>
+      <stop offset="100%" stop-color="#10b981"/>
+    </linearGradient>
+    
+    <!-- Spine/pathway gradient (Red/Orange representing pain to Green/Teal representing recovery) -->
+    <linearGradient id="spineGradient" x1="0%" y1="100%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ef4444"/>
+      <stop offset="40%" stop-color="#f97316"/>
+      <stop offset="70%" stop-color="#0ea5e9"/>
+      <stop offset="100%" stop-color="#10b981"/>
+    </linearGradient>
+  </defs>
+</svg>
