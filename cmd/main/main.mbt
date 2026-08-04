@@ -92,6 +92,11 @@ fn main {
         " -> " +
         s2.pain_after.to_string(),
       )
+      println("  Total reps completed: " + s2.total_reps().to_string())
+      println(
+        "  Average pain during exercises: " +
+        s2.average_pain_during().to_string(),
+      )
 
       // 3. Run validation
       println("\n--- [3] Validating V2 Log ---")
