@@ -23,10 +23,25 @@ fn main {
       println("  ID: " + s1.id)
       println("  Date: " + s1.date)
       println("  Duration: " + s1.duration.to_string() + " mins")
-      println("  Pain (before -> after): " + s1.pain_before.to_string() + " -> " + s1.pain_after.to_string())
-      println("  Migrated movements count: " + s1.movements.length().to_string())
+      println(
+        "  Pain (before -> after): " +
+        s1.pain_before.to_string() +
+        " -> " +
+        s1.pain_after.to_string(),
+      )
+      println(
+        "  Migrated movements count: " + s1.movements.length().to_string(),
+      )
       for m in s1.movements {
-        println("    - Movement: " + m.name + " (Default pain: " + m.pain.to_string() + ", RPE: " + m.rpe.to_string() + ")")
+        println(
+          "    - Movement: " +
+          m.name +
+          " (Default pain: " +
+          m.pain.to_string() +
+          ", RPE: " +
+          m.rpe.to_string() +
+          ")",
+        )
       }
     }
     Err(e) => println("Error parsing V1: " + e)
@@ -71,15 +86,24 @@ fn main {
       println("  ID: " + s2.id)
       println("  Date: " + s2.date)
       println("  Duration: " + s2.duration.to_string() + " mins")
-      println("  Pain (before -> after): " + s2.pain_before.to_string() + " -> " + s2.pain_after.to_string())
-      
+      println(
+        "  Pain (before -> after): " +
+        s2.pain_before.to_string() +
+        " -> " +
+        s2.pain_after.to_string(),
+      )
+
       // 3. Run validation
       println("\n--- [3] Validating V2 Log ---")
       let errors = @validation.validate_session(s2)
       if errors.length() == 0 {
         println("Validation check: PASS (0 errors found)")
       } else {
-        println("Validation check: FAILED (" + errors.length().to_string() + " errors found)")
+        println(
+          "Validation check: FAILED (" +
+          errors.length().to_string() +
+          " errors found)",
+        )
         for err in errors {
           println("  - Error: " + err.to_json().stringify())
         }
@@ -90,11 +114,30 @@ fn main {
       for m in s2.movements {
         let advice = @progression.analyze_progression(m)
         println("  Movement: " + m.name)
-        println("    Current load: " + m.sets.length().to_string() + " sets x " + (if m.sets.length() > 0 { m.sets[0].reps.to_string() } else { "0" }) + " reps @ " + (if m.sets.length() > 0 { m.sets[0].resistance } else { "None" }))
-        println("    Pain during: " + m.pain.to_string() + ", RPE: " + m.rpe.to_string())
+        println(
+          "    Current load: " +
+          m.sets.length().to_string() +
+          " sets x " +
+          (if m.sets.length() > 0 { m.sets[0].reps.to_string() } else { "0" }) +
+          " reps @ " +
+          (if m.sets.length() > 0 { m.sets[0].resistance } else { "None" }),
+        )
+        println(
+          "    Pain during: " +
+          m.pain.to_string() +
+          ", RPE: " +
+          m.rpe.to_string(),
+        )
         println("    Recommendation: " + advice.state.to_json().stringify())
         println("    Reason: " + advice.reason)
-        println("    Suggested next: " + advice.suggested_sets.to_string() + " sets x " + advice.suggested_reps.to_string() + " reps @ " + advice.suggested_resistance)
+        println(
+          "    Suggested next: " +
+          advice.suggested_sets.to_string() +
+          " sets x " +
+          advice.suggested_reps.to_string() +
+          " reps @ " +
+          advice.suggested_resistance,
+        )
         println("")
       }
     }

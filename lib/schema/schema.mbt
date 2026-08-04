@@ -52,12 +52,7 @@ pub fn SessionV2::from_core_session(session : @core.Session) -> SessionV2 {
 pub fn SessionV1::migrate_to_v2(self : SessionV1) -> @core.Session {
   let movements = []
   for mv_name in self.movements {
-    let m = @core.Movement::{
-      name: mv_name,
-      sets: [],
-      pain: 0,
-      rpe: 5
-    }
+    let m = @core.Movement::{ name: mv_name, sets: [], pain: 0, rpe: 5 }
     movements.push(m)
   }
   @core.Session::{
@@ -66,23 +61,24 @@ pub fn SessionV1::migrate_to_v2(self : SessionV1) -> @core.Session {
     duration: self.duration,
     pain_before: self.pain_before,
     pain_after: self.pain_after,
-    movements: movements,
+    movements,
     notes: self.notes,
   }
 }
 
 ///|
-pub fn parse_and_migrate_session(json_str : String) -> Result[@core.Session, String] {
+pub fn parse_and_migrate_session(
+  json_str : String,
+) -> Result[@core.Session, String] {
   try {
     let json = @json.parse(json_str)
     let mut version = 1
     match json {
-      Object(obj) => {
+      Object(obj) =>
         match obj.get("version") {
           Some(Number(v, ..)) => version = v.to_int()
           _ => ()
         }
-      }
       _ => return Err("Invalid JSON: expected a JSON object")
     }
     if version == 2 {

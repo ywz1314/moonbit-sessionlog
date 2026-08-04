@@ -1,6 +1,11 @@
 ///|
 test "session serialization and deserialization" {
-  let set1 = Set::{ reps: 10, hold_time: 5, resistance: "Yellow Band", completion: 1.0 }
+  let set1 = Set::{
+    reps: 10,
+    hold_time: 5,
+    resistance: "Yellow Band",
+    completion: 1.0,
+  }
   let mv1 = Movement::{ name: "Squat", sets: [set1], pain: 3, rpe: 4 }
   let session = Session::{
     id: "s-001",
@@ -9,9 +14,9 @@ test "session serialization and deserialization" {
     pain_before: 5,
     pain_after: 2,
     movements: [mv1],
-    notes: "Felt good after warm up"
+    notes: "Felt good after warm up",
   }
-  
+
   // Serialize
   let json = session.to_json()
   // Deserialize
