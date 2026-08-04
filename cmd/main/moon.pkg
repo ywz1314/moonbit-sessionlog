@@ -1,0 +1,7 @@
+// import {
+//   "PaiGack/sessionlog" @lib,
+// }
+
+options(
+  "is-main": true,
+)
