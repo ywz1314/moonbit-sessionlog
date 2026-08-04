@@ -24,3 +24,26 @@ pub(all) struct Session {
   movements : Array[Movement]
   notes : String
 } derive(Debug, Eq, ToJson, FromJson)
+
+///|
+pub fn Session::total_reps(self : Session) -> Int {
+  let mut total = 0
+  for m in self.movements {
+    for s in m.sets {
+      total = total + s.reps
+    }
+  }
+  total
+}
+
+///|
+pub fn Session::average_pain_during(self : Session) -> Double {
+  if self.movements.length() == 0 {
+    return 0.0
+  }
+  let mut sum = 0
+  for m in self.movements {
+    sum = sum + m.pain
+  }
+  sum.to_double() / self.movements.length().to_double()
+}
