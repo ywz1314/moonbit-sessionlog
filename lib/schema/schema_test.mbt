@@ -10,7 +10,7 @@ test "parse and migrate V1 session" {
     #|  "movements": ["Squat", "Leg Curl"],
     #|  "notes": "Version 1 log test"
     #|}
-  
+
   match @schema.parse_and_migrate_session(v1_json) {
     Ok(session) => {
       assert_eq(session.id, "s-v1-001")
@@ -56,7 +56,7 @@ test "parse V2 session" {
     #|  ],
     #|  "notes": "Version 2 log test"
     #|}
-  
+
   match @schema.parse_and_migrate_session(v2_json) {
     Ok(session) => {
       assert_eq(session.id, "s-v2-002")
@@ -79,7 +79,12 @@ test "parse V2 session" {
 
 ///|
 test "serialize to V2 JSON" {
-  let set1 = @core.Set::{ reps: 8, hold_time: 10, resistance: "10kg", completion: 0.8 }
+  let set1 = @core.Set::{
+    reps: 8,
+    hold_time: 10,
+    resistance: "10kg",
+    completion: 0.8,
+  }
   let mv1 = @core.Movement::{ name: "Deadlift", sets: [set1], pain: 4, rpe: 6 }
   let session = @core.Session::{
     id: "s-out",
@@ -88,12 +93,12 @@ test "serialize to V2 JSON" {
     pain_before: 3,
     pain_after: 3,
     movements: [mv1],
-    notes: "Export test"
+    notes: "Export test",
   }
-  
+
   let v2_struct = @schema.SessionV2::from_core_session(session)
   let json_str = v2_struct.to_json().stringify()
-  
+
   // Re-parse and verify
   match @schema.parse_and_migrate_session(json_str) {
     Ok(s) => {
