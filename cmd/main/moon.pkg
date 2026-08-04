@@ -1,6 +1,9 @@
-// import {
-//   "PaiGack/sessionlog" @lib,
-// }
+import {
+  "PaiGack/sessionlog/lib/core",
+  "PaiGack/sessionlog/lib/validation",
+  "PaiGack/sessionlog/lib/schema",
+  "PaiGack/sessionlog/lib/progression"
+}
 
 options(
   "is-main": true,
