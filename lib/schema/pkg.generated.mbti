@@ -1,0 +1,43 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "PaiGack/sessionlog/lib/schema"
+
+import {
+  "PaiGack/sessionlog/lib/core",
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+}
+
+// Values
+pub fn parse_and_migrate_session(String) -> Result[@core.Session, String]
+
+// Errors
+
+// Types and methods
+pub(all) struct SessionV1 {
+  id : String
+  date : String
+  duration : Int
+  pain_before : Int
+  pain_after : Int
+  movements : Array[String]
+  notes : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn SessionV1::migrate_to_v2(Self) -> @core.Session
+
+pub(all) struct SessionV2 {
+  version : Int
+  id : String
+  date : String
+  duration : Int
+  pain_before : Int
+  pain_after : Int
+  movements : Array[@core.Movement]
+  notes : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn SessionV2::from_core_session(@core.Session) -> Self
+pub fn SessionV2::to_core_session(Self) -> @core.Session
+
+// Type aliases
+
+// Traits
+

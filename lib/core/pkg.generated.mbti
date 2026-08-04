@@ -1,0 +1,43 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "PaiGack/sessionlog/lib/core"
+
+import {
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+}
+
+// Values
+
+// Errors
+
+// Types and methods
+pub(all) struct Movement {
+  name : String
+  sets : Array[Set]
+  pain : Int
+  rpe : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+
+pub(all) struct Session {
+  id : String
+  date : String
+  duration : Int
+  pain_before : Int
+  pain_after : Int
+  movements : Array[Movement]
+  notes : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn Session::average_pain_during(Self) -> Double
+pub fn Session::total_reps(Self) -> Int
+
+pub(all) struct Set {
+  reps : Int
+  hold_time : Int
+  resistance : String
+  completion : Double
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+
+// Type aliases
+
+// Traits
+
