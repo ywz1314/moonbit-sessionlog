@@ -1,8 +1,8 @@
 import {
-  "PaiGack/sessionlog/lib/core",
-  "PaiGack/sessionlog/lib/validation",
-  "PaiGack/sessionlog/lib/schema",
-  "PaiGack/sessionlog/lib/progression",
+  "ywzywz/sessionlog/lib/core",
+  "ywzywz/sessionlog/lib/validation",
+  "ywzywz/sessionlog/lib/schema",
+  "ywzywz/sessionlog/lib/progression",
 }
 
 options(

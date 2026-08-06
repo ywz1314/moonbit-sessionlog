@@ -9,7 +9,7 @@
 //   "moonbitlang/x@0.4.6",
 // }
 
-name = "PaiGack/sessionlog"
+name = "ywzywz/sessionlog"
 
 version = "0.1.0"
 

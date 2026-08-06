@@ -1,10 +1,10 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "PaiGack/sessionlog/lib/progression"
+package "ywzywz/sessionlog/lib/progression"
 
 import {
-  "PaiGack/sessionlog/lib/core",
   "moonbitlang/core/debug",
   "moonbitlang/core/json",
+  "ywzywz/sessionlog/lib/core",
 }
 
 // Values

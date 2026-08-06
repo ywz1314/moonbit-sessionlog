@@ -9,7 +9,7 @@ MoonBit康复训练日志模型 (Rehabilitation Session Log Model).
 
 ```
 moonbit-sessionlog/
-├── moon.mod               # 模块配置 (name = "PaiGack/sessionlog")
+├── moon.mod               # 模块配置 (name = "ywzywz/sessionlog")
 ├── LICENSE                # Apache-2.0 许可证
 ├── README.md              # 项目文档说明
 ├── .github/
