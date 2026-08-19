@@ -30,6 +30,14 @@ jobs:
           moon check --target all --deny-warn
           moon test --target native --deny-warn
 
+      - name: Configure Mooncakes credentials
+        env:
+          MOONCAKES_TOKEN: ${{ secrets.MOONCAKES_TOKEN }}
+        run: |
+          mkdir -p "$HOME/.moon"
+          printf '{"token":"%s"}\n' "$MOONCAKES_TOKEN" > "$HOME/.moon/credentials.json"
+          chmod 600 "$HOME/.moon/credentials.json"
+
       - name: Publish to Mooncakes
         env:
           MOONCAKES_TOKEN: ${{ secrets.MOONCAKES_TOKEN }}
