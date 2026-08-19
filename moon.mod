@@ -9,9 +9,9 @@
 //   "moonbitlang/x@0.4.6",
 // }
 
-name = "ywzywz/sessionlog"
+name = "ywz1314/sessionlog"
 
-version = "0.2.1"
+version = "0.2.2"
 
 readme = "README.md"
 

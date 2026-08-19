@@ -43,9 +43,9 @@ moon run cmd/bench
 
 ```moonbit
 import {
-  "ywzywz/sessionlog/lib/core",
-  "ywzywz/sessionlog/lib/analytics",
-  "ywzywz/sessionlog/lib/validation",
+  "ywz1314/sessionlog/lib/core",
+  "ywz1314/sessionlog/lib/analytics",
+  "ywz1314/sessionlog/lib/validation",
 }
 ```
 

@@ -1,7 +1,7 @@
 import {
-  "ywzywz/sessionlog/lib/benchmark",
-  "ywzywz/sessionlog/lib/normalization",
-  "ywzywz/sessionlog/lib/retention",
+  "ywz1314/sessionlog/lib/benchmark",
+  "ywz1314/sessionlog/lib/normalization",
+  "ywz1314/sessionlog/lib/retention",
 }
 
 pkgtype(kind: "executable")

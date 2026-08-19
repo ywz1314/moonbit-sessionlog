@@ -1,5 +1,5 @@
 import {
-  "ywzywz/sessionlog/lib/core",
-  "ywzywz/sessionlog/lib/aggregation",
+  "ywz1314/sessionlog/lib/core",
+  "ywz1314/sessionlog/lib/aggregation",
   "moonbitlang/core/json",
 }

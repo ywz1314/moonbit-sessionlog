@@ -1,8 +1,8 @@
 import {
-  "ywzywz/sessionlog/lib/core",
-  "ywzywz/sessionlog/lib/analytics",
-  "ywzywz/sessionlog/lib/alerts",
-  "ywzywz/sessionlog/lib/forecast",
-  "ywzywz/sessionlog/lib/quality",
+  "ywz1314/sessionlog/lib/core",
+  "ywz1314/sessionlog/lib/analytics",
+  "ywz1314/sessionlog/lib/alerts",
+  "ywz1314/sessionlog/lib/forecast",
+  "ywz1314/sessionlog/lib/quality",
   "moonbitlang/core/json",
 }

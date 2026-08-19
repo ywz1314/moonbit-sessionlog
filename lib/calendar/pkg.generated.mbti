@@ -1,5 +1,5 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "ywzywz/sessionlog/lib/calendar"
+package "ywz1314/sessionlog/lib/calendar"
 
 import {
   "moonbitlang/core/debug",

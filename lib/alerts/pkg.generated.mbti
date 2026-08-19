@@ -1,10 +1,10 @@
 // Generated using `moon info`, DON'T EDIT IT
-package "ywzywz/sessionlog/lib/alerts"
+package "ywz1314/sessionlog/lib/alerts"
 
 import {
   "moonbitlang/core/debug",
   "moonbitlang/core/json",
-  "ywzywz/sessionlog/lib/core",
+  "ywz1314/sessionlog/lib/core",
 }
 
 // Values

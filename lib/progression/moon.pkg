@@ -1,4 +1,4 @@
 import {
-  "ywzywz/sessionlog/lib/core",
+  "ywz1314/sessionlog/lib/core",
   "moonbitlang/core/json",
 }

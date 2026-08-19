@@ -1,7 +1,7 @@
 import {
   "moonbitlang/core/json",
-  "ywzywz/sessionlog/lib/calendar",
-  "ywzywz/sessionlog/lib/core",
-  "ywzywz/sessionlog/lib/quality",
-  "ywzywz/sessionlog/lib/validation",
+  "ywz1314/sessionlog/lib/calendar",
+  "ywz1314/sessionlog/lib/core",
+  "ywz1314/sessionlog/lib/quality",
+  "ywz1314/sessionlog/lib/validation",
 }

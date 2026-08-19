@@ -1,7 +1,7 @@
 import {
-  "ywzywz/sessionlog/lib/core",
-  "ywzywz/sessionlog/lib/analytics",
-  "ywzywz/sessionlog/lib/progression",
-  "ywzywz/sessionlog/lib/validation",
+  "ywz1314/sessionlog/lib/core",
+  "ywz1314/sessionlog/lib/analytics",
+  "ywz1314/sessionlog/lib/progression",
+  "ywz1314/sessionlog/lib/validation",
   "moonbitlang/core/json",
 }
