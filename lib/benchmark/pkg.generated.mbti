@@ -1,0 +1,62 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "ywzywz/sessionlog/lib/benchmark"
+
+import {
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+  "ywzywz/sessionlog/lib/core",
+}
+
+// Values
+pub fn benchmark_case(String, Int, Int, Int) -> BenchmarkCase
+
+pub fn build_fixture(BenchmarkCase) -> Array[@core.Session]
+
+pub fn checksum(Array[@core.Session]) -> Int
+
+pub fn result_text(BenchmarkResult) -> String
+
+pub fn results_text(Array[BenchmarkResult]) -> String
+
+pub fn run(BenchmarkCase) -> BenchmarkResult
+
+pub fn run_all() -> Array[BenchmarkResult]
+
+pub fn standard_cases() -> Array[BenchmarkCase]
+
+// Errors
+
+// Types and methods
+pub(all) struct BenchmarkCase {
+  name : String
+  session_count : Int
+  movement_count : Int
+  sets_per_movement : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn BenchmarkCase::movement_count(Self) -> Int
+pub fn BenchmarkCase::name(Self) -> String
+pub fn BenchmarkCase::session_count(Self) -> Int
+pub fn BenchmarkCase::sets_per_movement(Self) -> Int
+
+pub(all) struct BenchmarkResult {
+  name : String
+  session_count : Int
+  movement_count : Int
+  total_reps : Int
+  total_work_units : Int
+  average_pain : Double
+  average_completion : Double
+  checksum : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn BenchmarkResult::average_completion(Self) -> Double
+pub fn BenchmarkResult::average_pain(Self) -> Double
+pub fn BenchmarkResult::checksum(Self) -> Int
+pub fn BenchmarkResult::movement_count(Self) -> Int
+pub fn BenchmarkResult::name(Self) -> String
+pub fn BenchmarkResult::session_count(Self) -> Int
+pub fn BenchmarkResult::total_reps(Self) -> Int
+pub fn BenchmarkResult::total_work_units(Self) -> Int
+
+// Type aliases
+
+// Traits

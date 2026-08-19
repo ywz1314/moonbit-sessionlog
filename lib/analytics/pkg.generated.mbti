@@ -1,0 +1,142 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "ywzywz/sessionlog/lib/analytics"
+
+import {
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+  "ywzywz/sessionlog/lib/core",
+}
+
+// Values
+pub fn analyze(Array[@core.Session], options? : AnalyticsOptions) -> TrendReport
+
+pub fn average_session_duration(Array[@core.Session]) -> Double
+
+pub fn best_completion_session(Array[@core.Session]) -> @core.Session?
+
+pub fn classify_recovery(@core.Session, AnalyticsOptions) -> RecoveryStatus
+
+pub fn compare_completion(@core.Session, @core.Session) -> Double
+
+pub fn compare_pain(@core.Session, @core.Session) -> Double
+
+pub fn compare_work(@core.Session, @core.Session) -> Int
+
+pub fn completion_target_met(@core.Session, options? : AnalyticsOptions) -> Bool
+
+pub fn default_analytics_options() -> AnalyticsOptions
+
+pub fn longest_ready_streak(Array[@core.Session], options? : AnalyticsOptions) -> Int
+
+pub fn lowest_pain_session(Array[@core.Session]) -> @core.Session?
+
+pub fn merge_by_id(Array[@core.Session], Array[@core.Session]) -> Array[@core.Session]
+
+pub fn moving_average(Array[Double], Int) -> Array[Double]
+
+pub fn moving_average_completion(Array[@core.Session], Int) -> Array[Double]
+
+pub fn moving_average_pain(Array[@core.Session], Int) -> Array[Double]
+
+pub fn pain_improved(@core.Session, options? : AnalyticsOptions) -> Bool
+
+pub fn readiness_score(@core.Session, AnalyticsOptions) -> Int
+
+pub fn readiness_scores(Array[@core.Session], options? : AnalyticsOptions) -> Array[Int]
+
+pub fn recovery_counts(Array[@core.Session], options? : AnalyticsOptions) -> (Int, Int, Int, Int)
+
+pub fn select_by_date(Array[@core.Session], String, String) -> Array[@core.Session]
+
+pub fn select_recent(Array[@core.Session], Int) -> Array[@core.Session]
+
+pub fn sessions_with_flag(Array[@core.Session], String, options? : AnalyticsOptions) -> Array[@core.Session]
+
+pub fn snapshot(@core.Session, options? : AnalyticsOptions) -> DailySnapshot
+
+pub fn total_work_units(Array[@core.Session]) -> Int
+
+pub fn unique_session_ids(Array[@core.Session]) -> Array[String]
+
+// Errors
+
+// Types and methods
+pub(all) struct AnalyticsOptions {
+  pain_improvement_threshold : Int
+  completion_target : Double
+  ready_pain_limit : Int
+  ready_rpe_limit : Int
+  expected_sessions : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+
+pub(all) struct DailySnapshot {
+  date : String
+  session_id : String
+  total_reps : Int
+  total_sets : Int
+  work_units : Int
+  average_pain : Double
+  average_completion : Double
+  pain_delta : Int
+  readiness_score : Int
+  recovery : RecoveryStatus
+  flags : Array[String]
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn DailySnapshot::average_completion(Self) -> Double
+pub fn DailySnapshot::average_pain(Self) -> Double
+pub fn DailySnapshot::date(Self) -> String
+pub fn DailySnapshot::flags(Self) -> Array[String]
+pub fn DailySnapshot::pain_delta(Self) -> Int
+pub fn DailySnapshot::readiness_score(Self) -> Int
+pub fn DailySnapshot::recovery(Self) -> RecoveryStatus
+pub fn DailySnapshot::session_id(Self) -> String
+pub fn DailySnapshot::total_reps(Self) -> Int
+pub fn DailySnapshot::total_sets(Self) -> Int
+pub fn DailySnapshot::work_units(Self) -> Int
+
+pub(all) enum RecoveryStatus {
+  Ready
+  Caution
+  Deload
+  Unknown
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn RecoveryStatus::label(Self) -> String
+
+pub(all) enum TrendDirection {
+  Improving
+  Stable
+  Worsening
+  InsufficientData
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn TrendDirection::label(Self) -> String
+
+pub(all) struct TrendReport {
+  snapshots : Array[DailySnapshot]
+  session_count : Int
+  total_reps : Int
+  total_work_units : Int
+  average_pain : Double
+  average_completion : Double
+  pain_direction : TrendDirection
+  completion_direction : TrendDirection
+  load_direction : TrendDirection
+  first_date : String
+  last_date : String
+  adherence_percent : Double
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn TrendReport::adherence_percent(Self) -> Double
+pub fn TrendReport::average_completion(Self) -> Double
+pub fn TrendReport::average_pain(Self) -> Double
+pub fn TrendReport::completion_direction(Self) -> TrendDirection
+pub fn TrendReport::first_date(Self) -> String
+pub fn TrendReport::last_date(Self) -> String
+pub fn TrendReport::load_direction(Self) -> TrendDirection
+pub fn TrendReport::pain_direction(Self) -> TrendDirection
+pub fn TrendReport::session_count(Self) -> Int
+pub fn TrendReport::snapshots(Self) -> Array[DailySnapshot]
+pub fn TrendReport::total_reps(Self) -> Int
+pub fn TrendReport::total_work_units(Self) -> Int
+
+// Type aliases
+
+// Traits

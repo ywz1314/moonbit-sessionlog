@@ -1,0 +1,55 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "ywzywz/sessionlog/lib/dashboard"
+
+import {
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+  "ywzywz/sessionlog/lib/core",
+}
+
+// Values
+pub fn build(Array[@core.Session]) -> Dashboard
+
+pub fn compare(Dashboard, Dashboard) -> (Int, Int, Int, Double)
+
+pub fn empty() -> Dashboard
+
+pub fn is_improving(Dashboard) -> Bool
+
+pub fn status(Dashboard) -> String
+
+pub fn to_text(Dashboard) -> String
+
+// Errors
+
+// Types and methods
+pub(all) struct Dashboard {
+  session_count : Int
+  total_reps : Int
+  total_work_units : Int
+  average_pain : Double
+  average_completion : Double
+  adherence_percent : Double
+  quality_score : Double
+  alert_count : Int
+  critical_alert_count : Int
+  risk_score : Int
+  forecast_confidence : Double
+  headline : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn Dashboard::adherence_percent(Self) -> Double
+pub fn Dashboard::alert_count(Self) -> Int
+pub fn Dashboard::average_completion(Self) -> Double
+pub fn Dashboard::average_pain(Self) -> Double
+pub fn Dashboard::critical_alert_count(Self) -> Int
+pub fn Dashboard::forecast_confidence(Self) -> Double
+pub fn Dashboard::headline(Self) -> String
+pub fn Dashboard::quality_score(Self) -> Double
+pub fn Dashboard::risk_score(Self) -> Int
+pub fn Dashboard::session_count(Self) -> Int
+pub fn Dashboard::total_reps(Self) -> Int
+pub fn Dashboard::total_work_units(Self) -> Int
+
+// Type aliases
+
+// Traits

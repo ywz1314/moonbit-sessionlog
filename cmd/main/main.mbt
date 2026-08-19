@@ -145,11 +145,27 @@ fn main {
         )
         println("")
       }
+      println("--- [5] Building Analytics Dashboard ---")
+      let normalized = @normalization.normalize_or_keep(
+        s2,
+        @normalization.default_options(),
+      )
+      let normalized_session = normalized.session()
+      let trends = @analytics.analyze([normalized_session])
+      let dashboard = @dashboard.build([normalized_session])
+      println(
+        "  Normalization warnings: " +
+        normalized.report().warning_count().to_string(),
+      )
+      println("  Trend sessions: " + trends.session_count().to_string())
+      println("  Dashboard status: " + @dashboard.status(dashboard))
+      println("  Dashboard risk: " + dashboard.risk_score().to_string())
+      println("  Dashboard headline: " + dashboard.headline())
     }
     Err(e) => println("Error parsing V2: " + e)
   }
 
-  // 5. Demonstrate Validation failing on incorrect data
+  // 6. Demonstrate Validation failing on incorrect data
   let invalid_json =
     #|{
     #|  "version": 2,

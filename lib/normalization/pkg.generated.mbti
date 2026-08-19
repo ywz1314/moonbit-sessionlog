@@ -1,0 +1,126 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "ywzywz/sessionlog/lib/normalization"
+
+import {
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+  "ywzywz/sessionlog/lib/core",
+}
+
+// Values
+pub fn date_counts(Array[@core.Session]) -> Array[(String, Int)]
+
+pub fn deduplicate(Array[@core.Session]) -> Array[@core.Session]
+
+pub fn default_options() -> NormalizationOptions
+
+pub fn duplicate_count(Array[@core.Session]) -> Int
+
+pub fn group_by_date(Array[@core.Session]) -> Array[(String, Array[@core.Session])]
+
+pub fn movement_counts(Array[@core.Session]) -> Array[(String, Int)]
+
+pub fn normalization_checksum(BatchNormalization) -> Int
+
+pub fn normalize(@core.Session, NormalizationOptions) -> Result[NormalizationResult, String]
+
+pub fn normalize_and_deduplicate(Array[@core.Session], NormalizationOptions) -> BatchNormalization
+
+pub fn normalize_many(Array[@core.Session], NormalizationOptions) -> BatchNormalization
+
+pub fn normalize_or_keep(@core.Session, NormalizationOptions) -> NormalizationResult
+
+pub fn report_text(BatchNormalization) -> String
+
+pub fn safe_normalize(@core.Session, NormalizationOptions) -> Result[NormalizationResult, String]
+
+pub fn sorted_by_date(Array[@core.Session]) -> Array[@core.Session]
+
+pub fn sorted_by_id(Array[@core.Session]) -> Array[@core.Session]
+
+pub fn strict_options() -> NormalizationOptions
+
+pub fn validate_options(NormalizationOptions) -> Array[String]
+
+pub fn warning_codes(Array[NormalizationReport]) -> Array[String]
+
+pub fn with_max_notes_length(NormalizationOptions, Int) -> NormalizationOptions
+
+// Errors
+
+// Types and methods
+pub(all) struct BatchNormalization {
+  sessions : Array[@core.Session]
+  reports : Array[NormalizationReport]
+  rejected : Array[String]
+  changed_count : Int
+  warning_count : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn BatchNormalization::changed_count(Self) -> Int
+pub fn BatchNormalization::rejected(Self) -> Array[String]
+pub fn BatchNormalization::reports(Self) -> Array[NormalizationReport]
+pub fn BatchNormalization::sessions(Self) -> Array[@core.Session]
+pub fn BatchNormalization::warning_count(Self) -> Int
+
+pub(all) struct NormalizationOptions {
+  trim_text : Bool
+  canonicalize_dates : Bool
+  merge_movements : Bool
+  sort_sets : Bool
+  clamp_numeric_values : Bool
+  fill_blank_resistance : Bool
+  preserve_notes : Bool
+  reject_invalid_dates : Bool
+  max_notes_length : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+
+pub(all) struct NormalizationReport {
+  session_id : String
+  changed : Bool
+  warning_count : Int
+  warnings : Array[NormalizationWarning]
+  original_movement_count : Int
+  normalized_movement_count : Int
+  original_set_count : Int
+  normalized_set_count : Int
+  original_fingerprint : String
+  normalized_fingerprint : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn NormalizationReport::changed(Self) -> Bool
+pub fn NormalizationReport::normalized_fingerprint(Self) -> String
+pub fn NormalizationReport::normalized_movement_count(Self) -> Int
+pub fn NormalizationReport::normalized_set_count(Self) -> Int
+pub fn NormalizationReport::original_fingerprint(Self) -> String
+pub fn NormalizationReport::original_movement_count(Self) -> Int
+pub fn NormalizationReport::original_set_count(Self) -> Int
+pub fn NormalizationReport::session_id(Self) -> String
+pub fn NormalizationReport::warning_count(Self) -> Int
+pub fn NormalizationReport::warnings(Self) -> Array[NormalizationWarning]
+
+pub(all) struct NormalizationResult {
+  session : @core.Session
+  report : NormalizationReport
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn NormalizationResult::report(Self) -> NormalizationReport
+pub fn NormalizationResult::session(Self) -> @core.Session
+
+pub(all) enum NormalizationWarning {
+  TrimmedIdentifier
+  TrimmedMovementName(String)
+  CanonicalizedDate
+  InvalidDate(String)
+  MergedMovement(String)
+  ClampedPain(String, Int)
+  ClampedRpe(String, Int)
+  ClampedReps(String, Int)
+  ClampedHoldTime(String, Int)
+  ClampedCompletion(String, Double)
+  FilledResistance(String)
+  TruncatedNotes(Int)
+  DroppedEmptyMovement
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn NormalizationWarning::code(Self) -> String
+
+// Type aliases
+
+// Traits

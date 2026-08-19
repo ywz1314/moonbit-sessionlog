@@ -1,0 +1,86 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "ywzywz/sessionlog/lib/series"
+
+import {
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+  "ywzywz/sessionlog/lib/core",
+}
+
+// Values
+pub fn above_pain(SessionSeries, Double) -> Array[SeriesPoint]
+
+pub fn average_completion(SessionSeries) -> Double
+
+pub fn average_pain(SessionSeries) -> Double
+
+pub fn below_completion(SessionSeries, Double) -> Array[SeriesPoint]
+
+pub fn best_completion(SessionSeries) -> SeriesPoint?
+
+pub fn completion_delta(SessionSeries) -> Double
+
+pub fn completion_values(SessionSeries) -> Array[Double]
+
+pub fn count(SessionSeries) -> Int
+
+pub fn first(SessionSeries) -> SeriesPoint?
+
+pub fn from_sessions(Array[@core.Session]) -> SessionSeries
+
+pub fn highest_load(SessionSeries) -> SeriesPoint?
+
+pub fn last(SessionSeries) -> SeriesPoint?
+
+pub fn max_completion(SessionSeries) -> Double
+
+pub fn max_pain(SessionSeries) -> Double
+
+pub fn min_completion(SessionSeries) -> Double
+
+pub fn min_pain(SessionSeries) -> Double
+
+pub fn pain_delta(SessionSeries) -> Double
+
+pub fn pain_values(SessionSeries) -> Array[Double]
+
+pub fn select(SessionSeries, String, String) -> SessionSeries
+
+pub fn sorted(SessionSeries) -> SessionSeries
+
+pub fn text(SessionSeries) -> String
+
+pub fn total_reps(SessionSeries) -> Int
+
+pub fn total_work_units(SessionSeries) -> Int
+
+pub fn work_delta(SessionSeries) -> Int
+
+pub fn work_values(SessionSeries) -> Array[Int]
+
+// Errors
+
+// Types and methods
+pub(all) struct SeriesPoint {
+  date : String
+  session_id : String
+  reps : Int
+  work_units : Int
+  average_pain : Double
+  completion : Double
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn SeriesPoint::average_pain(Self) -> Double
+pub fn SeriesPoint::completion(Self) -> Double
+pub fn SeriesPoint::date(Self) -> String
+pub fn SeriesPoint::reps(Self) -> Int
+pub fn SeriesPoint::session_id(Self) -> String
+pub fn SeriesPoint::work_units(Self) -> Int
+
+pub(all) struct SessionSeries {
+  points : Array[SeriesPoint]
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn SessionSeries::points(Self) -> Array[SeriesPoint]
+
+// Type aliases
+
+// Traits

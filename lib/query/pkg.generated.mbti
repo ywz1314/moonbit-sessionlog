@@ -1,0 +1,65 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "ywzywz/sessionlog/lib/query"
+
+import {
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+  "ywzywz/sessionlog/lib/core",
+}
+
+// Values
+pub fn average_pain(Array[@core.Session], SessionQuery) -> Double
+
+pub fn by_completion(SessionQuery, Double, Double) -> SessionQuery
+
+pub fn by_date_range(SessionQuery, String, String) -> SessionQuery
+
+pub fn by_movement(SessionQuery, String) -> SessionQuery
+
+pub fn by_pain(SessionQuery, Int, Int) -> SessionQuery
+
+pub fn count(Array[@core.Session], SessionQuery) -> Int
+
+pub fn describe(SessionQuery) -> String
+
+pub fn empty_query() -> SessionQuery
+
+pub fn filter(Array[@core.Session], SessionQuery) -> Array[@core.Session]
+
+pub fn first(Array[@core.Session], SessionQuery) -> @core.Session?
+
+pub fn group_by_movement(Array[@core.Session], SessionQuery) -> Array[(String, Int)]
+
+pub fn ids(Array[@core.Session], SessionQuery) -> Array[String]
+
+pub fn matches(SessionQuery, @core.Session) -> Bool
+
+pub fn sort_by_completion(Array[@core.Session]) -> Array[@core.Session]
+
+pub fn sort_by_date(Array[@core.Session]) -> Array[@core.Session]
+
+pub fn sort_by_pain(Array[@core.Session]) -> Array[@core.Session]
+
+pub fn total_reps(Array[@core.Session], SessionQuery) -> Int
+
+pub fn valid_only(SessionQuery) -> SessionQuery
+
+// Errors
+
+// Types and methods
+pub(all) struct SessionQuery {
+  mut id_contains : String
+  mut date_from : String
+  mut date_to : String
+  mut movement_name : String
+  mut minimum_pain : Int
+  mut maximum_pain : Int
+  mut minimum_completion : Double
+  mut maximum_completion : Double
+  mut minimum_duration : Int
+  mut valid_only : Bool
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+
+// Type aliases
+
+// Traits

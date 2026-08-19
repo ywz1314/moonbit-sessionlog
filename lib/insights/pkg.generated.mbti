@@ -1,0 +1,87 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "ywzywz/sessionlog/lib/insights"
+
+import {
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+  "ywzywz/sessionlog/lib/core",
+}
+
+// Values
+pub fn all_session_insights(@core.Session) -> Array[Insight]
+
+pub fn build(Array[@core.Session]) -> InsightReport
+
+pub fn count_by_severity(Array[Insight]) -> (Int, Int, Int, Int)
+
+pub fn data_quality_insights(@core.Session) -> Array[Insight]
+
+pub fn filter_kind(Array[Insight], InsightKind) -> Array[Insight]
+
+pub fn has_critical(Array[Insight]) -> Bool
+
+pub fn highest_priority(Array[Insight]) -> Insight?
+
+pub fn history_risk_score(Array[@core.Session]) -> Int
+
+pub fn progression_insights(@core.Session) -> Array[Insight]
+
+pub fn report_text(InsightReport) -> String
+
+pub fn risk_score(@core.Session) -> Int
+
+pub fn session_insights(@core.Session) -> Array[Insight]
+
+// Errors
+
+// Types and methods
+pub(all) struct Insight {
+  code : String
+  severity : InsightSeverity
+  kind : InsightKind
+  session_id : String
+  title : String
+  detail : String
+  metric : Double
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn Insight::code(Self) -> String
+pub fn Insight::detail(Self) -> String
+pub fn Insight::kind(Self) -> InsightKind
+pub fn Insight::metric(Self) -> Double
+pub fn Insight::session_id(Self) -> String
+pub fn Insight::severity(Self) -> InsightSeverity
+pub fn Insight::title(Self) -> String
+
+pub(all) enum InsightKind {
+  Pain
+  Completion
+  Effort
+  DataQuality
+  Adherence
+  Progression
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn InsightKind::label(Self) -> String
+
+pub(all) struct InsightReport {
+  session_count : Int
+  risk_score : Int
+  insights : Array[Insight]
+  recommendation : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn InsightReport::insights(Self) -> Array[Insight]
+pub fn InsightReport::recommendation(Self) -> String
+pub fn InsightReport::risk_score(Self) -> Int
+pub fn InsightReport::session_count(Self) -> Int
+
+pub(all) enum InsightSeverity {
+  Info
+  Notice
+  Warning
+  Critical
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn InsightSeverity::label(Self) -> String
+pub fn InsightSeverity::rank(Self) -> Int
+
+// Type aliases
+
+// Traits

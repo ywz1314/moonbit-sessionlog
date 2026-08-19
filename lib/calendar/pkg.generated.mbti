@@ -1,0 +1,48 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "ywzywz/sessionlog/lib/calendar"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn add_days(CalendarDate, Int) -> CalendarDate
+
+pub fn compare(CalendarDate, CalendarDate) -> Int
+
+pub fn dates_between(CalendarDate, CalendarDate) -> Array[CalendarDate]
+
+pub fn days_between(CalendarDate, CalendarDate) -> Int
+
+pub fn is_leap(Int) -> Bool
+
+pub fn is_weekend(CalendarDate) -> Bool
+
+pub fn month_days(Int, Int) -> Int
+
+pub fn month_end(CalendarDate) -> CalendarDate
+
+pub fn month_start(CalendarDate) -> CalendarDate
+
+pub fn parse(String) -> CalendarDate?
+
+pub fn valid(CalendarDate) -> Bool
+
+pub fn weekday(CalendarDate) -> Int
+
+// Errors
+
+// Types and methods
+pub(all) struct CalendarDate {
+  mut year : Int
+  mut month : Int
+  mut day : Int
+} derive(Eq, @debug.Debug)
+pub fn CalendarDate::day(Self) -> Int
+pub fn CalendarDate::month(Self) -> Int
+pub fn CalendarDate::to_string(Self) -> String
+pub fn CalendarDate::year(Self) -> Int
+
+// Type aliases
+
+// Traits

@@ -8,21 +8,87 @@ import {
 }
 
 // Values
+pub fn all_valid(Array[@core.Session], options? : ValidationOptions) -> Bool
+
+pub fn count_errors(Array[@core.Session], options? : ValidationOptions) -> Int
+
+pub fn days_in_month(Int, Int) -> Int
+
+pub fn default_validation_options() -> ValidationOptions
+
+pub fn error_code_counts(Array[ValidationError]) -> Array[(String, Int)]
+
+pub fn errors_by_code(Array[ValidationError], String) -> Array[ValidationError]
+
+pub fn first_error(@core.Session) -> ValidationError?
+
+pub fn is_calendar_date(String) -> Bool
+
+pub fn is_leap_year(Int) -> Bool
+
+pub fn is_strictly_valid(@core.Session) -> Bool
+
+pub fn is_valid(@core.Session) -> Bool
+
+pub fn strict_validation_options() -> ValidationOptions
+
+pub fn summarize(@core.Session, options? : ValidationOptions) -> ValidationSummary
+
+pub fn summarize_many(Array[@core.Session], options? : ValidationOptions) -> Array[ValidationSummary]
+
+pub fn validate_many(Array[@core.Session], options? : ValidationOptions) -> Array[(String, Array[ValidationError])]
+
 pub fn validate_session(@core.Session) -> Array[ValidationError]
+
+pub fn validate_session_with_options(@core.Session, ValidationOptions) -> Array[ValidationError]
+
+pub fn validation_error_code(ValidationError) -> String
+
+pub fn validation_error_path(ValidationError) -> String
 
 // Errors
 
 // Types and methods
-pub enum ValidationError {
+pub(all) enum ValidationError {
   InvalidPain(String, Int)
   InvalidRPE(String, Int)
   InvalidReps(String, Int)
   InvalidDuration(Int)
   InvalidCompletion(String, Double)
   InvalidDate(String)
+  InvalidId(String)
+  InvalidMovementName(String)
+  InvalidResistance(String)
+  InvalidNotes(String)
+  PainWorsened(Int)
+  TooManySets(String, Int)
+  TooManyReps(String, Int)
 } derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+
+pub(all) struct ValidationOptions {
+  require_id : Bool
+  require_movement_name : Bool
+  require_resistance : Bool
+  reject_empty_notes : Bool
+  reject_pain_worsening : Bool
+  max_duration : Int
+  max_sets_per_movement : Int
+  max_reps_per_set : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+
+pub(all) struct ValidationSummary {
+  session_id : String
+  valid : Bool
+  error_count : Int
+  codes : Array[String]
+  paths : Array[String]
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn ValidationSummary::codes(Self) -> Array[String]
+pub fn ValidationSummary::error_count(Self) -> Int
+pub fn ValidationSummary::paths(Self) -> Array[String]
+pub fn ValidationSummary::session_id(Self) -> String
+pub fn ValidationSummary::valid(Self) -> Bool
 
 // Type aliases
 
 // Traits
-

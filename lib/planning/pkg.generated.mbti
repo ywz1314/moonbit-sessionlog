@@ -1,0 +1,109 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "ywzywz/sessionlog/lib/planning"
+
+import {
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+  "ywzywz/sessionlog/lib/core",
+}
+
+// Values
+pub fn active_days(TrainingPlan) -> Array[PlanDay]
+
+pub fn adherence_for(TrainingPlan, PlanDay, @core.Session) -> Double
+
+pub fn completed_target_count(TrainingPlan, PlanDay, @core.Session) -> Int
+
+pub fn execute(PlanItem, @core.Movement) -> PlanItemStatus
+
+pub fn execute_day(TrainingPlan, PlanDay, @core.Session) -> Array[PlanItemStatus]
+
+pub fn new_plan(String) -> TrainingPlan
+
+pub fn next_day(TrainingPlan, PlanDay) -> PlanDay
+
+pub fn plan_day_from_number(Int) -> PlanDay?
+
+pub fn plan_text(TrainingPlan) -> String
+
+pub fn target(String, Int, Int, Int, String, Double, Int, Int) -> ExerciseTarget
+
+// Errors
+
+// Types and methods
+pub(all) struct ExerciseTarget {
+  movement_name : String
+  target_sets : Int
+  target_reps : Int
+  target_hold_time : Int
+  resistance : String
+  minimum_completion : Double
+  maximum_pain : Int
+  maximum_rpe : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn ExerciseTarget::maximum_pain(Self) -> Int
+pub fn ExerciseTarget::maximum_rpe(Self) -> Int
+pub fn ExerciseTarget::minimum_completion(Self) -> Double
+pub fn ExerciseTarget::movement_name(Self) -> String
+pub fn ExerciseTarget::resistance(Self) -> String
+pub fn ExerciseTarget::target_hold_time(Self) -> Int
+pub fn ExerciseTarget::target_reps(Self) -> Int
+pub fn ExerciseTarget::target_sets(Self) -> Int
+
+pub(all) enum PlanDay {
+  Monday
+  Tuesday
+  Wednesday
+  Thursday
+  Friday
+  Saturday
+  Sunday
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn PlanDay::label(Self) -> String
+pub fn PlanDay::number(Self) -> Int
+
+pub(all) struct PlanItem {
+  day : PlanDay
+  order : Int
+  target : ExerciseTarget
+  status : PlanItemStatus
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn PlanItem::day(Self) -> PlanDay
+pub fn PlanItem::movement_name(Self) -> String
+pub fn PlanItem::order(Self) -> Int
+pub fn PlanItem::status(Self) -> PlanItemStatus
+pub fn PlanItem::target(Self) -> ExerciseTarget
+
+pub(all) enum PlanItemStatus {
+  Planned
+  Completed
+  PartiallyCompleted
+  Skipped
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+
+pub(all) struct TrainingPlan {
+  name : String
+  mut version : Int
+  mut active : Bool
+  items : Array[PlanItem]
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn TrainingPlan::active(Self) -> Bool
+pub fn TrainingPlan::add(Self, PlanDay, ExerciseTarget) -> Unit
+pub fn TrainingPlan::day_count(Self) -> Int
+pub fn TrainingPlan::estimate_work_units(Self) -> Int
+pub fn TrainingPlan::for_day(Self, PlanDay) -> Array[PlanItem]
+pub fn TrainingPlan::for_movement(Self, String) -> Array[PlanItem]
+pub fn TrainingPlan::item_count(Self) -> Int
+pub fn TrainingPlan::items(Self) -> Array[PlanItem]
+pub fn TrainingPlan::movement_names(Self) -> Array[String]
+pub fn TrainingPlan::name(Self) -> String
+pub fn TrainingPlan::remove_movement(Self, String) -> Int
+pub fn TrainingPlan::set_active(Self, Bool) -> Unit
+pub fn TrainingPlan::validate(Self) -> Array[String]
+pub fn TrainingPlan::version(Self) -> Int
+pub fn TrainingPlan::weekly_target_hold_time(Self) -> Int
+pub fn TrainingPlan::weekly_target_reps(Self) -> Int
+
+// Type aliases
+
+// Traits

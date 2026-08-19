@@ -1,0 +1,68 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "ywzywz/sessionlog/lib/safety"
+
+import {
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+  "ywzywz/sessionlog/lib/core",
+}
+
+// Values
+pub fn amber_reports(Array[SafetyReport]) -> Array[SafetyReport]
+
+pub fn evaluate(@core.Session) -> SafetyReport
+
+pub fn evaluate_many(Array[@core.Session]) -> Array[SafetyReport]
+
+pub fn red_reports(Array[SafetyReport]) -> Array[SafetyReport]
+
+pub fn safe(@core.Session) -> Bool
+
+pub fn text(SafetyReport) -> String
+
+// Errors
+
+// Types and methods
+pub(all) struct SafetyFinding {
+  rule : SafetyRule
+  level : SafetyLevel
+  message : String
+  metric : Double
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn SafetyFinding::level(Self) -> SafetyLevel
+pub fn SafetyFinding::message(Self) -> String
+pub fn SafetyFinding::metric(Self) -> Double
+pub fn SafetyFinding::rule(Self) -> SafetyRule
+
+pub(all) enum SafetyLevel {
+  Green
+  Amber
+  Red
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn SafetyLevel::label(Self) -> String
+
+pub(all) struct SafetyReport {
+  session_id : String
+  level : SafetyLevel
+  score : Int
+  findings : Array[SafetyFinding]
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn SafetyReport::findings(Self) -> Array[SafetyFinding]
+pub fn SafetyReport::level(Self) -> SafetyLevel
+pub fn SafetyReport::score(Self) -> Int
+pub fn SafetyReport::session_id(Self) -> String
+
+pub(all) enum SafetyRule {
+  PainRange
+  PainIncrease
+  EffortRange
+  CompletionRange
+  DurationRange
+  DataValidity
+  MovementPresence
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn SafetyRule::label(Self) -> String
+
+// Type aliases
+
+// Traits

@@ -1,0 +1,64 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "ywzywz/sessionlog/lib/history"
+
+import {
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+  "ywzywz/sessionlog/lib/core",
+}
+
+// Values
+pub fn new_history() -> HistoryLog
+
+// Errors
+
+// Types and methods
+pub(all) struct HistoryEntry {
+  revision : Int
+  session_id : String
+  date : String
+  event : HistoryEvent
+  summary : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn HistoryEntry::date(Self) -> String
+pub fn HistoryEntry::event(Self) -> HistoryEvent
+pub fn HistoryEntry::revision(Self) -> Int
+pub fn HistoryEntry::session_id(Self) -> String
+pub fn HistoryEntry::summary(Self) -> String
+
+pub(all) enum HistoryEvent {
+  SessionAdded
+  SessionUpdated
+  SessionRemoved
+  Imported
+  Exported
+  PlanApplied
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn HistoryEvent::label(Self) -> String
+
+pub(all) struct HistoryLog {
+  mut entries : Array[HistoryEntry]
+  mut next_revision : Int
+} derive(Eq, @debug.Debug)
+pub fn HistoryLog::append(Self, String, String, HistoryEvent, String) -> HistoryEntry
+pub fn HistoryLog::by_event(Self, HistoryEvent) -> Array[HistoryEntry]
+pub fn HistoryLog::clear(Self) -> Unit
+pub fn HistoryLog::count(Self) -> Int
+pub fn HistoryLog::entries(Self) -> Array[HistoryEntry]
+pub fn HistoryLog::event_counts(Self) -> (Int, Int, Int, Int, Int, Int)
+pub fn HistoryLog::for_session(Self, String) -> Array[HistoryEntry]
+pub fn HistoryLog::latest(Self) -> HistoryEntry?
+pub fn HistoryLog::merge(Self, Self) -> Unit
+pub fn HistoryLog::record_added(Self, @core.Session) -> HistoryEntry
+pub fn HistoryLog::record_exported(Self, String, String) -> HistoryEntry
+pub fn HistoryLog::record_imported(Self, @core.Session) -> HistoryEntry
+pub fn HistoryLog::record_removed(Self, String, String) -> HistoryEntry
+pub fn HistoryLog::record_updated(Self, @core.Session) -> HistoryEntry
+pub fn HistoryLog::session_ids(Self) -> Array[String]
+pub fn HistoryLog::since(Self, Int) -> Array[HistoryEntry]
+pub fn HistoryLog::to_json_string(Self) -> String
+pub fn HistoryLog::to_text(Self) -> String
+
+// Type aliases
+
+// Traits

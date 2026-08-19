@@ -1,0 +1,65 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "ywzywz/sessionlog/lib/quality"
+
+import {
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+  "ywzywz/sessionlog/lib/core",
+}
+
+// Values
+pub fn average_score(Array[@core.Session]) -> Double
+
+pub fn duplicate_movement_names(@core.Session) -> Array[String]
+
+pub fn empty_resistance_count(@core.Session) -> Int
+
+pub fn grade_counts(Array[@core.Session]) -> (Int, Int, Int, Int)
+
+pub fn invalid_completion_count(@core.Session) -> Int
+
+pub fn quality_failures(Array[@core.Session]) -> Array[@core.Session]
+
+pub fn quality_text(QualityScore) -> String
+
+pub fn quality_warnings(Array[@core.Session]) -> Array[String]
+
+pub fn score(@core.Session) -> QualityScore
+
+pub fn score_many(Array[@core.Session]) -> Array[QualityScore]
+
+pub fn valid_ratio(Array[@core.Session]) -> Double
+
+pub fn zero_duration_count(Array[@core.Session]) -> Int
+
+// Errors
+
+// Types and methods
+pub(all) enum QualityGrade {
+  Excellent
+  Good
+  Review
+  Poor
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn QualityGrade::label(Self) -> String
+
+pub(all) struct QualityScore {
+  session_id : String
+  score : Int
+  grade : QualityGrade
+  completeness : Int
+  consistency : Int
+  validity : Int
+  warnings : Array[String]
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn QualityScore::completeness(Self) -> Int
+pub fn QualityScore::consistency(Self) -> Int
+pub fn QualityScore::grade(Self) -> QualityGrade
+pub fn QualityScore::score(Self) -> Int
+pub fn QualityScore::session_id(Self) -> String
+pub fn QualityScore::validity(Self) -> Int
+pub fn QualityScore::warnings(Self) -> Array[String]
+
+// Type aliases
+
+// Traits

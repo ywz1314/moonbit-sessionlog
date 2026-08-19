@@ -11,16 +11,16 @@
 
 name = "ywzywz/sessionlog"
 
-version = "0.1.0"
+version = "0.2.0"
 
 readme = "README.md"
 
-repository = ""
+repository = "https://github.com/ywz1314/moonbit-sessionlog"
 
 license = "Apache-2.0"
 
-keywords = [ ]
+keywords = [ "rehabilitation", "session-log", "analytics", "MoonBit" ]
 
 preferred_target = "wasm-gc"
 
-description = ""
+description = "A deterministic MoonBit model and analytics library for rehabilitation session logs."

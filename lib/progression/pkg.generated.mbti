@@ -10,6 +10,38 @@ import {
 // Values
 pub fn analyze_progression(@core.Movement) -> ProgressionAdvice
 
+pub fn analyze_with_policy(@core.Movement, ProgressionPolicy) -> ProgressionDecision
+
+pub fn average_readiness(Array[@core.Movement], policy? : ProgressionPolicy) -> Double
+
+pub fn compare_movements(@core.Movement, @core.Movement) -> (Double, Int, Int)
+
+pub fn conservative_policy() -> ProgressionPolicy
+
+pub fn decisions_ready_to_progress(Array[ProgressionDecision]) -> Array[ProgressionDecision]
+
+pub fn decisions_requiring_attention(Array[ProgressionDecision]) -> Array[ProgressionDecision]
+
+pub fn default_policy() -> ProgressionPolicy
+
+pub fn explain_state(ProgressionState) -> String
+
+pub fn performance_policy() -> ProgressionPolicy
+
+pub fn plan_readiness(Array[ProgressionDecision]) -> Int
+
+pub fn plan_session(@core.Session, policy? : ProgressionPolicy) -> Array[ProgressionDecision]
+
+pub fn plan_states(Array[ProgressionDecision]) -> Array[ProgressionState]
+
+pub fn plan_summary(Array[ProgressionDecision]) -> (Int, Int, Int)
+
+pub fn safe_repetition_target(@core.Movement, policy? : ProgressionPolicy) -> Int
+
+pub fn safe_set_target(@core.Movement, policy? : ProgressionPolicy) -> Int
+
+pub fn stable_for_progression(Array[@core.Movement], policy? : ProgressionPolicy) -> Bool
+
 // Errors
 
 // Types and methods
@@ -23,6 +55,44 @@ pub(all) struct ProgressionAdvice {
 } derive(Eq, ToJson, @debug.Debug, @json.FromJson)
 pub impl Show for ProgressionAdvice
 
+pub(all) struct ProgressionDecision {
+  movement_name : String
+  state : ProgressionState
+  readiness : Int
+  current_reps : Int
+  suggested_reps : Int
+  current_sets : Int
+  suggested_sets : Int
+  completion : Double
+  pain : Int
+  rpe : Int
+  rationale : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn ProgressionDecision::completion(Self) -> Double
+pub fn ProgressionDecision::current_reps(Self) -> Int
+pub fn ProgressionDecision::current_sets(Self) -> Int
+pub fn ProgressionDecision::movement_name(Self) -> String
+pub fn ProgressionDecision::pain(Self) -> Int
+pub fn ProgressionDecision::rationale(Self) -> String
+pub fn ProgressionDecision::readiness(Self) -> Int
+pub fn ProgressionDecision::rpe(Self) -> Int
+pub fn ProgressionDecision::state(Self) -> ProgressionState
+pub fn ProgressionDecision::suggested_reps(Self) -> Int
+pub fn ProgressionDecision::suggested_sets(Self) -> Int
+
+pub(all) struct ProgressionPolicy {
+  completion_target : Double
+  progress_pain_limit : Int
+  progress_rpe_limit : Int
+  regression_pain_limit : Int
+  regression_rpe_limit : Int
+  rep_step : Int
+  set_step : Int
+  minimum_reps : Int
+  maximum_reps : Int
+  maximum_sets : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+
 pub(all) enum ProgressionState {
   Progression
   Maintenance
@@ -33,4 +103,3 @@ pub impl Show for ProgressionState
 // Type aliases
 
 // Traits
-

@@ -1,0 +1,164 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "ywzywz/sessionlog/lib/retention"
+
+import {
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+  "ywzywz/sessionlog/lib/core",
+}
+
+// Values
+pub fn action_counts(Array[RetentionDecision]) -> (Int, Int, Int)
+
+pub fn archival_policy(Int) -> RetentionPolicy
+
+pub fn archive_plan(Archive, Array[@core.Session], RetentionPlan, String, RetentionPolicy) -> (Archive, Array[String])
+
+pub fn archive_report(RetentionPlan) -> String
+
+pub fn archive_size_by_reason(Archive) -> Array[(String, Int)]
+
+pub fn archived_sessions(Array[@core.Session], RetentionPlan) -> Array[@core.Session]
+
+pub fn bounded_policy(Int) -> RetentionPolicy
+
+pub fn decide(@core.Session, String, RetentionPolicy) -> RetentionDecision
+
+pub fn decision_for(RetentionPlan, String) -> RetentionDecision?
+
+pub fn default_policy() -> RetentionPolicy
+
+pub fn fingerprint(@core.Session) -> String
+
+pub fn high_pain_sessions(Array[@core.Session], Int) -> Array[@core.Session]
+
+pub fn kept_sessions(Array[@core.Session], RetentionPlan) -> Array[@core.Session]
+
+pub fn older_than(Array[@core.Session], String, Int) -> Array[@core.Session]
+
+pub fn parse_archive(String) -> Result[Archive, String]
+
+pub fn plan(Array[@core.Session], String, RetentionPolicy) -> RetentionPlan
+
+pub fn policy_with_quality(Int) -> RetentionPolicy
+
+pub fn privacy_policy() -> RetentionPolicy
+
+pub fn reason_counts(Array[RetentionDecision]) -> Array[(RetentionReason, Int)]
+
+pub fn redact_session(@core.Session, RetentionPolicy) -> @core.Session
+
+pub fn retention_checksum(RetentionPlan) -> Int
+
+pub fn review_sessions(Array[@core.Session], RetentionPlan) -> Array[@core.Session]
+
+pub fn safe_plan(Array[@core.Session], String, RetentionPolicy) -> Result[RetentionPlan, String]
+
+pub fn validate_policy(RetentionPolicy) -> Array[String]
+
+// Errors
+
+// Types and methods
+pub(all) struct Archive {
+  mut entries : Array[ArchiveEntry]
+  mut revision : Int
+} derive(Eq, @debug.Debug)
+pub fn Archive::add(Self, @core.Session, String, RetentionDecision, RetentionPolicy) -> Result[Unit, String]
+pub fn Archive::by_reason(Self, RetentionReason) -> Array[ArchiveEntry]
+pub fn Archive::clear(Self) -> Unit
+pub fn Archive::contains_fingerprint(Self, String) -> Bool
+pub fn Archive::contains_id(Self, String) -> Bool
+pub fn Archive::count(Self) -> Int
+pub fn Archive::duplicate_groups(Self) -> Array[Array[ArchiveEntry]]
+pub fn Archive::entries(Self) -> Array[ArchiveEntry]
+pub fn Archive::find(Self, String) -> ArchiveEntry?
+pub fn Archive::is_empty(Self) -> Bool
+pub fn Archive::json(Self) -> String
+pub fn Archive::new() -> Self
+pub fn Archive::pretty_json(Self) -> String
+pub fn Archive::remove(Self, String) -> Bool
+pub fn Archive::restore_all(Self) -> Array[@core.Session]
+pub fn Archive::restore_ids(Self, Array[String]) -> Array[@core.Session]
+pub fn Archive::revision(Self) -> Int
+
+pub(all) struct ArchiveEntry {
+  session : @core.Session
+  archived_on : String
+  reason : RetentionReason
+  age_days : Int
+  fingerprint : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn ArchiveEntry::age_days(Self) -> Int
+pub fn ArchiveEntry::archived_on(Self) -> String
+pub fn ArchiveEntry::fingerprint(Self) -> String
+pub fn ArchiveEntry::reason(Self) -> RetentionReason
+pub fn ArchiveEntry::session(Self) -> @core.Session
+
+pub(all) enum RetentionAction {
+  Keep
+  Archive
+  Review
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn RetentionAction::label(Self) -> String
+
+pub(all) struct RetentionDecision {
+  session_id : String
+  action : RetentionAction
+  reason : RetentionReason
+  age_days : Int
+  quality_score : Int
+  fingerprint : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn RetentionDecision::action(Self) -> RetentionAction
+pub fn RetentionDecision::age_days(Self) -> Int
+pub fn RetentionDecision::fingerprint(Self) -> String
+pub fn RetentionDecision::is_archive(Self) -> Bool
+pub fn RetentionDecision::is_review(Self) -> Bool
+pub fn RetentionDecision::quality_score(Self) -> Int
+pub fn RetentionDecision::reason(Self) -> RetentionReason
+pub fn RetentionDecision::session_id(Self) -> String
+
+pub(all) struct RetentionPlan {
+  reference_date : String
+  decisions : Array[RetentionDecision]
+  kept_count : Int
+  archived_count : Int
+  review_count : Int
+  duplicate_count : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn RetentionPlan::archived_count(Self) -> Int
+pub fn RetentionPlan::decisions(Self) -> Array[RetentionDecision]
+pub fn RetentionPlan::duplicate_count(Self) -> Int
+pub fn RetentionPlan::kept_count(Self) -> Int
+pub fn RetentionPlan::reference_date(Self) -> String
+pub fn RetentionPlan::review_count(Self) -> Int
+
+pub(all) struct RetentionPolicy {
+  mut max_age_days : Int
+  mut max_sessions : Int
+  mut high_pain_threshold : Int
+  mut minimum_quality_score : Int
+  mut keep_high_pain : Bool
+  mut keep_notes : Bool
+  mut keep_invalid : Bool
+  mut deduplicate : Bool
+  mut redact_notes : Bool
+  mut anonymize_ids : Bool
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+
+pub(all) enum RetentionReason {
+  WithinWindow
+  OlderThanWindow
+  CapacityExceeded
+  Duplicate
+  HighPain
+  HasClinicalNotes
+  LowQuality
+  InvalidData
+  ManualReview
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn RetentionReason::label(Self) -> String
+
+// Type aliases
+
+// Traits

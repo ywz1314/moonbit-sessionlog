@@ -1,0 +1,41 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "ywzywz/sessionlog/lib/consistency"
+
+import {
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+  "ywzywz/sessionlog/lib/core",
+}
+
+// Values
+pub fn compare_all(Array[@core.Session]) -> Array[MovementConsistency]
+
+pub fn compare_movement(String, Array[@core.Movement]) -> MovementConsistency
+
+pub fn consistency_text(Array[MovementConsistency]) -> String
+
+pub fn stable_items(Array[MovementConsistency]) -> Array[MovementConsistency]
+
+pub fn unstable_items(Array[MovementConsistency]) -> Array[MovementConsistency]
+
+// Errors
+
+// Types and methods
+pub(all) struct MovementConsistency {
+  name : String
+  observations : Int
+  completion_range : Double
+  pain_range : Int
+  reps_range : Int
+  stable : Bool
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn MovementConsistency::completion_range(Self) -> Double
+pub fn MovementConsistency::name(Self) -> String
+pub fn MovementConsistency::observations(Self) -> Int
+pub fn MovementConsistency::pain_range(Self) -> Int
+pub fn MovementConsistency::reps_range(Self) -> Int
+pub fn MovementConsistency::stable(Self) -> Bool
+
+// Type aliases
+
+// Traits

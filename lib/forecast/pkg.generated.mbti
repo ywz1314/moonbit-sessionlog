@@ -1,0 +1,68 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "ywzywz/sessionlog/lib/forecast"
+
+import {
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+  "ywzywz/sessionlog/lib/core",
+}
+
+// Values
+pub fn expected_completion_at(ForecastReport, Int) -> Double
+
+pub fn expected_pain_at(ForecastReport, Int) -> Double
+
+pub fn forecast(Array[@core.Session], Int) -> ForecastReport
+
+pub fn forecast_from_aggregates(Array[@core.Session], Int) -> ForecastReport
+
+pub fn has_caution(ForecastReport) -> Bool
+
+pub fn max_expected_work(ForecastReport) -> Int
+
+pub fn report_text(ForecastReport) -> String
+
+// Errors
+
+// Types and methods
+pub(all) enum ForecastBand {
+  Stable
+  Improving
+  Caution
+  Uncertain
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn ForecastBand::label(Self) -> String
+
+pub(all) struct ForecastPoint {
+  step : Int
+  expected_completion : Double
+  expected_pain : Double
+  expected_work_units : Int
+  band : ForecastBand
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn ForecastPoint::band(Self) -> ForecastBand
+pub fn ForecastPoint::expected_completion(Self) -> Double
+pub fn ForecastPoint::expected_pain(Self) -> Double
+pub fn ForecastPoint::expected_work_units(Self) -> Int
+pub fn ForecastPoint::step(Self) -> Int
+
+pub(all) struct ForecastReport {
+  points : Array[ForecastPoint]
+  baseline_completion : Double
+  baseline_pain : Double
+  baseline_work_units : Int
+  completion_slope : Double
+  pain_slope : Double
+  confidence : Double
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn ForecastReport::baseline_completion(Self) -> Double
+pub fn ForecastReport::baseline_pain(Self) -> Double
+pub fn ForecastReport::baseline_work_units(Self) -> Int
+pub fn ForecastReport::completion_slope(Self) -> Double
+pub fn ForecastReport::confidence(Self) -> Double
+pub fn ForecastReport::pain_slope(Self) -> Double
+pub fn ForecastReport::points(Self) -> Array[ForecastPoint]
+
+// Type aliases
+
+// Traits

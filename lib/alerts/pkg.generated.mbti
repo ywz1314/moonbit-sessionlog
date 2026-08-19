@@ -1,0 +1,76 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "ywzywz/sessionlog/lib/alerts"
+
+import {
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+  "ywzywz/sessionlog/lib/core",
+}
+
+// Values
+pub fn counts(Array[SessionAlert]) -> (Int, Int, Int)
+
+pub fn default_alert_policy() -> AlertPolicy
+
+pub fn evaluate(@core.Session, policy? : AlertPolicy) -> Array[SessionAlert]
+
+pub fn evaluate_series(Array[@core.Session], policy? : AlertPolicy) -> Array[SessionAlert]
+
+pub fn filter_severity(Array[SessionAlert], AlertSeverity) -> Array[SessionAlert]
+
+pub fn filter_type(Array[SessionAlert], AlertType) -> Array[SessionAlert]
+
+pub fn has_critical(Array[SessionAlert]) -> Bool
+
+pub fn load_spike(@core.Session, @core.Session, policy? : AlertPolicy) -> SessionAlert?
+
+pub fn text(Array[SessionAlert]) -> String
+
+// Errors
+
+// Types and methods
+pub(all) struct AlertPolicy {
+  pain_threshold : Int
+  effort_threshold : Int
+  completion_threshold : Double
+  load_spike_ratio : Double
+  check_invalid_data : Bool
+  check_empty_movement : Bool
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+
+pub(all) enum AlertSeverity {
+  Notice
+  Warning
+  Critical
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn AlertSeverity::label(Self) -> String
+
+pub(all) enum AlertType {
+  PainThreshold
+  PainIncrease
+  EffortThreshold
+  CompletionDrop
+  InvalidData
+  MissingMovement
+  LoadSpike
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn AlertType::label(Self) -> String
+
+pub(all) struct SessionAlert {
+  session_id : String
+  date : String
+  alert_type : AlertType
+  severity : AlertSeverity
+  message : String
+  metric : Double
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn SessionAlert::alert_type(Self) -> AlertType
+pub fn SessionAlert::date(Self) -> String
+pub fn SessionAlert::message(Self) -> String
+pub fn SessionAlert::metric(Self) -> Double
+pub fn SessionAlert::session_id(Self) -> String
+pub fn SessionAlert::severity(Self) -> AlertSeverity
+
+// Type aliases
+
+// Traits

@@ -7,16 +7,52 @@ import {
 }
 
 // Values
+pub fn effort_band(Int) -> EffortBand
+
+pub fn pain_band(Int) -> PainBand
 
 // Errors
 
 // Types and methods
+pub(all) enum EffortBand {
+  VeryEasy
+  Easy
+  Moderate
+  Hard
+  VeryHard
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn EffortBand::label(Self) -> String
+
 pub(all) struct Movement {
   name : String
   sets : Array[Set]
   pain : Int
   rpe : Int
 } derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn Movement::average_completion(Self) -> Double
+pub fn Movement::average_reps(Self) -> Double
+pub fn Movement::completed_set_count(Self) -> Int
+pub fn Movement::dominant_resistance(Self) -> String
+pub fn Movement::effective_reps(Self) -> Int
+pub fn Movement::effort_band(Self) -> EffortBand
+pub fn Movement::has_incomplete_set(Self) -> Bool
+pub fn Movement::highest_completion(Self) -> Double
+pub fn Movement::lowest_completion(Self) -> Double
+pub fn Movement::pain_band(Self) -> PainBand
+pub fn Movement::rep_range(Self) -> (Int, Int)
+pub fn Movement::resistances(Self) -> Array[String]
+pub fn Movement::total_completion(Self) -> Double
+pub fn Movement::total_hold_time(Self) -> Int
+pub fn Movement::total_reps(Self) -> Int
+pub fn Movement::work_units(Self) -> Int
+
+pub(all) enum PainBand {
+  None
+  Mild
+  Moderate
+  Severe
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn PainBand::label(Self) -> String
 
 pub(all) struct Session {
   id : String
@@ -27,8 +63,35 @@ pub(all) struct Session {
   movements : Array[Movement]
   notes : String
 } derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn Session::average_completion(Self) -> Double
 pub fn Session::average_pain_during(Self) -> Double
+pub fn Session::metrics(Self) -> SessionMetrics
+pub fn Session::movement(Self, String) -> Movement?
+pub fn Session::movement_names(Self) -> Array[String]
+pub fn Session::movements_at_or_below_pain(Self, Int) -> Int
+pub fn Session::pain_delta(Self) -> Int
+pub fn Session::total_hold_time(Self) -> Int
 pub fn Session::total_reps(Self) -> Int
+pub fn Session::total_sets(Self) -> Int
+
+pub(all) struct SessionMetrics {
+  session_id : String
+  movement_count : Int
+  set_count : Int
+  total_reps : Int
+  total_hold_time : Int
+  average_completion : Double
+  average_pain : Double
+  pain_delta : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn SessionMetrics::average_completion(Self) -> Double
+pub fn SessionMetrics::average_pain(Self) -> Double
+pub fn SessionMetrics::movement_count(Self) -> Int
+pub fn SessionMetrics::pain_delta(Self) -> Int
+pub fn SessionMetrics::session_id(Self) -> String
+pub fn SessionMetrics::set_count(Self) -> Int
+pub fn SessionMetrics::total_hold_time(Self) -> Int
+pub fn SessionMetrics::total_reps(Self) -> Int
 
 pub(all) struct Set {
   reps : Int
@@ -36,8 +99,11 @@ pub(all) struct Set {
   resistance : String
   completion : Double
 } derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn Set::completion_percent(Self) -> Int
+pub fn Set::effective_reps(Self) -> Int
+pub fn Set::is_complete(Self, threshold? : Double) -> Bool
+pub fn Set::work_units(Self) -> Int
 
 // Type aliases
 
 // Traits
-

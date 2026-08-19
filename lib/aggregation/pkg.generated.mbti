@@ -1,0 +1,61 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "ywzywz/sessionlog/lib/aggregation"
+
+import {
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+  "ywzywz/sessionlog/lib/core",
+}
+
+// Values
+pub fn aggregate_all(Array[@core.Session]) -> Array[MovementAggregate]
+
+pub fn aggregate_movement(Array[@core.Session], String) -> MovementAggregate
+
+pub fn aggregate_text(Array[MovementAggregate]) -> String
+
+pub fn average_completion(Array[MovementAggregate]) -> Double
+
+pub fn most_consistent_movement(Array[MovementAggregate]) -> MovementAggregate?
+
+pub fn sort_by_completion(Array[MovementAggregate]) -> Array[MovementAggregate]
+
+pub fn sort_by_work(Array[MovementAggregate]) -> Array[MovementAggregate]
+
+pub fn strongest_movement(Array[MovementAggregate]) -> MovementAggregate?
+
+pub fn total_effective_reps(Array[MovementAggregate]) -> Int
+
+pub fn total_work_units(Array[MovementAggregate]) -> Int
+
+// Errors
+
+// Types and methods
+pub(all) struct MovementAggregate {
+  name : String
+  session_count : Int
+  set_count : Int
+  total_reps : Int
+  effective_reps : Int
+  total_work_units : Int
+  average_completion : Double
+  average_pain : Double
+  average_rpe : Double
+  first_date : String
+  last_date : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn MovementAggregate::average_completion(Self) -> Double
+pub fn MovementAggregate::average_pain(Self) -> Double
+pub fn MovementAggregate::average_rpe(Self) -> Double
+pub fn MovementAggregate::effective_reps(Self) -> Int
+pub fn MovementAggregate::first_date(Self) -> String
+pub fn MovementAggregate::last_date(Self) -> String
+pub fn MovementAggregate::name(Self) -> String
+pub fn MovementAggregate::session_count(Self) -> Int
+pub fn MovementAggregate::set_count(Self) -> Int
+pub fn MovementAggregate::total_reps(Self) -> Int
+pub fn MovementAggregate::total_work_units(Self) -> Int
+
+// Type aliases
+
+// Traits

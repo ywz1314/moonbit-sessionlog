@@ -1,0 +1,93 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "ywzywz/sessionlog/lib/reporting"
+
+import {
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+  "ywzywz/sessionlog/lib/analytics",
+  "ywzywz/sessionlog/lib/core",
+}
+
+// Values
+pub fn build(Array[@core.Session], options? : ReportOptions) -> ReportDocument
+
+pub fn combine_text(Array[String], separator? : String) -> String
+
+pub fn default_report_options() -> ReportOptions
+
+pub fn fixed_width(String, Int) -> String
+
+pub fn format_name(ReportFormat) -> String
+
+pub fn movement_csv(Array[@core.Session], privacy? : PrivacyMode) -> String
+
+pub fn privacy_name(PrivacyMode) -> String
+
+pub fn redact_id(String, PrivacyMode) -> String
+
+pub fn redact_notes(String, PrivacyMode) -> String
+
+pub fn redact_resistance(String, PrivacyMode) -> String
+
+pub fn session_csv(Array[@core.Session], privacy? : PrivacyMode) -> String
+
+pub fn session_json(@core.Session, privacy? : PrivacyMode) -> String
+
+pub fn session_text(@core.Session, privacy? : PrivacyMode) -> String
+
+pub fn table_row(Array[String], Array[Int]) -> String
+
+pub fn table_separator(Array[Int]) -> String
+
+pub fn trend_csv(@analytics.TrendReport) -> String
+
+pub fn trend_json(@analytics.TrendReport) -> String
+
+pub fn trend_text(@analytics.TrendReport, String) -> String
+
+pub fn validation_text(Array[@core.Session]) -> String
+
+// Errors
+
+// Types and methods
+pub(all) enum PrivacyMode {
+  Full
+  HideNotes
+  HashIdentifiers
+  Minimal
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+
+pub(all) struct ReportDocument {
+  title : String
+  format : ReportFormat
+  privacy : PrivacyMode
+  session_count : Int
+  valid_count : Int
+  invalid_count : Int
+  body : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn ReportDocument::body(Self) -> String
+pub fn ReportDocument::format(Self) -> ReportFormat
+pub fn ReportDocument::invalid_count(Self) -> Int
+pub fn ReportDocument::privacy(Self) -> PrivacyMode
+pub fn ReportDocument::session_count(Self) -> Int
+pub fn ReportDocument::title(Self) -> String
+pub fn ReportDocument::valid_count(Self) -> Int
+
+pub(all) enum ReportFormat {
+  Text
+  Csv
+  Json
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+
+pub(all) struct ReportOptions {
+  title : String
+  format : ReportFormat
+  privacy : PrivacyMode
+  include_invalid : Bool
+  include_empty_movements : Bool
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+
+// Type aliases
+
+// Traits

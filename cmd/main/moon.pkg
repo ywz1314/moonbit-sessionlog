@@ -1,10 +1,11 @@
 import {
+  "ywzywz/sessionlog/lib/analytics",
   "ywzywz/sessionlog/lib/core",
+  "ywzywz/sessionlog/lib/dashboard",
+  "ywzywz/sessionlog/lib/normalization",
   "ywzywz/sessionlog/lib/validation",
   "ywzywz/sessionlog/lib/schema",
   "ywzywz/sessionlog/lib/progression",
 }
 
-options(
-  "is-main": true,
-)
+pkgtype(kind: "executable")

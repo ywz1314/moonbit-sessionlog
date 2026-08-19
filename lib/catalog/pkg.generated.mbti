@@ -1,0 +1,78 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "ywzywz/sessionlog/lib/catalog"
+
+import {
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+  "ywzywz/sessionlog/lib/core",
+}
+
+// Values
+pub fn definition(String, Array[String], BodyRegion, MovementCategory, Int, Int, Int, String, Array[String]) -> MovementDefinition
+
+pub fn new_catalog() -> MovementCatalog
+
+pub fn standard_catalog() -> MovementCatalog
+
+// Errors
+
+// Types and methods
+pub(all) enum BodyRegion {
+  FullBody
+  UpperLimb
+  LowerLimb
+  Trunk
+  Balance
+  Breathing
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn BodyRegion::label(Self) -> String
+
+pub(all) struct MovementCatalog {
+  mut items : Array[MovementDefinition]
+  mut revision : Int
+} derive(Eq, @debug.Debug)
+pub fn MovementCatalog::add(Self, MovementDefinition) -> Bool
+pub fn MovementCatalog::all(Self) -> Array[MovementDefinition]
+pub fn MovementCatalog::by_category(Self, MovementCategory) -> Array[MovementDefinition]
+pub fn MovementCatalog::by_region(Self, BodyRegion) -> Array[MovementDefinition]
+pub fn MovementCatalog::count(Self) -> Int
+pub fn MovementCatalog::find(Self, String) -> MovementDefinition?
+pub fn MovementCatalog::remove(Self, String) -> Bool
+pub fn MovementCatalog::revision(Self) -> Int
+pub fn MovementCatalog::search(Self, String) -> Array[MovementDefinition]
+pub fn MovementCatalog::validate_movement(Self, @core.Movement) -> Array[String]
+pub fn MovementCatalog::with_tag(Self, String) -> Array[MovementDefinition]
+
+pub(all) enum MovementCategory {
+  Mobility
+  Strength
+  Endurance
+  Coordination
+  Recovery
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn MovementCategory::label(Self) -> String
+
+pub(all) struct MovementDefinition {
+  name : String
+  aliases : Array[String]
+  region : BodyRegion
+  category : MovementCategory
+  default_reps : Int
+  default_sets : Int
+  default_hold_time : Int
+  description : String
+  tags : Array[String]
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn MovementDefinition::aliases(Self) -> Array[String]
+pub fn MovementDefinition::category(Self) -> MovementCategory
+pub fn MovementDefinition::default_hold_time(Self) -> Int
+pub fn MovementDefinition::default_reps(Self) -> Int
+pub fn MovementDefinition::default_sets(Self) -> Int
+pub fn MovementDefinition::description(Self) -> String
+pub fn MovementDefinition::name(Self) -> String
+pub fn MovementDefinition::region(Self) -> BodyRegion
+pub fn MovementDefinition::tags(Self) -> Array[String]
+
+// Type aliases
+
+// Traits

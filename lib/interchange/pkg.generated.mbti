@@ -1,0 +1,55 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "ywzywz/sessionlog/lib/interchange"
+
+import {
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+  "ywzywz/sessionlog/lib/core",
+}
+
+// Values
+pub fn parse_json_lines(String) -> (Array[@core.Session], Array[String])
+
+pub fn parse_row(String) -> Result[SessionRow, String]
+
+pub fn parse_tsv(String) -> (Array[SessionRow], Array[String])
+
+pub fn row_from_session(@core.Session) -> SessionRow
+
+pub fn row_to_tsv(SessionRow) -> String
+
+pub fn rows_from_sessions(Array[@core.Session]) -> Array[SessionRow]
+
+pub fn rows_to_json(Array[SessionRow]) -> String
+
+pub fn rows_to_tsv(Array[SessionRow]) -> String
+
+pub fn session_json_lines(Array[@core.Session]) -> String
+
+// Errors
+
+// Types and methods
+pub(all) struct SessionRow {
+  id : String
+  date : String
+  duration : Int
+  pain_before : Int
+  pain_after : Int
+  total_reps : Int
+  total_sets : Int
+  average_pain : Double
+  average_completion : Double
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn SessionRow::average_completion(Self) -> Double
+pub fn SessionRow::average_pain(Self) -> Double
+pub fn SessionRow::date(Self) -> String
+pub fn SessionRow::duration(Self) -> Int
+pub fn SessionRow::id(Self) -> String
+pub fn SessionRow::pain_after(Self) -> Int
+pub fn SessionRow::pain_before(Self) -> Int
+pub fn SessionRow::total_reps(Self) -> Int
+pub fn SessionRow::total_sets(Self) -> Int
+
+// Type aliases
+
+// Traits
