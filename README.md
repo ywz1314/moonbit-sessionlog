@@ -24,7 +24,7 @@
 
 ## 快速开始
 
-需要 MoonBit stable 工具链。项目当前使用的本地工具链为 `moonc v0.10.7`，可先执行：
+需要 MoonBit stable 工具链。当前本地验收使用 `moon 0.1.20260814` / `moonc v0.10.8`，可先执行：
 
 ```bash
 moon check --target wasm-gc --deny-warn
@@ -84,7 +84,7 @@ core types
 
 基准夹具是确定性的，不把运行时间写死在程序输出中：程序输出 checksum，外层命令负责测量实际耗时。一次 `cmd/bench` 同时覆盖 10/100/1000 会话规模，以及 1000 会话、6 动作、每动作 4 组的规范化流水线。
 
-本地实测（2026-08-19，Windows NT 10.0.26200.0，AMD Ryzen 7 5800H，`moonc v0.10.7`，PowerShell `Measure-Command`，7 次复测）：
+本地实测（2026-08-22，Windows NT 10.0.26200.0，AMD Ryzen 7 5800H，`moonc v0.10.8`，PowerShell `Measure-Command`，7 次复测）：
 
 | 场景 | 输入规模 | 稳定输出 |
 | --- | ---: | --- |
@@ -93,7 +93,7 @@ core types
 | history | 1,000 sessions × 6 movements × 4 sets | checksum `-1039633519` |
 | pipeline | 1,000 sessions × 6 movements × 4 sets，规范化 + retention | checksum `602712179` |
 
-`cmd/bench` 端到端耗时：平均 `437.05 ms`，中位数 `414.14 ms`，样本为 `434.47, 529.91, 514.36, 414.14, 369.13, 409.42, 387.89 ms`。这些数字用于复现当前环境，不代表所有机器的性能承诺；复测命令为 `moon run cmd/bench`。
+`cmd/bench` 端到端耗时：首轮冷启动 `1427.27 ms`；其余 6 次热运行平均 `282.85 ms`，中位数 `279.49 ms`，完整样本为 `1427.27, 298.23, 277.77, 276.50, 285.60, 281.21, 277.76 ms`。这些数字用于复现当前环境，不代表所有机器的性能承诺；复测命令为 `moon run cmd/bench`。
 
 ## 测试与质量门禁
 
