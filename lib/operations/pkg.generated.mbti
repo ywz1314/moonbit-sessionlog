@@ -1,0 +1,216 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "ywz1314/sessionlog/lib/operations"
+
+import {
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+  "ywz1314/sessionlog/lib/core",
+}
+
+// Values
+pub fn build_sla_dashboard(WorkQueue, String, SlaPolicy) -> SlaDashboard
+
+pub fn create_items_for_sessions(Array[@core.Session], String) -> Array[WorkItem]
+
+pub fn default_sla_policy() -> SlaPolicy
+
+pub fn evaluate_queue(WorkQueue, String, SlaPolicy) -> Array[SlaResult]
+
+pub fn evaluate_sla(WorkItem, String, SlaPolicy) -> SlaResult
+
+pub fn event(String, String, OperationEventKind, String, String) -> OperationEvent
+
+pub fn new_log() -> OperationLog
+
+pub fn new_queue() -> WorkQueue
+
+pub fn queue_text(WorkQueue) -> String
+
+pub fn refresh_for_sessions(WorkQueue, Array[@core.Session], String) -> WorkQueue
+
+pub fn sla_at_risk(Array[SlaResult]) -> Array[SlaResult]
+
+pub fn sla_breached(Array[SlaResult]) -> Array[SlaResult]
+
+pub fn sla_compliance(Array[SlaResult]) -> Double
+
+pub fn sla_report_text(Array[SlaResult]) -> String
+
+pub fn sla_status_counts(Array[SlaResult]) -> Array[(String, Int)]
+
+pub fn sla_text(SlaResult) -> String
+
+pub fn with_tags(WorkItem, Array[String]) -> WorkItem
+
+pub fn work_item(String, String, WorkKind, WorkPriority, String, String, String, String) -> WorkItem
+
+// Errors
+
+// Types and methods
+pub(all) struct OperationEvent {
+  item_id : String
+  timestamp : String
+  kind : OperationEventKind
+  actor : String
+  detail : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn OperationEvent::actor(Self) -> String
+pub fn OperationEvent::detail(Self) -> String
+pub fn OperationEvent::item_id(Self) -> String
+pub fn OperationEvent::kind(Self) -> OperationEventKind
+pub fn OperationEvent::timestamp(Self) -> String
+
+pub(all) enum OperationEventKind {
+  Created
+  StatusChanged
+  Assigned
+  Escalated
+  Commented
+  Linked
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+
+pub(all) struct OperationLog {
+  events : Array[OperationEvent]
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn OperationLog::append(Self, OperationEvent) -> Self
+pub fn OperationLog::count(Self) -> Int
+pub fn OperationLog::events(Self) -> Array[OperationEvent]
+pub fn OperationLog::for_item(Self, String) -> Array[OperationEvent]
+pub fn OperationLog::latest(Self, String) -> OperationEvent?
+
+pub(all) struct SlaDashboard {
+  results : Array[SlaResult]
+  compliance : Double
+  breached_ids : Array[String]
+  at_risk_ids : Array[String]
+  owner_actions : Array[String]
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn SlaDashboard::at_risk_ids(Self) -> Array[String]
+pub fn SlaDashboard::breached_ids(Self) -> Array[String]
+pub fn SlaDashboard::compliance(Self) -> Double
+pub fn SlaDashboard::owner_actions(Self) -> Array[String]
+pub fn SlaDashboard::results(Self) -> Array[SlaResult]
+
+pub(all) struct SlaPolicy {
+  critical_hours : Int
+  high_hours : Int
+  normal_hours : Int
+  low_hours : Int
+  escalation_after_hours : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn SlaPolicy::validate(Self) -> Array[String]
+
+pub(all) struct SlaResult {
+  item_id : String
+  priority : WorkPriority
+  status : SlaStatus
+  target_hours : Int
+  elapsed_hours : Int
+  remaining_hours : Int
+  utilization : Double
+  recommendation : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn SlaResult::elapsed_hours(Self) -> Int
+pub fn SlaResult::item_id(Self) -> String
+pub fn SlaResult::priority(Self) -> WorkPriority
+pub fn SlaResult::recommendation(Self) -> String
+pub fn SlaResult::remaining_hours(Self) -> Int
+pub fn SlaResult::status(Self) -> SlaStatus
+pub fn SlaResult::target_hours(Self) -> Int
+pub fn SlaResult::utilization(Self) -> Double
+
+pub(all) enum SlaStatus {
+  Within
+  AtRisk
+  Breached
+  Complete
+  Unknown
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn SlaStatus::label(Self) -> String
+
+pub(all) struct WorkItem {
+  id : String
+  session_id : String
+  kind : WorkKind
+  priority : WorkPriority
+  status : WorkStatus
+  title : String
+  detail : String
+  created_at : String
+  due_at : String
+  owner : String
+  tags : Array[String]
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn WorkItem::assign(Self, String) -> Self
+pub fn WorkItem::created_at(Self) -> String
+pub fn WorkItem::detail(Self) -> String
+pub fn WorkItem::due_at(Self) -> String
+pub fn WorkItem::id(Self) -> String
+pub fn WorkItem::kind(Self) -> WorkKind
+pub fn WorkItem::overdue(Self, String) -> Bool
+pub fn WorkItem::owner(Self) -> String
+pub fn WorkItem::priority(Self) -> WorkPriority
+pub fn WorkItem::session_id(Self) -> String
+pub fn WorkItem::status(Self) -> WorkStatus
+pub fn WorkItem::tags(Self) -> Array[String]
+pub fn WorkItem::title(Self) -> String
+pub fn WorkItem::with_status(Self, WorkStatus) -> Self
+
+pub(all) enum WorkKind {
+  ValidateRecord
+  ReviewRisk
+  ContactParticipant
+  UpdatePlan
+  VerifyOutcome
+  ResolveDuplicate
+  ExportReport
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn WorkKind::label(Self) -> String
+
+pub(all) enum WorkPriority {
+  Routine
+  Soon
+  Urgent
+  Immediate
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn WorkPriority::label(Self) -> String
+pub fn WorkPriority::rank(Self) -> Int
+
+pub(all) struct WorkQueue {
+  items : Array[WorkItem]
+  mut revision : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn WorkQueue::add(Self, WorkItem) -> Self
+pub fn WorkQueue::add_many(Self, Array[WorkItem]) -> Self
+pub fn WorkQueue::by_due_date(Self) -> Array[WorkItem]
+pub fn WorkQueue::by_priority(Self) -> Array[WorkItem]
+pub fn WorkQueue::completion_percent(Self) -> Double
+pub fn WorkQueue::count(Self) -> Int
+pub fn WorkQueue::for_owner(Self, String) -> Array[WorkItem]
+pub fn WorkQueue::for_session(Self, String) -> Array[WorkItem]
+pub fn WorkQueue::get(Self, String) -> WorkItem?
+pub fn WorkQueue::items(Self) -> Array[WorkItem]
+pub fn WorkQueue::overdue(Self, String) -> Array[WorkItem]
+pub fn WorkQueue::pending(Self) -> Array[WorkItem]
+pub fn WorkQueue::priority_counts(Self) -> (Int, Int, Int, Int)
+pub fn WorkQueue::remove(Self, String) -> Self
+pub fn WorkQueue::revision(Self) -> Int
+pub fn WorkQueue::status_counts(Self) -> (Int, Int, Int, Int, Int)
+pub fn WorkQueue::summary(Self) -> String
+pub fn WorkQueue::tagged(Self, String) -> Array[WorkItem]
+pub fn WorkQueue::transition(Self, String, WorkStatus) -> Self
+pub fn WorkQueue::update(Self, WorkItem) -> Self
+
+pub(all) enum WorkStatus {
+  Queued
+  InProgress
+  Waiting
+  Done
+  Cancelled
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn WorkStatus::label(Self) -> String
+pub fn WorkStatus::terminal(Self) -> Bool
+
+// Type aliases
+
+// Traits

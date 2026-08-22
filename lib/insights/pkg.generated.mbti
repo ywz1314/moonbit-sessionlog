@@ -12,13 +12,33 @@ pub fn all_session_insights(@core.Session) -> Array[Insight]
 
 pub fn build(Array[@core.Session]) -> InsightReport
 
+pub fn by_action(Array[ExplainedInsight], ExplanationAction) -> Array[ExplainedInsight]
+
+pub fn by_kind(Array[ExplainedInsight], InsightKind) -> Array[ExplainedInsight]
+
 pub fn count_by_severity(Array[Insight]) -> (Int, Int, Int, Int)
 
 pub fn data_quality_insights(@core.Session) -> Array[Insight]
 
+pub fn evidence_text(Evidence) -> String
+
+pub fn explain(Insight, Array[String]) -> ExplainedInsight
+
+pub fn explain_all(InsightReport) -> Array[ExplainedInsight]
+
+pub fn explanation_checksum(Array[ExplainedInsight]) -> Int
+
+pub fn explanation_coverage(InsightReport) -> Double
+
+pub fn explanation_report_text(Array[ExplainedInsight]) -> String
+
+pub fn explanation_text(ExplainedInsight) -> String
+
 pub fn filter_kind(Array[Insight], InsightKind) -> Array[Insight]
 
 pub fn has_critical(Array[Insight]) -> Bool
+
+pub fn high_confidence(Array[ExplainedInsight], Double) -> Array[ExplainedInsight]
 
 pub fn highest_priority(Array[Insight]) -> Insight?
 
@@ -35,6 +55,47 @@ pub fn session_insights(@core.Session) -> Array[Insight]
 // Errors
 
 // Types and methods
+pub(all) struct Evidence {
+  metric : String
+  observed : Double
+  threshold : Double
+  direction : String
+  source_session_ids : Array[String]
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn Evidence::direction(Self) -> String
+pub fn Evidence::metric(Self) -> String
+pub fn Evidence::observed(Self) -> Double
+pub fn Evidence::source_session_ids(Self) -> Array[String]
+pub fn Evidence::threshold(Self) -> Double
+
+pub(all) struct ExplainedInsight {
+  code : String
+  severity : InsightSeverity
+  kind : InsightKind
+  title : String
+  detail : String
+  action : ExplanationAction
+  confidence : Double
+  evidence : Array[Evidence]
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn ExplainedInsight::action(Self) -> ExplanationAction
+pub fn ExplainedInsight::code(Self) -> String
+pub fn ExplainedInsight::confidence(Self) -> Double
+pub fn ExplainedInsight::detail(Self) -> String
+pub fn ExplainedInsight::evidence(Self) -> Array[Evidence]
+pub fn ExplainedInsight::kind(Self) -> InsightKind
+pub fn ExplainedInsight::severity(Self) -> InsightSeverity
+pub fn ExplainedInsight::title(Self) -> String
+
+pub(all) enum ExplanationAction {
+  Monitor
+  VerifyData
+  ReduceLoad
+  ReviewClinically
+  ContinuePlan
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn ExplanationAction::label(Self) -> String
+
 pub(all) struct Insight {
   code : String
   severity : InsightSeverity

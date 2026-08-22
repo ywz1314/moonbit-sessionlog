@@ -62,6 +62,6 @@ jobs:
             ! -path './_build/*' \
             ! -name '*_test.mbt' \
             ! -name '*_wbtest.mbt' \
-            -print0 | xargs -0 awk 'END { print NR }')
-          echo "Production MoonBit source lines: ${lines}"
-          test "${lines}" -ge 8000
+            -print0 | xargs -0 awk 'NF && $0 !~ /^[[:space:]]*\/\// { count++ } END { print count + 0 }')
+          echo "Non-comment production MoonBit source lines: ${lines}"
+          test "${lines}" -ge 20000

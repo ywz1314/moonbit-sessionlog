@@ -7,9 +7,175 @@ import {
 }
 
 // Values
+pub fn digest_changed(SerializationDigest, SerializationDigest) -> Array[String]
+
+pub fn digest_checksum_all(Array[SerializationDigest]) -> Int
+
+pub fn digest_duplicates(Array[SerializationDigest]) -> Array[SerializationDigest]
+
+pub fn digest_find(Array[SerializationDigest], String) -> SerializationDigest?
+
+pub fn digest_map_by_id(Array[SerializationDigest]) -> Array[(String, Int)]
+
+pub fn digests(Array[Session]) -> Array[SessionDigest]
+
 pub fn effort_band(Int) -> EffortBand
 
+pub fn export_complete_rows(Array[SessionExportRow]) -> Array[SessionExportRow]
+
+pub fn export_duplicate_ids(Array[SessionExportRow]) -> Array[String]
+
+pub fn export_duration_total(Array[SessionExportRow]) -> Int
+
+pub fn export_import_gate_text(Array[SessionExportRow]) -> String
+
+pub fn export_incomplete_rows(Array[SessionExportRow]) -> Array[SessionExportRow]
+
+pub fn export_metric_above(Array[SessionExportRow], ExportMetric, Double) -> Array[SessionExportRow]
+
+pub fn export_metric_average(Array[SessionExportRow], ExportMetric) -> Double
+
+pub fn export_metric_below(Array[SessionExportRow], ExportMetric, Double) -> Array[SessionExportRow]
+
+pub fn export_metric_bottom(Array[SessionExportRow], ExportMetric, Int) -> Array[(String, Double)]
+
+pub fn export_metric_maximum(Array[SessionExportRow], ExportMetric) -> Double
+
+pub fn export_metric_minimum(Array[SessionExportRow], ExportMetric) -> Double
+
+pub fn export_metric_range(Array[SessionExportRow], ExportMetric) -> Double
+
+pub fn export_metric_rank(Array[SessionExportRow], ExportMetric) -> Array[(String, Double)]
+
+pub fn export_metric_report(Array[SessionExportRow], ExportMetric) -> String
+
+pub fn export_metric_top(Array[SessionExportRow], ExportMetric, Int) -> Array[(String, Double)]
+
+pub fn export_metric_total(Array[SessionExportRow], ExportMetric) -> Double
+
+pub fn export_metric_values(Array[SessionExportRow], ExportMetric) -> Array[Double]
+
+pub fn export_pain_total(Array[SessionExportRow]) -> Int
+
+pub fn export_quality_average(Array[SessionExportRow]) -> Double
+
+pub fn export_quality_fail(Array[SessionExportRow], Int) -> Array[SessionExportRow]
+
+pub fn export_quality_pass(Array[SessionExportRow], Int) -> Array[SessionExportRow]
+
+pub fn export_quality_report(Array[SessionExportRow], Int) -> String
+
+pub fn export_reps_total(Array[SessionExportRow]) -> Int
+
+pub fn export_row_checksum(SessionExportRow) -> Int
+
+pub fn export_row_header() -> Array[String]
+
+pub fn export_row_is_complete(SessionExportRow) -> Bool
+
+pub fn export_row_quality_score(SessionExportRow) -> Int
+
+pub fn export_row_values(SessionExportRow) -> Array[String]
+
+pub fn export_rows(Array[Session]) -> Array[SessionExportRow]
+
+pub fn export_rows_after(Array[SessionExportRow], Int) -> Array[SessionExportRow]
+
+pub fn export_rows_by_date(Array[Session]) -> Array[(String, Int)]
+
+pub fn export_rows_changed(Array[SessionExportRow], Array[SessionExportRow]) -> Bool
+
+pub fn export_rows_checksum(Array[SessionExportRow]) -> Int
+
+pub fn export_rows_count_delta(Array[SessionExportRow], Array[SessionExportRow]) -> Int
+
+pub fn export_rows_date_span(Array[SessionExportRow]) -> (String, String)
+
+pub fn export_rows_date_text(Array[SessionExportRow]) -> String
+
+pub fn export_rows_duration_delta(Array[SessionExportRow], Array[SessionExportRow]) -> Int
+
+pub fn export_rows_earliest(Array[SessionExportRow]) -> SessionExportRow?
+
+pub fn export_rows_empty(Array[SessionExportRow]) -> Bool
+
+pub fn export_rows_has_duplicate_ids(Array[SessionExportRow]) -> Bool
+
+pub fn export_rows_id_counts(Array[SessionExportRow]) -> Array[(String, Int)]
+
+pub fn export_rows_ids_text(Array[SessionExportRow]) -> String
+
+pub fn export_rows_integrity_text(Array[SessionExportRow]) -> String
+
+pub fn export_rows_latest(Array[SessionExportRow]) -> SessionExportRow?
+
+pub fn export_rows_limit(Array[SessionExportRow], Int) -> Array[SessionExportRow]
+
+pub fn export_rows_nonempty(Array[SessionExportRow]) -> Bool
+
+pub fn export_rows_page(Array[SessionExportRow], Int, Int) -> Array[SessionExportRow]
+
+pub fn export_rows_page_count(Array[SessionExportRow], Int) -> Int
+
+pub fn export_rows_page_valid(Array[SessionExportRow], Int, Int) -> Bool
+
+pub fn export_rows_pain_delta(Array[SessionExportRow], Array[SessionExportRow]) -> Int
+
+pub fn export_rows_quality_delta(Array[SessionExportRow], Array[SessionExportRow]) -> Double
+
+pub fn export_rows_ready_for_import(Array[SessionExportRow]) -> Bool
+
+pub fn export_rows_reps_delta(Array[SessionExportRow], Array[SessionExportRow]) -> Int
+
+pub fn export_rows_revision_key(Array[SessionExportRow]) -> String
+
+pub fn export_rows_same_revision(Array[SessionExportRow], Array[SessionExportRow]) -> Bool
+
+pub fn export_rows_select_completion(Array[SessionExportRow], Double) -> Array[SessionExportRow]
+
+pub fn export_rows_select_date(Array[SessionExportRow], String, String) -> Array[SessionExportRow]
+
+pub fn export_rows_select_pain(Array[SessionExportRow], Int) -> Array[SessionExportRow]
+
+pub fn export_rows_sets_delta(Array[SessionExportRow], Array[SessionExportRow]) -> Int
+
+pub fn export_rows_sort_by_completion(Array[SessionExportRow]) -> Array[SessionExportRow]
+
+pub fn export_rows_sort_by_pain(Array[SessionExportRow]) -> Array[SessionExportRow]
+
+pub fn export_rows_sort_by_reps(Array[SessionExportRow]) -> Array[SessionExportRow]
+
+pub fn export_rows_sorted_by_date(Array[SessionExportRow]) -> Array[SessionExportRow]
+
+pub fn export_rows_summary_delta(Array[SessionExportRow], Array[SessionExportRow]) -> String
+
+pub fn export_rows_top_pain(Array[SessionExportRow], Int) -> Array[SessionExportRow]
+
+pub fn export_rows_top_reps(Array[SessionExportRow], Int) -> Array[SessionExportRow]
+
+pub fn export_rows_tsv(Array[Session]) -> String
+
+pub fn export_rows_unique_ids(Array[SessionExportRow]) -> Array[String]
+
+pub fn export_rows_version(Array[SessionExportRow]) -> String
+
+pub fn export_rows_with_notes(Array[SessionExportRow]) -> Array[SessionExportRow]
+
+pub fn export_rows_without_notes(Array[SessionExportRow]) -> Array[SessionExportRow]
+
+pub fn export_sets_total(Array[SessionExportRow]) -> Int
+
+pub fn export_summary_text(ExportRowSummary) -> String
+
+pub fn highest_symptom_session(Array[Session]) -> Session?
+
 pub fn pain_band(Int) -> PainBand
+
+pub fn peak_work_session(Array[Session]) -> Session?
+
+pub fn serialization_digests(Array[Session]) -> Array[SerializationDigest]
+
+pub fn summarize_export_rows(Array[SessionExportRow]) -> ExportRowSummary
 
 // Errors
 
@@ -23,6 +189,37 @@ pub(all) enum EffortBand {
 } derive(Eq, ToJson, @debug.Debug, @json.FromJson)
 pub fn EffortBand::label(Self) -> String
 
+pub(all) enum ExportMetric {
+  Duration
+  Movements
+  Sets
+  Reps
+  HoldTime
+  Completion
+  Pain
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn ExportMetric::label(Self) -> String
+pub fn ExportMetric::value(Self, SessionExportRow) -> Double
+
+pub(all) struct ExportRowSummary {
+  count : Int
+  duration : Int
+  movements : Int
+  sets : Int
+  reps : Int
+  hold_time : Int
+  average_completion : Double
+  average_pain : Double
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn ExportRowSummary::average_completion(Self) -> Double
+pub fn ExportRowSummary::average_pain(Self) -> Double
+pub fn ExportRowSummary::count(Self) -> Int
+pub fn ExportRowSummary::duration(Self) -> Int
+pub fn ExportRowSummary::hold_time(Self) -> Int
+pub fn ExportRowSummary::movements(Self) -> Int
+pub fn ExportRowSummary::reps(Self) -> Int
+pub fn ExportRowSummary::sets(Self) -> Int
+
 pub(all) struct Movement {
   name : String
   sets : Array[Set]
@@ -32,19 +229,53 @@ pub(all) struct Movement {
 pub fn Movement::average_completion(Self) -> Double
 pub fn Movement::average_reps(Self) -> Double
 pub fn Movement::completed_set_count(Self) -> Int
+pub fn Movement::consistent_resistance(Self) -> Bool
 pub fn Movement::dominant_resistance(Self) -> String
 pub fn Movement::effective_reps(Self) -> Int
 pub fn Movement::effort_band(Self) -> EffortBand
 pub fn Movement::has_incomplete_set(Self) -> Bool
 pub fn Movement::highest_completion(Self) -> Double
+pub fn Movement::invalid_set_count(Self) -> Int
+pub fn Movement::load_profile(Self) -> MovementLoad
+pub fn Movement::load_score(Self) -> Double
 pub fn Movement::lowest_completion(Self) -> Double
+pub fn Movement::pain_adjusted_completion(Self) -> Double
 pub fn Movement::pain_band(Self) -> PainBand
+pub fn Movement::peak_hold_time(Self) -> Int
+pub fn Movement::peak_reps(Self) -> Int
 pub fn Movement::rep_range(Self) -> (Int, Int)
+pub fn Movement::resistance_changes(Self) -> Int
 pub fn Movement::resistances(Self) -> Array[String]
 pub fn Movement::total_completion(Self) -> Double
 pub fn Movement::total_hold_time(Self) -> Int
 pub fn Movement::total_reps(Self) -> Int
+pub fn Movement::total_volume(Self) -> Int
+pub fn Movement::uncompleted_reps(Self) -> Int
+pub fn Movement::valid_set_count(Self) -> Int
 pub fn Movement::work_units(Self) -> Int
+
+pub(all) struct MovementLoad {
+  movement_name : String
+  sets : Int
+  reps : Int
+  effective_reps : Int
+  hold_time : Int
+  work_units : Int
+  completion : Double
+  pain : Int
+  rpe : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn MovementLoad::completion(Self) -> Double
+pub fn MovementLoad::effective_reps(Self) -> Int
+pub fn MovementLoad::hold_time(Self) -> Int
+pub fn MovementLoad::intensity(Self) -> Double
+pub fn MovementLoad::movement_name(Self) -> String
+pub fn MovementLoad::pain(Self) -> Int
+pub fn MovementLoad::reps(Self) -> Int
+pub fn MovementLoad::rpe(Self) -> Int
+pub fn MovementLoad::sets(Self) -> Int
+pub fn MovementLoad::symptom_burden(Self) -> Double
+pub fn MovementLoad::work_units(Self) -> Int
 
 pub(all) enum PainBand {
   None
@@ -53,6 +284,31 @@ pub(all) enum PainBand {
   Severe
 } derive(Eq, ToJson, @debug.Debug, @json.FromJson)
 pub fn PainBand::label(Self) -> String
+
+pub(all) struct SerializationDigest {
+  id : String
+  date : String
+  movement_count : Int
+  set_count : Int
+  reps : Int
+  hold_time : Int
+  completion : Double
+  pain_before : Int
+  pain_after : Int
+  checksum : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn SerializationDigest::checksum(Self) -> Int
+pub fn SerializationDigest::completion(Self) -> Double
+pub fn SerializationDigest::date(Self) -> String
+pub fn SerializationDigest::hold_time(Self) -> Int
+pub fn SerializationDigest::id(Self) -> String
+pub fn SerializationDigest::movement_count(Self) -> Int
+pub fn SerializationDigest::pain_after(Self) -> Int
+pub fn SerializationDigest::pain_before(Self) -> Int
+pub fn SerializationDigest::reps(Self) -> Int
+pub fn SerializationDigest::set_count(Self) -> Int
+pub fn SerializationDigest::stable_key(Self) -> String
+pub fn SerializationDigest::text(Self) -> String
 
 pub(all) struct Session {
   id : String
@@ -65,14 +321,79 @@ pub(all) struct Session {
 } derive(Eq, ToJson, @debug.Debug, @json.FromJson)
 pub fn Session::average_completion(Self) -> Double
 pub fn Session::average_pain_during(Self) -> Double
+pub fn Session::average_rpe(Self) -> Double
+pub fn Session::data_completeness(Self) -> Double
+pub fn Session::density(Self) -> Double
+pub fn Session::digest(Self) -> SessionDigest
+pub fn Session::export_row(Self) -> SessionExportRow
+pub fn Session::has_movement(Self, String) -> Bool
+pub fn Session::intensity(Self) -> Double
 pub fn Session::metrics(Self) -> SessionMetrics
 pub fn Session::movement(Self, String) -> Movement?
+pub fn Session::movement_at(Self, Int) -> Movement?
+pub fn Session::movement_count_with_sets(Self) -> Int
 pub fn Session::movement_names(Self) -> Array[String]
 pub fn Session::movements_at_or_below_pain(Self, Int) -> Int
 pub fn Session::pain_delta(Self) -> Int
+pub fn Session::peak_pain(Self) -> Int
+pub fn Session::peak_rpe(Self) -> Int
+pub fn Session::resistances(Self) -> Array[String]
+pub fn Session::serialization_digest(Self) -> SerializationDigest
+pub fn Session::symptom_burden(Self) -> Double
+pub fn Session::total_effective_reps(Self) -> Int
 pub fn Session::total_hold_time(Self) -> Int
 pub fn Session::total_reps(Self) -> Int
 pub fn Session::total_sets(Self) -> Int
+pub fn Session::total_volume(Self) -> Int
+pub fn Session::total_work_units(Self) -> Int
+
+pub(all) struct SessionDigest {
+  session_id : String
+  date : String
+  work_units : Int
+  effective_reps : Int
+  intensity : Double
+  density : Double
+  peak_pain : Int
+  peak_rpe : Int
+  completeness : Double
+  resistances : Array[String]
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn SessionDigest::completeness(Self) -> Double
+pub fn SessionDigest::date(Self) -> String
+pub fn SessionDigest::density(Self) -> Double
+pub fn SessionDigest::effective_reps(Self) -> Int
+pub fn SessionDigest::intensity(Self) -> Double
+pub fn SessionDigest::peak_pain(Self) -> Int
+pub fn SessionDigest::peak_rpe(Self) -> Int
+pub fn SessionDigest::resistances(Self) -> Array[String]
+pub fn SessionDigest::session_id(Self) -> String
+pub fn SessionDigest::work_units(Self) -> Int
+
+pub(all) struct SessionExportRow {
+  id : String
+  date : String
+  duration : Int
+  movements : Int
+  sets : Int
+  reps : Int
+  hold_time : Int
+  pain_before : Int
+  pain_after : Int
+  completion : Double
+  notes_length : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn SessionExportRow::completion(Self) -> Double
+pub fn SessionExportRow::date(Self) -> String
+pub fn SessionExportRow::duration(Self) -> Int
+pub fn SessionExportRow::hold_time(Self) -> Int
+pub fn SessionExportRow::id(Self) -> String
+pub fn SessionExportRow::movements(Self) -> Int
+pub fn SessionExportRow::notes_length(Self) -> Int
+pub fn SessionExportRow::pain_after(Self) -> Int
+pub fn SessionExportRow::pain_before(Self) -> Int
+pub fn SessionExportRow::reps(Self) -> Int
+pub fn SessionExportRow::sets(Self) -> Int
 
 pub(all) struct SessionMetrics {
   session_id : String
@@ -102,6 +423,10 @@ pub(all) struct Set {
 pub fn Set::completion_percent(Self) -> Int
 pub fn Set::effective_reps(Self) -> Int
 pub fn Set::is_complete(Self, threshold? : Double) -> Bool
+pub fn Set::is_valid_measurement(Self) -> Bool
+pub fn Set::symptom_adjusted_work(Self, Int, Int) -> Double
+pub fn Set::uncompleted_reps(Self) -> Int
+pub fn Set::volume(Self) -> Int
 pub fn Set::work_units(Self) -> Int
 
 // Type aliases

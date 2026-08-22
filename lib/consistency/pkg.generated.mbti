@@ -14,7 +14,25 @@ pub fn compare_movement(String, Array[@core.Movement]) -> MovementConsistency
 
 pub fn consistency_text(Array[MovementConsistency]) -> String
 
+pub fn high_priority_repairs(Array[RepairSuggestion], Int) -> Array[RepairSuggestion]
+
+pub fn repair_checksum(Array[RepairSuggestion]) -> Int
+
+pub fn repair_confidence(Array[RepairSuggestion]) -> Double
+
+pub fn repair_kind_counts(Array[RepairSuggestion]) -> Array[(String, Int)]
+
+pub fn repair_report_text(Array[RepairSuggestion]) -> String
+
+pub fn repair_text(RepairSuggestion) -> String
+
+pub fn repairs_by_kind(Array[RepairSuggestion], RepairKind) -> Array[RepairSuggestion]
+
+pub fn repairs_for_session(Array[RepairSuggestion], String) -> Array[RepairSuggestion]
+
 pub fn stable_items(Array[MovementConsistency]) -> Array[MovementConsistency]
+
+pub fn suggest_repairs(Array[@core.Session]) -> Array[RepairSuggestion]
 
 pub fn unstable_items(Array[MovementConsistency]) -> Array[MovementConsistency]
 
@@ -35,6 +53,35 @@ pub fn MovementConsistency::observations(Self) -> Int
 pub fn MovementConsistency::pain_range(Self) -> Int
 pub fn MovementConsistency::reps_range(Self) -> Int
 pub fn MovementConsistency::stable(Self) -> Bool
+
+pub(all) enum RepairKind {
+  NormalizeName
+  SplitDuplicate
+  ReviewOutlier
+  FillMissingSet
+  VerifyPain
+  Keep
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn RepairKind::label(Self) -> String
+
+pub(all) struct RepairSuggestion {
+  session_id : String
+  movement_name : String
+  kind : RepairKind
+  priority : Int
+  confidence : Double
+  before : String
+  after : String
+  rationale : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn RepairSuggestion::after(Self) -> String
+pub fn RepairSuggestion::before(Self) -> String
+pub fn RepairSuggestion::confidence(Self) -> Double
+pub fn RepairSuggestion::kind(Self) -> RepairKind
+pub fn RepairSuggestion::movement_name(Self) -> String
+pub fn RepairSuggestion::priority(Self) -> Int
+pub fn RepairSuggestion::rationale(Self) -> String
+pub fn RepairSuggestion::session_id(Self) -> String
 
 // Type aliases
 

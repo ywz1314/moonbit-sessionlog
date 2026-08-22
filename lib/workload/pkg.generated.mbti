@@ -1,0 +1,110 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "ywz1314/sessionlog/lib/workload"
+
+import {
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+  "ywz1314/sessionlog/lib/core",
+}
+
+// Values
+pub fn acute_chronic_ratio(Array[LoadVector], Int, Int) -> Double
+
+pub fn acute_load(Array[LoadVector], Int) -> Double
+
+pub fn assess(Array[LoadVector], acute_days? : Int, chronic_days? : Int, ramp_limit? : Double) -> LoadAssessment
+
+pub fn chronic_load(Array[LoadVector], Int) -> Double
+
+pub fn compare(LoadAssessment, LoadAssessment) -> (Double, Double, Double)
+
+pub fn daily_average_load(Array[LoadVector]) -> Array[(String, Double)]
+
+pub fn daily_load(Array[LoadVector]) -> Array[(String, Double)]
+
+pub fn from_session(@core.Session) -> LoadVector
+
+pub fn from_sessions(Array[@core.Session]) -> Array[LoadVector]
+
+pub fn load_text(LoadAssessment) -> String
+
+pub fn monotony(Array[LoadVector]) -> Double
+
+pub fn ramp_percent(Double, Double) -> Double
+
+pub fn safe_next_load(Double, maximum_ramp? : Double) -> Double
+
+pub fn strain(Array[LoadVector]) -> Double
+
+pub fn window(Array[LoadVector], String, String) -> LoadWindow
+
+// Errors
+
+// Types and methods
+pub(all) struct LoadAssessment {
+  acute : Double
+  chronic : Double
+  ratio : Double
+  monotony : Double
+  strain : Double
+  flags : Array[LoadFlag]
+  recommendation : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn LoadAssessment::acute(Self) -> Double
+pub fn LoadAssessment::chronic(Self) -> Double
+pub fn LoadAssessment::flags(Self) -> Array[LoadFlag]
+pub fn LoadAssessment::monotony(Self) -> Double
+pub fn LoadAssessment::ratio(Self) -> Double
+pub fn LoadAssessment::recommendation(Self) -> String
+pub fn LoadAssessment::strain(Self) -> Double
+
+pub(all) enum LoadFlag {
+  VeryLow
+  Balanced
+  RapidIncrease
+  RapidDecrease
+  Monotonous
+  SymptomHeavy
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn LoadFlag::label(Self) -> String
+
+pub(all) struct LoadVector {
+  date : String
+  session_id : String
+  reps : Int
+  work_units : Int
+  duration : Int
+  pain : Double
+  rpe : Double
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn LoadVector::date(Self) -> String
+pub fn LoadVector::duration(Self) -> Int
+pub fn LoadVector::load(Self) -> Double
+pub fn LoadVector::pain(Self) -> Double
+pub fn LoadVector::reps(Self) -> Int
+pub fn LoadVector::rpe(Self) -> Double
+pub fn LoadVector::session_id(Self) -> String
+pub fn LoadVector::symptom_adjusted_load(Self) -> Double
+pub fn LoadVector::work_units(Self) -> Int
+
+pub(all) struct LoadWindow {
+  start_date : String
+  end_date : String
+  values : Array[LoadVector]
+  total_load : Double
+  average_load : Double
+  peak_load : Double
+  standard_deviation : Double
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn LoadWindow::average_load(Self) -> Double
+pub fn LoadWindow::end_date(Self) -> String
+pub fn LoadWindow::peak_load(Self) -> Double
+pub fn LoadWindow::session_count(Self) -> Int
+pub fn LoadWindow::standard_deviation(Self) -> Double
+pub fn LoadWindow::start_date(Self) -> String
+pub fn LoadWindow::total_load(Self) -> Double
+pub fn LoadWindow::values(Self) -> Array[LoadVector]
+
+// Type aliases
+
+// Traits

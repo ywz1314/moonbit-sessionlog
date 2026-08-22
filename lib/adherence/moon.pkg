@@ -1,0 +1,7 @@
+import {
+  "ywz1314/sessionlog/lib/core",
+  "ywz1314/sessionlog/lib/calendar",
+  "ywz1314/sessionlog/lib/planning",
+  "ywz1314/sessionlog/lib/statistics",
+  "moonbitlang/core/json",
+}

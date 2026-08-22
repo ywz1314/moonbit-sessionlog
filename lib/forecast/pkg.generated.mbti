@@ -8,6 +8,22 @@ import {
 }
 
 // Values
+pub fn assess_forecast_risk(Array[ForecastInterval], Double) -> ForecastRisk
+
+pub fn best_completion(Array[ScenarioReport]) -> ScenarioReport?
+
+pub fn calibrate(Array[ForecastInterval], Array[Double], Double) -> Result[CalibrationReport, String]
+
+pub fn calibration_text(CalibrationReport) -> String
+
+pub fn caution_steps(ScenarioReport) -> Array[Int]
+
+pub fn compare_scenarios(ScenarioReport, ScenarioReport) -> (Double, Double, Int)
+
+pub fn confidence_band(ScenarioReport) -> String
+
+pub fn conservative_scenario(Int) -> ScenarioInput
+
 pub fn expected_completion_at(ForecastReport, Int) -> Double
 
 pub fn expected_pain_at(ForecastReport, Int) -> Double
@@ -16,15 +32,70 @@ pub fn forecast(Array[@core.Session], Int) -> ForecastReport
 
 pub fn forecast_from_aggregates(Array[@core.Session], Int) -> ForecastReport
 
+pub fn forecast_risk_text(ForecastRisk) -> String
+
 pub fn has_caution(ForecastReport) -> Bool
+
+pub fn interval(Int, String, Double, Double, Double, IntervalKind) -> Result[ForecastInterval, String]
+
+pub fn interval_contains(ForecastInterval, Double) -> Bool
+
+pub fn interval_is_wide(ForecastInterval, Double) -> Bool
+
+pub fn interval_relative_width(ForecastInterval) -> Double
+
+pub fn intervals_for_report(ForecastReport, Double, Double, Double) -> Result[Array[ForecastInterval], String]
+
+pub fn intervals_for_scenario(ScenarioReport, Double, Double, Double) -> Result[Array[ForecastInterval], String]
+
+pub fn lowest_work(Array[ScenarioReport]) -> ScenarioReport?
+
+pub fn maintenance_scenario(Int) -> ScenarioInput
 
 pub fn max_expected_work(ForecastReport) -> Int
 
+pub fn progression_scenario(Int) -> ScenarioInput
+
+pub fn quantile_band(Int, String, Array[Double]) -> QuantileBand
+
+pub fn quantile_band_text(QuantileBand) -> String
+
+pub fn recovery_scenario(Int) -> ScenarioInput
+
 pub fn report_text(ForecastReport) -> String
+
+pub fn run_scenario(Array[@core.Session], ScenarioInput) -> ScenarioReport
+
+pub fn run_standard_scenarios(Array[@core.Session], Int) -> Array[ScenarioReport]
+
+pub fn safest_pain(Array[ScenarioReport]) -> ScenarioReport?
+
+pub fn scenario(String, Double, Double, Double, Double, Int) -> ScenarioInput
+
+pub fn scenario_delta(ScenarioReport) -> (Double, Double, Int)
+
+pub fn scenario_text(ScenarioReport) -> String
 
 // Errors
 
 // Types and methods
+pub(all) struct CalibrationReport {
+  observations : Int
+  covered : Int
+  coverage : Double
+  target_level : Double
+  calibration_error : Double
+  mean_width : Double
+  overconfident : Bool
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn CalibrationReport::calibration_error(Self) -> Double
+pub fn CalibrationReport::coverage(Self) -> Double
+pub fn CalibrationReport::covered(Self) -> Int
+pub fn CalibrationReport::mean_width(Self) -> Double
+pub fn CalibrationReport::observations(Self) -> Int
+pub fn CalibrationReport::overconfident(Self) -> Bool
+pub fn CalibrationReport::target_level(Self) -> Double
+
 pub(all) enum ForecastBand {
   Stable
   Improving
@@ -32,6 +103,25 @@ pub(all) enum ForecastBand {
   Uncertain
 } derive(Eq, ToJson, @debug.Debug, @json.FromJson)
 pub fn ForecastBand::label(Self) -> String
+
+pub(all) struct ForecastInterval {
+  step : Int
+  metric : String
+  expected : Double
+  lower : Double
+  upper : Double
+  width : Double
+  level : Double
+  kind : IntervalKind
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn ForecastInterval::expected(Self) -> Double
+pub fn ForecastInterval::kind(Self) -> IntervalKind
+pub fn ForecastInterval::level(Self) -> Double
+pub fn ForecastInterval::lower(Self) -> Double
+pub fn ForecastInterval::metric(Self) -> String
+pub fn ForecastInterval::step(Self) -> Int
+pub fn ForecastInterval::upper(Self) -> Double
+pub fn ForecastInterval::width(Self) -> Double
 
 pub(all) struct ForecastPoint {
   step : Int
@@ -62,6 +152,94 @@ pub fn ForecastReport::completion_slope(Self) -> Double
 pub fn ForecastReport::confidence(Self) -> Double
 pub fn ForecastReport::pain_slope(Self) -> Double
 pub fn ForecastReport::points(Self) -> Array[ForecastPoint]
+
+pub(all) struct ForecastRisk {
+  interval_count : Int
+  wide_count : Int
+  negative_completion_count : Int
+  high_pain_count : Int
+  mean_width : Double
+  score : Double
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn ForecastRisk::high_pain_count(Self) -> Int
+pub fn ForecastRisk::interval_count(Self) -> Int
+pub fn ForecastRisk::mean_width(Self) -> Double
+pub fn ForecastRisk::negative_completion_count(Self) -> Int
+pub fn ForecastRisk::score(Self) -> Double
+pub fn ForecastRisk::wide_count(Self) -> Int
+
+pub(all) enum IntervalKind {
+  Prediction
+  Credible
+  Tolerance
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn IntervalKind::label(Self) -> String
+
+pub(all) struct QuantileBand {
+  step : Int
+  metric : String
+  q10 : Double
+  q25 : Double
+  q50 : Double
+  q75 : Double
+  q90 : Double
+  sample_count : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn QuantileBand::metric(Self) -> String
+pub fn QuantileBand::q10(Self) -> Double
+pub fn QuantileBand::q25(Self) -> Double
+pub fn QuantileBand::q50(Self) -> Double
+pub fn QuantileBand::q75(Self) -> Double
+pub fn QuantileBand::q90(Self) -> Double
+pub fn QuantileBand::sample_count(Self) -> Int
+pub fn QuantileBand::step(Self) -> Int
+
+pub(all) struct ScenarioInput {
+  name : String
+  completion_delta : Double
+  pain_delta : Double
+  work_multiplier : Double
+  recovery_factor : Double
+  horizon : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn ScenarioInput::completion_delta(Self) -> Double
+pub fn ScenarioInput::horizon(Self) -> Int
+pub fn ScenarioInput::name(Self) -> String
+pub fn ScenarioInput::pain_delta(Self) -> Double
+pub fn ScenarioInput::recovery_factor(Self) -> Double
+pub fn ScenarioInput::work_multiplier(Self) -> Double
+
+pub(all) struct ScenarioPoint {
+  step : Int
+  completion : Double
+  pain : Double
+  work_units : Int
+  readiness : Double
+  band : ForecastBand
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn ScenarioPoint::band(Self) -> ForecastBand
+pub fn ScenarioPoint::completion(Self) -> Double
+pub fn ScenarioPoint::pain(Self) -> Double
+pub fn ScenarioPoint::readiness(Self) -> Double
+pub fn ScenarioPoint::step(Self) -> Int
+pub fn ScenarioPoint::work_units(Self) -> Int
+
+pub(all) struct ScenarioReport {
+  input : ScenarioInput
+  baseline : ForecastReport
+  points : Array[ScenarioPoint]
+  final_completion : Double
+  final_pain : Double
+  final_work_units : Int
+  confidence : Double
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn ScenarioReport::baseline(Self) -> ForecastReport
+pub fn ScenarioReport::confidence(Self) -> Double
+pub fn ScenarioReport::final_completion(Self) -> Double
+pub fn ScenarioReport::final_pain(Self) -> Double
+pub fn ScenarioReport::final_work_units(Self) -> Int
+pub fn ScenarioReport::input(Self) -> ScenarioInput
+pub fn ScenarioReport::points(Self) -> Array[ScenarioPoint]
 
 // Type aliases
 

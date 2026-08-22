@@ -1,5 +1,6 @@
 import {
   "ywz1314/sessionlog/lib/core",
+  "ywz1314/sessionlog/lib/history",
   "ywz1314/sessionlog/lib/schema",
   "ywz1314/sessionlog/lib/validation",
   "moonbitlang/core/json",

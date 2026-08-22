@@ -1,0 +1,146 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "ywz1314/sessionlog/lib/outcomes"
+
+import {
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+  "ywz1314/sessionlog/lib/statistics",
+}
+
+// Values
+pub fn change(OutcomeInstrument, Double, Double) -> OutcomeChange
+
+pub fn denormalize(OutcomeInstrument, Double) -> Double
+
+pub fn function_instrument() -> OutcomeInstrument
+
+pub fn in_range(OutcomeInstrument, Double) -> Bool
+
+pub fn instrument(String, String, Double, Double, Bool, Double, Int) -> OutcomeInstrument
+
+pub fn new_series(OutcomeInstrument) -> OutcomeSeries
+
+pub fn normalize(OutcomeInstrument, Double) -> Double
+
+pub fn observation(String, OutcomeInstrument, String, Double, Int, OutcomeSource, String) -> OutcomeObservation
+
+pub fn outcome_text(OutcomeSeries) -> String
+
+pub fn pain_instrument() -> OutcomeInstrument
+
+pub fn report(Array[OutcomeSeries]) -> OutcomeReport
+
+pub fn response_rate(OutcomeReport) -> Double
+
+// Errors
+
+// Types and methods
+pub(all) struct OutcomeChange {
+  instrument : OutcomeInstrument
+  baseline : Double
+  current : Double
+  delta : Double
+  percent_change : Double
+  band : ResponseBand
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn OutcomeChange::band(Self) -> ResponseBand
+pub fn OutcomeChange::baseline(Self) -> Double
+pub fn OutcomeChange::current(Self) -> Double
+pub fn OutcomeChange::delta(Self) -> Double
+pub fn OutcomeChange::instrument(Self) -> OutcomeInstrument
+pub fn OutcomeChange::percent_change(Self) -> Double
+
+pub(all) struct OutcomeInstrument {
+  code : String
+  name : String
+  minimum : Double
+  maximum : Double
+  lower_is_better : Bool
+  meaningful_change : Double
+  item_count : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn OutcomeInstrument::code(Self) -> String
+pub fn OutcomeInstrument::item_count(Self) -> Int
+pub fn OutcomeInstrument::lower_is_better(Self) -> Bool
+pub fn OutcomeInstrument::maximum(Self) -> Double
+pub fn OutcomeInstrument::meaningful_change(Self) -> Double
+pub fn OutcomeInstrument::minimum(Self) -> Double
+pub fn OutcomeInstrument::name(Self) -> String
+
+pub(all) struct OutcomeObservation {
+  id : String
+  instrument : OutcomeInstrument
+  date : String
+  score : Double
+  answered_items : Int
+  source : OutcomeSource
+  note : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn OutcomeObservation::answered_items(Self) -> Int
+pub fn OutcomeObservation::completeness(Self) -> Double
+pub fn OutcomeObservation::date(Self) -> String
+pub fn OutcomeObservation::id(Self) -> String
+pub fn OutcomeObservation::instrument(Self) -> OutcomeInstrument
+pub fn OutcomeObservation::normalized(Self) -> Double
+pub fn OutcomeObservation::note(Self) -> String
+pub fn OutcomeObservation::score(Self) -> Double
+pub fn OutcomeObservation::source(Self) -> OutcomeSource
+pub fn OutcomeObservation::valid(Self) -> Bool
+pub fn OutcomeObservation::with_note(Self, String) -> Self
+
+pub(all) struct OutcomeReport {
+  series : Array[OutcomeSeries]
+  reliable_count : Int
+  improved_count : Int
+  deteriorated_count : Int
+  mean_normalized : Double
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn OutcomeReport::deteriorated_count(Self) -> Int
+pub fn OutcomeReport::improved_count(Self) -> Int
+pub fn OutcomeReport::mean_normalized(Self) -> Double
+pub fn OutcomeReport::reliable_count(Self) -> Int
+pub fn OutcomeReport::series(Self) -> Array[OutcomeSeries]
+
+pub(all) struct OutcomeSeries {
+  instrument : OutcomeInstrument
+  observations : Array[OutcomeObservation]
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn OutcomeSeries::append(Self, OutcomeObservation) -> Self
+pub fn OutcomeSeries::append_many(Self, Array[OutcomeObservation]) -> Self
+pub fn OutcomeSeries::baseline(Self) -> OutcomeObservation?
+pub fn OutcomeSeries::between(Self, String, String) -> Self
+pub fn OutcomeSeries::change(Self) -> OutcomeChange?
+pub fn OutcomeSeries::chronological(Self) -> Array[OutcomeObservation]
+pub fn OutcomeSeries::completion(Self) -> Double
+pub fn OutcomeSeries::count(Self) -> Int
+pub fn OutcomeSeries::instrument(Self) -> OutcomeInstrument
+pub fn OutcomeSeries::invalid(Self) -> Array[OutcomeObservation]
+pub fn OutcomeSeries::latest(Self) -> OutcomeObservation?
+pub fn OutcomeSeries::observations(Self) -> Array[OutcomeObservation]
+pub fn OutcomeSeries::reliable(Self, minimum? : Double) -> Bool
+pub fn OutcomeSeries::remove(Self, String) -> Self
+pub fn OutcomeSeries::response(Self) -> ResponseBand
+pub fn OutcomeSeries::summary(Self) -> @statistics.Summary
+pub fn OutcomeSeries::trend(Self) -> Double
+pub fn OutcomeSeries::valid(Self) -> Array[OutcomeObservation]
+pub fn OutcomeSeries::values(Self) -> Array[Double]
+
+pub(all) enum OutcomeSource {
+  Clinician
+  Participant
+  Device
+  Imported
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn OutcomeSource::label(Self) -> String
+
+pub(all) enum ResponseBand {
+  Deteriorated
+  Unchanged
+  Improved
+  MeaningfulImprovement
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn ResponseBand::label(Self) -> String
+
+// Type aliases
+
+// Traits

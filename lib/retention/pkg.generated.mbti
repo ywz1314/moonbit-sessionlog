@@ -22,6 +22,8 @@ pub fn archived_sessions(Array[@core.Session], RetentionPlan) -> Array[@core.Ses
 
 pub fn bounded_policy(Int) -> RetentionPolicy
 
+pub fn build_segment_plan(Array[RetentionSegment]) -> SegmentPlan
+
 pub fn decide(@core.Session, String, RetentionPolicy) -> RetentionDecision
 
 pub fn decision_for(RetentionPlan, String) -> RetentionDecision?
@@ -53,6 +55,24 @@ pub fn retention_checksum(RetentionPlan) -> Int
 pub fn review_sessions(Array[@core.Session], RetentionPlan) -> Array[@core.Session]
 
 pub fn safe_plan(Array[@core.Session], String, RetentionPolicy) -> Result[RetentionPlan, String]
+
+pub fn segment_by_kind(Array[RetentionSegment], RetentionSegmentKind) -> Array[RetentionSegment]
+
+pub fn segment_checksum(Array[RetentionSegment]) -> Int
+
+pub fn segment_counts(Array[RetentionSegment]) -> Array[(String, Int)]
+
+pub fn segment_fingerprint(RetentionSegment) -> String
+
+pub fn segment_plan_safe(SegmentPlan, Int) -> Bool
+
+pub fn segment_plan_text(SegmentPlan) -> String
+
+pub fn segment_reasons(Array[RetentionSegment]) -> Array[String]
+
+pub fn segment_score(Array[RetentionSegment], RetentionSegmentKind) -> Double
+
+pub fn segment_sessions(Array[@core.Session], String, Int) -> Array[RetentionSegment]
 
 pub fn validate_policy(RetentionPolicy) -> Array[String]
 
@@ -158,6 +178,45 @@ pub(all) enum RetentionReason {
   ManualReview
 } derive(Eq, ToJson, @debug.Debug, @json.FromJson)
 pub fn RetentionReason::label(Self) -> String
+
+pub(all) struct RetentionSegment {
+  session_id : String
+  kind : RetentionSegmentKind
+  score : Int
+  reasons : Array[String]
+  fingerprint : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn RetentionSegment::fingerprint(Self) -> String
+pub fn RetentionSegment::kind(Self) -> RetentionSegmentKind
+pub fn RetentionSegment::reasons(Self) -> Array[String]
+pub fn RetentionSegment::score(Self) -> Int
+pub fn RetentionSegment::session_id(Self) -> String
+
+pub(all) enum RetentionSegmentKind {
+  Recent
+  Active
+  Stable
+  NeedsReview
+  Sparse
+  Duplicate
+  ArchiveCandidate
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn RetentionSegmentKind::label(Self) -> String
+
+pub(all) struct SegmentPlan {
+  segments : Array[RetentionSegment]
+  hot : Array[String]
+  review : Array[String]
+  archive : Array[String]
+  duplicates : Array[String]
+  export_order : Array[String]
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn SegmentPlan::archive(Self) -> Array[String]
+pub fn SegmentPlan::duplicates(Self) -> Array[String]
+pub fn SegmentPlan::export_order(Self) -> Array[String]
+pub fn SegmentPlan::hot(Self) -> Array[String]
+pub fn SegmentPlan::review(Self) -> Array[String]
+pub fn SegmentPlan::segments(Self) -> Array[RetentionSegment]
 
 // Type aliases
 

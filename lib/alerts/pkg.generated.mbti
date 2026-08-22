@@ -8,9 +8,21 @@ import {
 }
 
 // Values
+pub fn action_counts(Array[EscalationPlan]) -> Array[(String, Int)]
+
 pub fn counts(Array[SessionAlert]) -> (Int, Int, Int)
 
+pub fn deduplicate(Array[SessionAlert]) -> Array[SessionAlert]
+
 pub fn default_alert_policy() -> AlertPolicy
+
+pub fn default_escalation_steps() -> Array[EscalationStep]
+
+pub fn escalation_action(Int, steps? : Array[EscalationStep]) -> EscalationStep
+
+pub fn escalation_score(Array[SessionAlert]) -> Int
+
+pub fn escalation_text(EscalationPlan) -> String
 
 pub fn evaluate(@core.Session, policy? : AlertPolicy) -> Array[SessionAlert]
 
@@ -20,9 +32,21 @@ pub fn filter_severity(Array[SessionAlert], AlertSeverity) -> Array[SessionAlert
 
 pub fn filter_type(Array[SessionAlert], AlertType) -> Array[SessionAlert]
 
+pub fn group_by_session(Array[SessionAlert]) -> Array[(String, Array[SessionAlert])]
+
 pub fn has_critical(Array[SessionAlert]) -> Bool
 
+pub fn highest_priority(Array[EscalationPlan]) -> EscalationPlan?
+
 pub fn load_spike(@core.Session, @core.Session, policy? : AlertPolicy) -> SessionAlert?
+
+pub fn owner_counts(Array[EscalationPlan]) -> Array[(String, Int)]
+
+pub fn plan(Array[SessionAlert], steps? : Array[EscalationStep]) -> EscalationPlan
+
+pub fn plans(Array[SessionAlert]) -> Array[EscalationPlan]
+
+pub fn requires_immediate(Array[EscalationPlan]) -> Bool
 
 pub fn text(Array[SessionAlert]) -> String
 
@@ -55,6 +79,44 @@ pub(all) enum AlertType {
   LoadSpike
 } derive(Eq, ToJson, @debug.Debug, @json.FromJson)
 pub fn AlertType::label(Self) -> String
+
+pub(all) enum EscalationAction {
+  Log
+  Notify
+  ReviewToday
+  PauseProgression
+  EscalateNow
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn EscalationAction::label(Self) -> String
+pub fn EscalationAction::rank(Self) -> Int
+
+pub(all) struct EscalationPlan {
+  session_id : String
+  score : Int
+  action : EscalationAction
+  owner : String
+  response_hours : Int
+  alerts : Array[SessionAlert]
+  rationale : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn EscalationPlan::action(Self) -> EscalationAction
+pub fn EscalationPlan::alerts(Self) -> Array[SessionAlert]
+pub fn EscalationPlan::owner(Self) -> String
+pub fn EscalationPlan::rationale(Self) -> String
+pub fn EscalationPlan::response_hours(Self) -> Int
+pub fn EscalationPlan::score(Self) -> Int
+pub fn EscalationPlan::session_id(Self) -> String
+
+pub(all) struct EscalationStep {
+  threshold : Int
+  action : EscalationAction
+  owner : String
+  response_hours : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn EscalationStep::action(Self) -> EscalationAction
+pub fn EscalationStep::owner(Self) -> String
+pub fn EscalationStep::response_hours(Self) -> Int
+pub fn EscalationStep::threshold(Self) -> Int
 
 pub(all) struct SessionAlert {
   session_id : String

@@ -1,0 +1,152 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "ywz1314/sessionlog/lib/statistics"
+
+import {
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+}
+
+// Values
+pub fn autocorrelation(Array[Double], Int) -> Double
+
+pub fn correlation(Array[Double], Array[Double]) -> Double
+
+pub fn covariance(Array[Double], Array[Double]) -> Double
+
+pub fn cumulative_sum(Array[Double]) -> Array[Double]
+
+pub fn describe(Array[Double]) -> Summary
+
+pub fn exponential_smoothing(Array[Double], Double) -> Array[Double]
+
+pub fn first_difference(Array[Double]) -> Array[Double]
+
+pub fn fit_linear(Array[Double], Array[Double]) -> LinearModel
+
+pub fn histogram(Array[Double], Int) -> Array[HistogramBin]
+
+pub fn histogram_text(Array[Double], Int) -> String
+
+pub fn lagged(Array[Double], Int) -> Array[(Double, Double)]
+
+pub fn maximum(Array[Double]) -> Double
+
+pub fn mean(Array[Double]) -> Double
+
+pub fn median(Array[Double]) -> Double
+
+pub fn median_absolute_deviation(Array[Double]) -> Double
+
+pub fn min_max_scale(Array[Double]) -> Array[Double]
+
+pub fn minimum(Array[Double]) -> Double
+
+pub fn outlier_indices(Array[Double], threshold? : Double) -> Array[Int]
+
+pub fn percentile(Array[Double], Double) -> Double
+
+pub fn percentile_ranks(Array[Double]) -> Array[Double]
+
+pub fn predictions(LinearModel, Array[Double]) -> Array[Double]
+
+pub fn rank(Array[Double]) -> Array[Int]
+
+pub fn residuals(LinearModel, Array[Double], Array[Double]) -> Array[Double]
+
+pub fn robust_z_score(Double, Array[Double]) -> Double
+
+pub fn robust_z_scores(Array[Double]) -> Array[Double]
+
+pub fn rolling_mean(Array[Double], Int) -> Array[Double]
+
+pub fn rolling_summary(Array[Double], Int) -> Array[Summary]
+
+pub fn slope(Array[Double]) -> Double
+
+pub fn slope_change(Array[Double], Int) -> Double
+
+pub fn sorted(Array[Double]) -> Array[Double]
+
+pub fn stable(Array[Double], Double) -> Bool
+
+pub fn standard_deviation(Array[Double]) -> Double
+
+pub fn standard_scale(Array[Double]) -> Array[Double]
+
+pub fn sum(Array[Double]) -> Double
+
+pub fn summary_text(Summary) -> String
+
+pub fn trimmed_mean(Array[Double], Double) -> Double
+
+pub fn variance(Array[Double]) -> Double
+
+pub fn weighted_mean(Array[Double], Array[Double]) -> Double
+
+pub fn weighted_variance(Array[Double], Array[Double]) -> Double
+
+pub fn winsorize(Array[Double], Double, Double) -> Array[Double]
+
+pub fn without_outliers(Array[Double], threshold? : Double) -> Array[Double]
+
+pub fn z_score(Double, Array[Double]) -> Double
+
+pub fn z_scores(Array[Double]) -> Array[Double]
+
+// Errors
+
+// Types and methods
+pub(all) struct HistogramBin {
+  lower : Double
+  upper : Double
+  count : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn HistogramBin::count(Self) -> Int
+pub fn HistogramBin::lower(Self) -> Double
+pub fn HistogramBin::upper(Self) -> Double
+
+pub(all) struct LinearModel {
+  slope : Double
+  intercept : Double
+  r_squared : Double
+  observations : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn LinearModel::intercept(Self) -> Double
+pub fn LinearModel::observations(Self) -> Int
+pub fn LinearModel::predict(Self, Double) -> Double
+pub fn LinearModel::r_squared(Self) -> Double
+pub fn LinearModel::slope(Self) -> Double
+
+pub(all) struct Summary {
+  count : Int
+  sum : Double
+  mean : Double
+  minimum : Double
+  maximum : Double
+  median : Double
+  first_quartile : Double
+  third_quartile : Double
+  variance : Double
+  standard_deviation : Double
+  median_absolute_deviation : Double
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn Summary::coefficient_of_variation(Self) -> Double
+pub fn Summary::count(Self) -> Int
+pub fn Summary::first_quartile(Self) -> Double
+pub fn Summary::interquartile_range(Self) -> Double
+pub fn Summary::is_empty(Self) -> Bool
+pub fn Summary::maximum(Self) -> Double
+pub fn Summary::mean(Self) -> Double
+pub fn Summary::median(Self) -> Double
+pub fn Summary::median_absolute_deviation(Self) -> Double
+pub fn Summary::minimum(Self) -> Double
+pub fn Summary::range(Self) -> Double
+pub fn Summary::relative_range(Self) -> Double
+pub fn Summary::standard_deviation(Self) -> Double
+pub fn Summary::sum(Self) -> Double
+pub fn Summary::third_quartile(Self) -> Double
+pub fn Summary::variance(Self) -> Double
+
+// Type aliases
+
+// Traits

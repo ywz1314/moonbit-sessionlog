@@ -11,17 +11,37 @@ import {
 // Values
 pub fn build(Array[@core.Session], options? : ReportOptions) -> ReportDocument
 
+pub fn bullet(Array[String]) -> String
+
+pub fn changelog(String, Array[String], Array[String]) -> String
+
+pub fn code_block(String, String) -> String
+
 pub fn combine_text(Array[String], separator? : String) -> String
 
+pub fn compare_documents(@core.Session, @core.Session, String) -> MarkdownDocument
+
 pub fn default_report_options() -> ReportOptions
+
+pub fn escape(String) -> String
 
 pub fn fixed_width(String, Int) -> String
 
 pub fn format_name(ReportFormat) -> String
 
+pub fn heading(String, Int) -> String
+
+pub fn metric_line(String, String, note? : String) -> String
+
 pub fn movement_csv(Array[@core.Session], privacy? : PrivacyMode) -> String
 
+pub fn new_document(String) -> MarkdownDocument
+
+pub fn numbered(Array[String]) -> String
+
 pub fn privacy_name(PrivacyMode) -> String
+
+pub fn quality_document(Array[@core.Session], String) -> MarkdownDocument
 
 pub fn redact_id(String, PrivacyMode) -> String
 
@@ -29,17 +49,29 @@ pub fn redact_notes(String, PrivacyMode) -> String
 
 pub fn redact_resistance(String, PrivacyMode) -> String
 
+pub fn report_bundle(Array[@core.Session], String) -> String
+
+pub fn section(String, Int, String) -> MarkdownSection
+
 pub fn session_csv(Array[@core.Session], privacy? : PrivacyMode) -> String
+
+pub fn session_document(@core.Session, privacy? : PrivacyMode) -> MarkdownDocument
 
 pub fn session_json(@core.Session, privacy? : PrivacyMode) -> String
 
 pub fn session_text(@core.Session, privacy? : PrivacyMode) -> String
+
+pub fn status_badge(String) -> String
+
+pub fn table(Array[String], Array[Array[String]]) -> String
 
 pub fn table_row(Array[String], Array[Int]) -> String
 
 pub fn table_separator(Array[Int]) -> String
 
 pub fn trend_csv(@analytics.TrendReport) -> String
+
+pub fn trend_document(@analytics.TrendReport, String) -> MarkdownDocument
 
 pub fn trend_json(@analytics.TrendReport) -> String
 
@@ -50,6 +82,27 @@ pub fn validation_text(Array[@core.Session]) -> String
 // Errors
 
 // Types and methods
+pub(all) struct MarkdownDocument {
+  title : String
+  sections : Array[MarkdownSection]
+  footer : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn MarkdownDocument::add(Self, MarkdownSection) -> Self
+pub fn MarkdownDocument::footer(Self) -> String
+pub fn MarkdownDocument::render(Self) -> String
+pub fn MarkdownDocument::sections(Self) -> Array[MarkdownSection]
+pub fn MarkdownDocument::title(Self) -> String
+pub fn MarkdownDocument::with_footer(Self, String) -> Self
+
+pub(all) struct MarkdownSection {
+  title : String
+  level : Int
+  body : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn MarkdownSection::body(Self) -> String
+pub fn MarkdownSection::level(Self) -> Int
+pub fn MarkdownSection::title(Self) -> String
+
 pub(all) enum PrivacyMode {
   Full
   HideNotes

@@ -5,13 +5,76 @@ import {
   "moonbitlang/core/debug",
   "moonbitlang/core/json",
   "ywz1314/sessionlog/lib/core",
+  "ywz1314/sessionlog/lib/history",
 }
 
 // Values
+pub fn checksum(Array[@core.Session]) -> Int
+
+pub fn diff(Array[@core.Session], Array[@core.Session]) -> Array[StoreMutation]
+
+pub fn plan_recovery(StoreSnapshot, StoreSnapshot) -> RecoveryPlan
+
+pub fn recovery_checksum(RecoveryPlan) -> Int
+
+pub fn recovery_restore(RecoveryPlan) -> Array[String]
+
+pub fn recovery_review(RecoveryPlan) -> Array[String]
+
+pub fn recovery_safe(RecoveryPlan) -> Bool
+
+pub fn recovery_text(RecoveryPlan) -> String
+
+pub fn snapshot_equal(StoreSnapshot, StoreSnapshot) -> Bool
+
+pub fn snapshot_text(StoreSnapshot) -> String
+
+pub fn transaction(Int, String, String) -> StoreTransaction
+
+pub fn transaction_from_diff(SessionStore, Array[@core.Session], String, String) -> StoreTransaction
 
 // Errors
 
 // Types and methods
+pub(all) enum CommitError {
+  RevisionConflict(Int, Int)
+  MutationFailed(String)
+  EmptyTransaction
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn CommitError::message(Self) -> String
+
+pub(all) enum RecoveryAction {
+  Restore
+  Rebuild
+  Skip
+  Review
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn RecoveryAction::label(Self) -> String
+
+pub(all) struct RecoveryItem {
+  session_id : String
+  action : RecoveryAction
+  reason : String
+  confidence : Double
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn RecoveryItem::action(Self) -> RecoveryAction
+pub fn RecoveryItem::confidence(Self) -> Double
+pub fn RecoveryItem::reason(Self) -> String
+pub fn RecoveryItem::session_id(Self) -> String
+
+pub(all) struct RecoveryPlan {
+  source : StoreSnapshot
+  target : StoreSnapshot
+  items : Array[RecoveryItem]
+  safe : Bool
+  checksum_match : Bool
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn RecoveryPlan::checksum_match(Self) -> Bool
+pub fn RecoveryPlan::items(Self) -> Array[RecoveryItem]
+pub fn RecoveryPlan::safe(Self) -> Bool
+pub fn RecoveryPlan::source(Self) -> StoreSnapshot
+pub fn RecoveryPlan::target(Self) -> StoreSnapshot
+
 pub(all) struct SessionStore {
   mut sessions : Array[@core.Session]
   mut revision : Int
@@ -22,7 +85,9 @@ pub fn SessionStore::average_duration(Self) -> Double
 pub fn SessionStore::between_dates(Self, String, String) -> Array[@core.Session]
 pub fn SessionStore::by_date(Self, String) -> Array[@core.Session]
 pub fn SessionStore::capacity(Self) -> Int
+pub fn SessionStore::checksum(Self) -> Int
 pub fn SessionStore::clear(Self) -> Unit
+pub fn SessionStore::commit(Self, StoreTransaction) -> Result[Int, CommitError]
 pub fn SessionStore::completion_target_count(Self, Double) -> Int
 pub fn SessionStore::contains(Self, String) -> Bool
 pub fn SessionStore::count(Self) -> Int
@@ -30,6 +95,7 @@ pub fn SessionStore::duplicate_ids(Self) -> Array[String]
 pub fn SessionStore::earliest(Self) -> @core.Session?
 pub fn SessionStore::export_json(Self) -> String
 pub fn SessionStore::get(Self, String) -> @core.Session?
+pub fn SessionStore::history_event(Self, @history.HistoryEvent, String) -> String
 pub fn SessionStore::ids(Self) -> Array[String]
 pub fn SessionStore::import_json(Self, String) -> Result[Int, String]
 pub fn SessionStore::import_versioned_json(Self, Array[String]) -> Result[Int, String]
@@ -42,9 +108,12 @@ pub fn SessionStore::movement_names(Self) -> Array[String]
 pub fn SessionStore::new(capacity? : Int) -> Self
 pub fn SessionStore::page(Self, Int, Int) -> Array[@core.Session]
 pub fn SessionStore::pain_improved_count(Self) -> Int
+pub fn SessionStore::partition(Self, Int) -> Array[Array[@core.Session]]
 pub fn SessionStore::remove(Self, String) -> Bool
 pub fn SessionStore::replace(Self, @core.Session) -> Result[Unit, String]
 pub fn SessionStore::revision(Self) -> Int
+pub fn SessionStore::same_content(Self, Self) -> Bool
+pub fn SessionStore::snapshot(Self) -> StoreSnapshot
 pub fn SessionStore::sorted_by_date(Self) -> Array[@core.Session]
 pub fn SessionStore::stats(Self) -> StoreStats
 pub fn SessionStore::take_latest(Self, Int) -> Array[@core.Session]
@@ -54,6 +123,29 @@ pub fn SessionStore::valid(Self) -> Array[@core.Session]
 pub fn SessionStore::with_completion_below(Self, Double) -> Array[@core.Session]
 pub fn SessionStore::with_movement(Self, String) -> Array[@core.Session]
 pub fn SessionStore::with_pain_at_least(Self, Int) -> Array[@core.Session]
+
+pub(all) enum StoreMutation {
+  Insert(@core.Session)
+  Replace(@core.Session)
+  Remove(String)
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn StoreMutation::id(Self) -> String
+pub fn StoreMutation::label(Self) -> String
+
+pub(all) struct StoreSnapshot {
+  revision : Int
+  count : Int
+  checksum : Int
+  earliest_date : String
+  latest_date : String
+  ids : Array[String]
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn StoreSnapshot::checksum(Self) -> Int
+pub fn StoreSnapshot::count(Self) -> Int
+pub fn StoreSnapshot::earliest_date(Self) -> String
+pub fn StoreSnapshot::ids(Self) -> Array[String]
+pub fn StoreSnapshot::latest_date(Self) -> String
+pub fn StoreSnapshot::revision(Self) -> Int
 
 pub(all) struct StoreStats {
   revision : Int
@@ -66,6 +158,22 @@ pub(all) struct StoreStats {
   latest_date : String
 } derive(Eq, ToJson, @debug.Debug, @json.FromJson)
 pub fn StoreStats::summary(Self) -> String
+
+pub(all) struct StoreTransaction {
+  base_revision : Int
+  mutations : Array[StoreMutation]
+  actor : String
+  reason : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn StoreTransaction::actor(Self) -> String
+pub fn StoreTransaction::base_revision(Self) -> Int
+pub fn StoreTransaction::count(Self) -> Int
+pub fn StoreTransaction::insert(Self, @core.Session) -> Self
+pub fn StoreTransaction::is_empty(Self) -> Bool
+pub fn StoreTransaction::mutations(Self) -> Array[StoreMutation]
+pub fn StoreTransaction::reason(Self) -> String
+pub fn StoreTransaction::remove(Self, String) -> Self
+pub fn StoreTransaction::replace(Self, @core.Session) -> Self
 
 // Type aliases
 

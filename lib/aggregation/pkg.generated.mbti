@@ -10,13 +10,45 @@ import {
 // Values
 pub fn aggregate_all(Array[@core.Session]) -> Array[MovementAggregate]
 
+pub fn aggregate_checksum(Array[IntervalAggregate]) -> Int
+
+pub fn aggregate_completion(Array[IntervalAggregate]) -> Double
+
+pub fn aggregate_interval(Array[IntervalAggregate], String) -> IntervalAggregate?
+
+pub fn aggregate_intervals(Array[@core.Session], IntervalKind) -> Array[IntervalAggregate]
+
 pub fn aggregate_movement(Array[@core.Session], String) -> MovementAggregate
+
+pub fn aggregate_pain_delta(IntervalAggregate) -> Int
+
+pub fn aggregate_peak_work(Array[IntervalAggregate]) -> IntervalAggregate?
+
+pub fn aggregate_sparse(Array[IntervalAggregate], Int) -> Array[IntervalAggregate]
 
 pub fn aggregate_text(Array[MovementAggregate]) -> String
 
 pub fn average_completion(Array[MovementAggregate]) -> Double
 
+pub fn compare_by_movement(Array[@core.Session], Array[@core.Session]) -> Array[(String, AggregateComparison)]
+
+pub fn compare_cohorts(Array[@core.Session], Array[@core.Session]) -> AggregateComparison
+
+pub fn comparison_effect_size(AggregateComparison) -> Double
+
+pub fn comparison_flags(AggregateComparison) -> Array[String]
+
+pub fn comparison_reliable(AggregateComparison, Int) -> Bool
+
+pub fn comparison_report_text(Array[(String, AggregateComparison)]) -> String
+
+pub fn comparison_text(AggregateComparison) -> String
+
+pub fn interval_aggregate_text(Array[IntervalAggregate]) -> String
+
 pub fn most_consistent_movement(Array[MovementAggregate]) -> MovementAggregate?
+
+pub fn relative_change(Double, Double) -> Double
 
 pub fn sort_by_completion(Array[MovementAggregate]) -> Array[MovementAggregate]
 
@@ -31,6 +63,77 @@ pub fn total_work_units(Array[MovementAggregate]) -> Int
 // Errors
 
 // Types and methods
+pub(all) struct AggregateComparison {
+  baseline_count : Int
+  current_count : Int
+  baseline_reps : Int
+  current_reps : Int
+  baseline_work : Int
+  current_work : Int
+  baseline_pain : Double
+  current_pain : Double
+  baseline_completion : Double
+  current_completion : Double
+  reps_delta : Int
+  work_delta : Int
+  pain_delta : Double
+  completion_delta : Double
+  effect_direction : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn AggregateComparison::baseline_completion(Self) -> Double
+pub fn AggregateComparison::baseline_count(Self) -> Int
+pub fn AggregateComparison::baseline_pain(Self) -> Double
+pub fn AggregateComparison::baseline_reps(Self) -> Int
+pub fn AggregateComparison::baseline_work(Self) -> Int
+pub fn AggregateComparison::completion_delta(Self) -> Double
+pub fn AggregateComparison::current_completion(Self) -> Double
+pub fn AggregateComparison::current_count(Self) -> Int
+pub fn AggregateComparison::current_pain(Self) -> Double
+pub fn AggregateComparison::current_reps(Self) -> Int
+pub fn AggregateComparison::current_work(Self) -> Int
+pub fn AggregateComparison::effect_direction(Self) -> String
+pub fn AggregateComparison::pain_delta(Self) -> Double
+pub fn AggregateComparison::reps_delta(Self) -> Int
+pub fn AggregateComparison::work_delta(Self) -> Int
+
+pub(all) struct IntervalAggregate {
+  key : String
+  kind : IntervalKind
+  session_count : Int
+  total_duration : Int
+  total_reps : Int
+  total_sets : Int
+  total_work : Int
+  average_pain : Double
+  average_completion : Double
+  minimum_pain : Int
+  maximum_pain : Int
+  first_date : String
+  last_date : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn IntervalAggregate::average_completion(Self) -> Double
+pub fn IntervalAggregate::average_pain(Self) -> Double
+pub fn IntervalAggregate::first_date(Self) -> String
+pub fn IntervalAggregate::key(Self) -> String
+pub fn IntervalAggregate::kind(Self) -> IntervalKind
+pub fn IntervalAggregate::last_date(Self) -> String
+pub fn IntervalAggregate::maximum_pain(Self) -> Int
+pub fn IntervalAggregate::minimum_pain(Self) -> Int
+pub fn IntervalAggregate::session_count(Self) -> Int
+pub fn IntervalAggregate::total_duration(Self) -> Int
+pub fn IntervalAggregate::total_reps(Self) -> Int
+pub fn IntervalAggregate::total_sets(Self) -> Int
+pub fn IntervalAggregate::total_work(Self) -> Int
+
+pub(all) enum IntervalKind {
+  Day
+  Week
+  Month
+  Quarter
+  Year
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn IntervalKind::label(Self) -> String
+
 pub(all) struct MovementAggregate {
   name : String
   session_count : Int

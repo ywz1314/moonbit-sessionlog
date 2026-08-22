@@ -1,0 +1,107 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "ywz1314/sessionlog/lib/audit"
+
+import {
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+  "ywz1314/sessionlog/lib/core",
+  "ywz1314/sessionlog/lib/normalization",
+  "ywz1314/sessionlog/lib/validation",
+}
+
+// Values
+pub fn audit_summary_text(AuditSummary) -> String
+
+pub fn new_audit(String) -> AuditTrail
+
+pub fn summarize_audit(AuditTrail) -> AuditSummary
+
+// Errors
+
+// Types and methods
+pub(all) enum AuditOperation {
+  Ingest
+  Normalize
+  Validate
+  Store
+  Update
+  Delete
+  Export
+  Review
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn AuditOperation::label(Self) -> String
+
+pub(all) enum AuditOutcome {
+  Accepted
+  AcceptedWithWarnings
+  Rejected
+  Failed
+  Skipped
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn AuditOutcome::label(Self) -> String
+pub fn AuditOutcome::successful(Self) -> Bool
+
+pub(all) struct AuditRecord {
+  sequence : Int
+  operation : AuditOperation
+  outcome : AuditOutcome
+  session_id : String
+  input_fingerprint : String
+  output_fingerprint : String
+  warning_count : Int
+  issue_count : Int
+  message : String
+  actor : String
+  source : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn AuditRecord::actor(Self) -> String
+pub fn AuditRecord::input_fingerprint(Self) -> String
+pub fn AuditRecord::issue_count(Self) -> Int
+pub fn AuditRecord::message(Self) -> String
+pub fn AuditRecord::operation(Self) -> AuditOperation
+pub fn AuditRecord::outcome(Self) -> AuditOutcome
+pub fn AuditRecord::output_fingerprint(Self) -> String
+pub fn AuditRecord::sequence(Self) -> Int
+pub fn AuditRecord::session_id(Self) -> String
+pub fn AuditRecord::source(Self) -> String
+pub fn AuditRecord::warning_count(Self) -> Int
+
+pub(all) struct AuditSummary {
+  total : Int
+  successful : Int
+  warnings : Int
+  rejected : Int
+  failed : Int
+  unique_sessions : Int
+  first_sequence : Int
+  last_sequence : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn AuditSummary::failed(Self) -> Int
+pub fn AuditSummary::first_sequence(Self) -> Int
+pub fn AuditSummary::last_sequence(Self) -> Int
+pub fn AuditSummary::rejected(Self) -> Int
+pub fn AuditSummary::success_rate(Self) -> Double
+pub fn AuditSummary::successful(Self) -> Int
+pub fn AuditSummary::total(Self) -> Int
+pub fn AuditSummary::unique_sessions(Self) -> Int
+pub fn AuditSummary::warnings(Self) -> Int
+
+pub(all) struct AuditTrail {
+  mut records : Array[AuditRecord]
+  mut next_sequence : Int
+  source : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn AuditTrail::append(Self, AuditOperation, AuditOutcome, String, String, String, Int, Int, String, String) -> AuditRecord
+pub fn AuditTrail::count(Self) -> Int
+pub fn AuditTrail::ingest(Self, @core.Session, String) -> AuditRecord
+pub fn AuditTrail::normalize(Self, @core.Session, @normalization.NormalizationResult, String) -> AuditRecord
+pub fn AuditTrail::records(Self) -> Array[AuditRecord]
+pub fn AuditTrail::reject(Self, String, String, String) -> AuditRecord
+pub fn AuditTrail::reset(Self) -> Unit
+pub fn AuditTrail::source(Self) -> String
+pub fn AuditTrail::store(Self, @core.Session, String) -> AuditRecord
+pub fn AuditTrail::validate(Self, @core.Session, Array[@validation.Constraint], String) -> AuditRecord
+
+// Type aliases
+
+// Traits

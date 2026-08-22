@@ -10,9 +10,19 @@ import {
 // Values
 pub fn all_valid(Array[@core.Session], options? : ValidationOptions) -> Bool
 
+pub fn batch_text(BatchConstraintSummary) -> String
+
+pub fn constraint_codes(Array[Constraint]) -> Array[String]
+
+pub fn constraint_summary(Array[Constraint]) -> (Int, Int, Int)
+
+pub fn constraint_text(Constraint) -> String
+
 pub fn count_errors(Array[@core.Session], options? : ValidationOptions) -> Int
 
 pub fn days_in_month(Int, Int) -> Int
+
+pub fn default_constraint_policy() -> ConstraintPolicy
 
 pub fn default_validation_options() -> ValidationOptions
 
@@ -20,7 +30,11 @@ pub fn error_code_counts(Array[ValidationError]) -> Array[(String, Int)]
 
 pub fn errors_by_code(Array[ValidationError], String) -> Array[ValidationError]
 
+pub fn evaluate_constraints(@core.Session, policy? : ConstraintPolicy) -> Array[Constraint]
+
 pub fn first_error(@core.Session) -> ValidationError?
+
+pub fn invalid_constraints(Array[Constraint]) -> Array[Constraint]
 
 pub fn is_calendar_date(String) -> Bool
 
@@ -30,11 +44,21 @@ pub fn is_strictly_valid(@core.Session) -> Bool
 
 pub fn is_valid(@core.Session) -> Bool
 
+pub fn session_is_safe(@core.Session, policy? : ConstraintPolicy) -> Bool
+
+pub fn session_passes(@core.Session, policy? : ConstraintPolicy) -> Bool
+
+pub fn strict_constraint_policy() -> ConstraintPolicy
+
 pub fn strict_validation_options() -> ValidationOptions
 
 pub fn summarize(@core.Session, options? : ValidationOptions) -> ValidationSummary
 
+pub fn summarize_constraints(Array[@core.Session], policy? : ConstraintPolicy) -> BatchConstraintSummary
+
 pub fn summarize_many(Array[@core.Session], options? : ValidationOptions) -> Array[ValidationSummary]
+
+pub fn unsafe_constraints(Array[Constraint]) -> Array[Constraint]
 
 pub fn validate_many(Array[@core.Session], options? : ValidationOptions) -> Array[(String, Array[ValidationError])]
 
@@ -46,9 +70,72 @@ pub fn validation_error_code(ValidationError) -> String
 
 pub fn validation_error_path(ValidationError) -> String
 
+pub fn with_notes_limit(ConstraintPolicy, Int) -> ConstraintPolicy
+
 // Errors
 
 // Types and methods
+pub(all) struct BatchConstraintSummary {
+  sessions : Int
+  affected_sessions : Int
+  issue_count : Int
+  unsafe_count : Int
+  invalid_count : Int
+  advisory_count : Int
+  clean_percent : Double
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn BatchConstraintSummary::advisory_count(Self) -> Int
+pub fn BatchConstraintSummary::affected_sessions(Self) -> Int
+pub fn BatchConstraintSummary::clean_percent(Self) -> Double
+pub fn BatchConstraintSummary::invalid_count(Self) -> Int
+pub fn BatchConstraintSummary::issue_count(Self) -> Int
+pub fn BatchConstraintSummary::sessions(Self) -> Int
+pub fn BatchConstraintSummary::unsafe_count(Self) -> Int
+
+pub(all) struct Constraint {
+  code : ConstraintCode
+  severity : ConstraintSeverity
+  path : String
+  message : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn Constraint::code(Self) -> ConstraintCode
+pub fn Constraint::message(Self) -> String
+pub fn Constraint::path(Self) -> String
+pub fn Constraint::severity(Self) -> ConstraintSeverity
+
+pub(all) enum ConstraintCode {
+  SessionIdentity
+  SessionDate
+  SessionDuration
+  PainRange
+  EffortRange
+  SetQuantity
+  CompletionRange
+  MovementName
+  ResistanceName
+  NotesLength
+  DuplicateMovement
+  MonotonicSessionId
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn ConstraintCode::label(Self) -> String
+
+pub(all) struct ConstraintPolicy {
+  maximum_notes_length : Int
+  require_notes : Bool
+  require_resistance : Bool
+  allow_duplicate_movements : Bool
+  require_positive_duration : Bool
+  require_nonempty_id : Bool
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+
+pub(all) enum ConstraintSeverity {
+  Advisory
+  Invalid
+  Unsafe
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn ConstraintSeverity::label(Self) -> String
+pub fn ConstraintSeverity::rank(Self) -> Int
+
 pub(all) enum ValidationError {
   InvalidPain(String, Int)
   InvalidRPE(String, Int)

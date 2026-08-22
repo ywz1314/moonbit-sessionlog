@@ -1,0 +1,116 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "ywz1314/sessionlog/lib/cohort"
+
+import {
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+  "ywz1314/sessionlog/lib/core",
+}
+
+// Values
+pub fn average_share(CohortReport) -> Double
+
+pub fn by_duration(Array[@core.Session]) -> CohortReport
+
+pub fn by_month(Array[@core.Session]) -> CohortReport
+
+pub fn by_movement(Array[@core.Session]) -> CohortReport
+
+pub fn by_pain_band(Array[@core.Session]) -> CohortReport
+
+pub fn by_quarter(Array[@core.Session]) -> CohortReport
+
+pub fn by_weekday(Array[@core.Session]) -> CohortReport
+
+pub fn compare_slices(CohortSlice, CohortSlice) -> (Double, Double, Int)
+
+pub fn group(Array[@core.Session], CohortDimension) -> CohortReport
+
+pub fn highest_completion(CohortReport) -> CohortSlice?
+
+pub fn lowest_pain(CohortReport) -> CohortSlice?
+
+pub fn report_text(CohortReport) -> String
+
+pub fn retention_at(CohortReport, Int) -> Double
+
+pub fn shares(CohortReport) -> Array[Double]
+
+pub fn slice(CohortReport, String) -> CohortSlice?
+
+pub fn sort_by_completion(CohortReport) -> Array[CohortSlice]
+
+pub fn sort_by_count(CohortReport) -> Array[CohortSlice]
+
+pub fn sort_by_pain(CohortReport) -> Array[CohortSlice]
+
+pub fn top_by_work(CohortReport) -> CohortSlice?
+
+pub fn top_slice(CohortReport) -> CohortSlice?
+
+pub fn values(CohortReport) -> Array[String]
+
+// Errors
+
+// Types and methods
+pub(all) enum CohortDimension {
+  Month
+  Quarter
+  Movement
+  PainBand
+  Weekday
+  DurationBand
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn CohortDimension::label(Self) -> String
+
+pub(all) struct CohortKey {
+  dimension : CohortDimension
+  value : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn CohortKey::dimension(Self) -> CohortDimension
+pub fn CohortKey::label(Self) -> String
+pub fn CohortKey::value(Self) -> String
+
+pub(all) struct CohortReport {
+  dimension : CohortDimension
+  slices : Array[CohortSlice]
+  total_sessions : Int
+  total_work_units : Int
+  average_pain : Double
+  average_completion : Double
+  concentration : Double
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn CohortReport::average_completion(Self) -> Double
+pub fn CohortReport::average_pain(Self) -> Double
+pub fn CohortReport::concentration(Self) -> Double
+pub fn CohortReport::dimension(Self) -> CohortDimension
+pub fn CohortReport::slices(Self) -> Array[CohortSlice]
+pub fn CohortReport::total_sessions(Self) -> Int
+pub fn CohortReport::total_work_units(Self) -> Int
+
+pub(all) struct CohortSlice {
+  key : CohortKey
+  sessions : Array[@core.Session]
+  session_count : Int
+  unique_ids : Int
+  total_reps : Int
+  total_work_units : Int
+  average_pain : Double
+  average_completion : Double
+  average_duration : Double
+  share : Double
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn CohortSlice::average_completion(Self) -> Double
+pub fn CohortSlice::average_duration(Self) -> Double
+pub fn CohortSlice::average_pain(Self) -> Double
+pub fn CohortSlice::key(Self) -> CohortKey
+pub fn CohortSlice::session_count(Self) -> Int
+pub fn CohortSlice::sessions(Self) -> Array[@core.Session]
+pub fn CohortSlice::share(Self) -> Double
+pub fn CohortSlice::total_reps(Self) -> Int
+pub fn CohortSlice::total_work_units(Self) -> Int
+pub fn CohortSlice::unique_ids(Self) -> Int
+
+// Type aliases
+
+// Traits

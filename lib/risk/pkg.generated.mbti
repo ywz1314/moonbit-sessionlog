@@ -1,0 +1,128 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "ywz1314/sessionlog/lib/risk"
+
+import {
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+  "ywz1314/sessionlog/lib/core",
+}
+
+// Values
+pub fn conservative_risk_options() -> RiskOptions
+
+pub fn critical(Array[RiskScore]) -> Array[RiskScore]
+
+pub fn default_risk_options() -> RiskOptions
+
+pub fn evaluate(@core.Session, options? : RiskOptions) -> RiskScore
+
+pub fn evaluate_many(Array[@core.Session], options? : RiskOptions) -> Array[RiskScore]
+
+pub fn explain(RiskScore) -> String
+
+pub fn factor_counts(Array[RiskScore]) -> Array[(String, Int)]
+
+pub fn factors(Array[RiskScore], RiskFactorKind) -> Array[RiskFactor]
+
+pub fn high_risk(Array[RiskScore]) -> Array[RiskScore]
+
+pub fn next_action(RiskScore) -> String
+
+pub fn report(Array[@core.Session], options? : RiskOptions) -> RiskReport
+
+pub fn report_text(RiskReport) -> String
+
+pub fn score_percentile(RiskScore, Array[RiskScore]) -> Double
+
+pub fn validate_options(RiskOptions) -> Array[String]
+
+// Errors
+
+// Types and methods
+pub(all) struct RiskFactor {
+  kind : RiskFactorKind
+  score : Int
+  weight : Int
+  metric : Double
+  threshold : Double
+  message : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn RiskFactor::kind(Self) -> RiskFactorKind
+pub fn RiskFactor::message(Self) -> String
+pub fn RiskFactor::metric(Self) -> Double
+pub fn RiskFactor::score(Self) -> Int
+pub fn RiskFactor::threshold(Self) -> Double
+pub fn RiskFactor::weight(Self) -> Int
+pub fn RiskFactor::weighted_score(Self) -> Int
+
+pub(all) enum RiskFactorKind {
+  HighPain
+  WorseningPain
+  LowCompletion
+  HighEffort
+  WorkloadSpike
+  DataInvalid
+  MissingObservation
+  RepeatedMiss
+  UnstableTrend
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn RiskFactorKind::label(Self) -> String
+
+pub(all) enum RiskLevel {
+  Low
+  Guarded
+  Elevated
+  High
+  Critical
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn RiskLevel::label(Self) -> String
+pub fn RiskLevel::rank(Self) -> Int
+
+pub(all) struct RiskOptions {
+  pain_threshold : Int
+  worsening_delta : Int
+  completion_threshold : Double
+  effort_threshold : Int
+  workload_spike_ratio : Double
+  invalid_penalty : Int
+  missing_penalty : Int
+  unstable_penalty : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+
+pub(all) struct RiskReport {
+  scores : Array[RiskScore]
+  average_score : Double
+  maximum_score : Int
+  high_count : Int
+  critical_count : Int
+  trend : Double
+  recommendation : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn RiskReport::average_score(Self) -> Double
+pub fn RiskReport::critical_count(Self) -> Int
+pub fn RiskReport::high_count(Self) -> Int
+pub fn RiskReport::maximum_score(Self) -> Int
+pub fn RiskReport::recommendation(Self) -> String
+pub fn RiskReport::scores(Self) -> Array[RiskScore]
+pub fn RiskReport::trend(Self) -> Double
+
+pub(all) struct RiskScore {
+  session_id : String
+  date : String
+  score : Int
+  level : RiskLevel
+  factors : Array[RiskFactor]
+  action : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn RiskScore::action(Self) -> String
+pub fn RiskScore::critical(Self) -> Bool
+pub fn RiskScore::date(Self) -> String
+pub fn RiskScore::factors(Self) -> Array[RiskFactor]
+pub fn RiskScore::has_factor(Self, RiskFactorKind) -> Bool
+pub fn RiskScore::level(Self) -> RiskLevel
+pub fn RiskScore::score(Self) -> Int
+pub fn RiskScore::session_id(Self) -> String
+
+// Type aliases
+
+// Traits

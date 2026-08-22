@@ -1,0 +1,145 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "ywz1314/sessionlog/lib/adherence"
+
+import {
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+  "ywz1314/sessionlog/lib/core",
+  "ywz1314/sessionlog/lib/planning",
+  "ywz1314/sessionlog/lib/statistics",
+}
+
+// Values
+pub fn adherence_summary(AdherenceReport) -> @statistics.Summary
+
+pub fn attempt_ratio(DayRecord) -> Double
+
+pub fn completion_ratio(DayRecord) -> Double
+
+pub fn daily_adherence(AdherenceReport) -> Array[Double]
+
+pub fn date_range(String, String) -> Array[String]
+
+pub fn default_adherence_options() -> AdherenceOptions
+
+pub fn evaluate(@planning.TrainingPlan, Array[@core.Session], String, String, options? : AdherenceOptions) -> AdherenceReport
+
+pub fn evaluate_day(@planning.TrainingPlan, String, Array[@core.Session], options? : AdherenceOptions) -> DayRecord?
+
+pub fn evaluate_range(@planning.TrainingPlan, Array[@core.Session], String, String, options? : AdherenceOptions) -> Array[DayRecord]
+
+pub fn expected_items(AdherenceReport) -> Int
+
+pub fn missed_days(AdherenceReport) -> Array[DayRecord]
+
+pub fn missed_movement_names(@planning.TrainingPlan, DayRecord, Array[@core.Session]) -> Array[String]
+
+pub fn monthly(@planning.TrainingPlan, Array[@core.Session], Int, Int, options? : AdherenceOptions) -> AdherenceReport
+
+pub fn needs_follow_up(AdherenceReport, threshold? : Double) -> Bool
+
+pub fn partial_days(AdherenceReport) -> Array[DayRecord]
+
+pub fn plan_day(String) -> @planning.PlanDay?
+
+pub fn recommendation(AdherenceReport) -> String
+
+pub fn report_text(AdherenceReport) -> String
+
+pub fn scheduled_on(@planning.TrainingPlan, String) -> Int
+
+pub fn sessions_on(Array[@core.Session], String) -> Array[@core.Session]
+
+pub fn successful_days(AdherenceReport) -> Array[DayRecord]
+
+pub fn weekly(@planning.TrainingPlan, Array[@core.Session], String, options? : AdherenceOptions) -> AdherenceReport
+
+pub fn with_minimum_adherence(AdherenceOptions, Double) -> AdherenceOptions
+
+pub fn with_partial_attempt(AdherenceOptions, Bool) -> AdherenceOptions
+
+pub fn with_unscheduled(AdherenceOptions, Bool) -> AdherenceOptions
+
+pub fn with_weekends(AdherenceOptions, Bool) -> AdherenceOptions
+
+// Errors
+
+// Types and methods
+pub(all) struct AdherenceOptions {
+  include_unscheduled_days : Bool
+  include_weekends : Bool
+  treat_partial_as_attempt : Bool
+  overdue_after_days : Int
+  minimum_adherence : Double
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn AdherenceOptions::include_unscheduled_days(Self) -> Bool
+pub fn AdherenceOptions::include_weekends(Self) -> Bool
+pub fn AdherenceOptions::minimum_adherence(Self) -> Double
+pub fn AdherenceOptions::overdue_after_days(Self) -> Int
+pub fn AdherenceOptions::treat_partial_as_attempt(Self) -> Bool
+
+pub(all) struct AdherenceReport {
+  plan_name : String
+  start_date : String
+  end_date : String
+  days : Array[DayRecord]
+  scheduled_count : Int
+  completed_count : Int
+  partial_count : Int
+  missed_count : Int
+  adherence : Double
+  attempted_days : Int
+  successful_days : Int
+  current_streak : Int
+  longest_streak : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn AdherenceReport::adherence(Self) -> Double
+pub fn AdherenceReport::attempted_days(Self) -> Int
+pub fn AdherenceReport::completed_count(Self) -> Int
+pub fn AdherenceReport::current_streak(Self) -> Int
+pub fn AdherenceReport::days(Self) -> Array[DayRecord]
+pub fn AdherenceReport::end_date(Self) -> String
+pub fn AdherenceReport::longest_streak(Self) -> Int
+pub fn AdherenceReport::missed_count(Self) -> Int
+pub fn AdherenceReport::partial_count(Self) -> Int
+pub fn AdherenceReport::plan_name(Self) -> String
+pub fn AdherenceReport::scheduled_count(Self) -> Int
+pub fn AdherenceReport::start_date(Self) -> String
+pub fn AdherenceReport::successful_days(Self) -> Int
+
+pub(all) enum AdherenceStatus {
+  Unscheduled
+  Completed
+  Partial
+  Missed
+  Overdue
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn AdherenceStatus::counts_as_attempted(Self) -> Bool
+pub fn AdherenceStatus::counts_as_completed(Self) -> Bool
+pub fn AdherenceStatus::label(Self) -> String
+
+pub(all) struct DayRecord {
+  date : String
+  day : @planning.PlanDay
+  scheduled_count : Int
+  completed_count : Int
+  partial_count : Int
+  missed_count : Int
+  session_count : Int
+  adherence : Double
+  status : AdherenceStatus
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn DayRecord::adherence(Self) -> Double
+pub fn DayRecord::completed_count(Self) -> Int
+pub fn DayRecord::date(Self) -> String
+pub fn DayRecord::day(Self) -> @planning.PlanDay
+pub fn DayRecord::is_successful(Self, minimum? : Double) -> Bool
+pub fn DayRecord::missed_count(Self) -> Int
+pub fn DayRecord::partial_count(Self) -> Int
+pub fn DayRecord::scheduled_count(Self) -> Int
+pub fn DayRecord::session_count(Self) -> Int
+pub fn DayRecord::status(Self) -> AdherenceStatus
+
+// Type aliases
+
+// Traits

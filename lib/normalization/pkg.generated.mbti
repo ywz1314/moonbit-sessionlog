@@ -14,6 +14,8 @@ pub fn deduplicate(Array[@core.Session]) -> Array[@core.Session]
 
 pub fn default_options() -> NormalizationOptions
 
+pub fn default_pipeline() -> PipelineOptions
+
 pub fn duplicate_count(Array[@core.Session]) -> Int
 
 pub fn group_by_date(Array[@core.Session]) -> Array[(String, Array[@core.Session])]
@@ -30,7 +32,35 @@ pub fn normalize_many(Array[@core.Session], NormalizationOptions) -> BatchNormal
 
 pub fn normalize_or_keep(@core.Session, NormalizationOptions) -> NormalizationResult
 
+pub fn pipeline_audit_lines(PipelineResult) -> Array[String]
+
+pub fn pipeline_audit_text(PipelineResult) -> String
+
+pub fn pipeline_batch_summary(PipelineBatch) -> String
+
+pub fn pipeline_changed_stages(PipelineResult) -> Array[PipelineStage]
+
+pub fn pipeline_fingerprint(PipelineResult) -> String
+
+pub fn pipeline_is_idempotent(@core.Session, PipelineOptions) -> Bool
+
+pub fn pipeline_recommendation(PipelineOptions) -> String
+
+pub fn pipeline_rejected_reason(PipelineResult) -> String
+
+pub fn pipeline_stage_order(PipelineOptions) -> String
+
+pub fn pipeline_summary(PipelineResult) -> String
+
+pub fn pipeline_warning_codes(PipelineResult) -> Array[String]
+
+pub fn pipeline_with_stages(Array[PipelineStage], max_notes_length? : Int, reject_invalid_dates? : Bool, fail_on_warnings? : Bool) -> PipelineOptions
+
 pub fn report_text(BatchNormalization) -> String
+
+pub fn run_pipeline(@core.Session, PipelineOptions) -> Result[PipelineResult, String]
+
+pub fn run_pipeline_many(Array[@core.Session], PipelineOptions) -> Result[PipelineBatch, String]
 
 pub fn safe_normalize(@core.Session, NormalizationOptions) -> Result[NormalizationResult, String]
 
@@ -39,6 +69,8 @@ pub fn sorted_by_date(Array[@core.Session]) -> Array[@core.Session]
 pub fn sorted_by_id(Array[@core.Session]) -> Array[@core.Session]
 
 pub fn strict_options() -> NormalizationOptions
+
+pub fn strict_pipeline() -> PipelineOptions
 
 pub fn validate_options(NormalizationOptions) -> Array[String]
 
@@ -120,6 +152,77 @@ pub(all) enum NormalizationWarning {
   DroppedEmptyMovement
 } derive(Eq, ToJson, @debug.Debug, @json.FromJson)
 pub fn NormalizationWarning::code(Self) -> String
+
+pub(all) struct PipelineBatch {
+  results : Array[PipelineResult]
+  accepted : Array[@core.Session]
+  rejected : Array[String]
+  changed_count : Int
+  warning_count : Int
+  stage_counts : Array[(String, Int)]
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn PipelineBatch::accepted(Self) -> Array[@core.Session]
+pub fn PipelineBatch::changed_count(Self) -> Int
+pub fn PipelineBatch::rejected(Self) -> Array[String]
+pub fn PipelineBatch::results(Self) -> Array[PipelineResult]
+pub fn PipelineBatch::stage_counts(Self) -> Array[(String, Int)]
+pub fn PipelineBatch::warning_count(Self) -> Int
+
+pub(all) struct PipelineOptions {
+  stages : Array[PipelineStage]
+  max_notes_length : Int
+  reject_invalid_dates : Bool
+  fail_on_warnings : Bool
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn PipelineOptions::has(Self, PipelineStage) -> Bool
+pub fn PipelineOptions::lossy(Self) -> Bool
+pub fn PipelineOptions::risk_score(Self) -> Int
+pub fn PipelineOptions::stages(Self) -> Array[PipelineStage]
+pub fn PipelineOptions::validate(Self) -> Array[String]
+
+pub(all) struct PipelineResult {
+  session : @core.Session
+  reports : Array[PipelineStageReport]
+  warnings : Array[String]
+  changed : Bool
+  rejected : Bool
+  error : String?
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn PipelineResult::changed(Self) -> Bool
+pub fn PipelineResult::error(Self) -> String?
+pub fn PipelineResult::rejected(Self) -> Bool
+pub fn PipelineResult::reports(Self) -> Array[PipelineStageReport]
+pub fn PipelineResult::session(Self) -> @core.Session
+pub fn PipelineResult::warnings(Self) -> Array[String]
+
+pub(all) enum PipelineStage {
+  TrimText
+  CanonicalizeDates
+  ClampMeasurements
+  FillResistance
+  MergeMovements
+  SortSets
+  PreserveNotes
+  LimitNotes
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn PipelineStage::is_lossy(Self) -> Bool
+pub fn PipelineStage::label(Self) -> String
+pub fn PipelineStage::risk(Self) -> Int
+
+pub(all) struct PipelineStageReport {
+  stage : PipelineStage
+  changed : Bool
+  warning_count : Int
+  warnings : Array[String]
+  before_fingerprint : String
+  after_fingerprint : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn PipelineStageReport::after_fingerprint(Self) -> String
+pub fn PipelineStageReport::before_fingerprint(Self) -> String
+pub fn PipelineStageReport::changed(Self) -> Bool
+pub fn PipelineStageReport::stage(Self) -> PipelineStage
+pub fn PipelineStageReport::warning_count(Self) -> Int
+pub fn PipelineStageReport::warnings(Self) -> Array[String]
 
 // Type aliases
 

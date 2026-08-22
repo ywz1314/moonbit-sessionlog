@@ -8,11 +8,64 @@ import {
 }
 
 // Values
+pub fn active_at(HistoryLog, Int) -> Result[Array[String], String]
+
+pub fn checkpoint(Array[ReplayFrame]) -> Checkpoint
+
+pub fn checkpoint_diff(Checkpoint, Checkpoint) -> Array[String]
+
+pub fn checkpoint_valid(Checkpoint) -> Bool
+
+pub fn default_replay_options() -> ReplayOptions
+
 pub fn new_history() -> HistoryLog
+
+pub fn replay(HistoryLog, ReplayOptions) -> Result[Array[ReplayFrame], String]
+
+pub fn replay_active_contains(Array[ReplayFrame], Int, String) -> Bool
+
+pub fn replay_changes_for(Array[ReplayFrame], String) -> Int
+
+pub fn replay_diff(Array[ReplayFrame], Array[ReplayFrame]) -> Array[String]
+
+pub fn replay_event_counts(Array[ReplayFrame]) -> Array[(String, Int)]
+
+pub fn replay_has_removal(Array[ReplayFrame], String) -> Bool
+
+pub fn replay_is_monotonic(Array[ReplayFrame]) -> Bool
+
+pub fn replay_last_change(Array[ReplayFrame], String) -> ReplayFrame?
+
+pub fn replay_latest(HistoryLog, ReplayOptions) -> ReplayFrame?
+
+pub fn replay_options(start_revision? : Int, end_revision? : Int, include_exports? : Bool, include_plans? : Bool, include_empty? : Bool) -> ReplayOptions
+
+pub fn replay_revisions(HistoryLog, Array[Int]) -> Result[Array[ReplayFrame], String]
+
+pub fn replay_session(HistoryLog, String, ReplayOptions) -> Result[Array[ReplayFrame], String]
+
+pub fn replay_sessions(Array[ReplayFrame]) -> Array[String]
+
+pub fn replay_summary(HistoryLog, ReplayOptions) -> Result[ReplaySummary, String]
+
+pub fn replay_summary_text(ReplaySummary) -> String
+
+pub fn replay_text(Array[ReplayFrame]) -> String
+
+pub fn summarize_replay(Array[ReplayFrame]) -> ReplaySummary
 
 // Errors
 
 // Types and methods
+pub(all) struct Checkpoint {
+  revision : Int
+  active_ids : Array[String]
+  checksum : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn Checkpoint::active_ids(Self) -> Array[String]
+pub fn Checkpoint::checksum(Self) -> Int
+pub fn Checkpoint::revision(Self) -> Int
+
 pub(all) struct HistoryEntry {
   revision : Int
   session_id : String
@@ -58,6 +111,69 @@ pub fn HistoryLog::session_ids(Self) -> Array[String]
 pub fn HistoryLog::since(Self, Int) -> Array[HistoryEntry]
 pub fn HistoryLog::to_json_string(Self) -> String
 pub fn HistoryLog::to_text(Self) -> String
+
+pub(all) enum ReplayAction {
+  Add
+  Update
+  Remove
+  Import
+  Export
+  Plan
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn ReplayAction::label(Self) -> String
+
+pub(all) struct ReplayFrame {
+  revision : Int
+  session_id : String
+  date : String
+  action : ReplayAction
+  summary : String
+  active_ids : Array[String]
+  active_count : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn ReplayFrame::action(Self) -> ReplayAction
+pub fn ReplayFrame::active_count(Self) -> Int
+pub fn ReplayFrame::active_ids(Self) -> Array[String]
+pub fn ReplayFrame::date(Self) -> String
+pub fn ReplayFrame::revision(Self) -> Int
+pub fn ReplayFrame::session_id(Self) -> String
+pub fn ReplayFrame::summary(Self) -> String
+
+pub(all) struct ReplayOptions {
+  include_exports : Bool
+  include_plans : Bool
+  start_revision : Int
+  end_revision : Int
+  include_empty : Bool
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn ReplayOptions::validate(Self) -> Array[String]
+
+pub(all) struct ReplaySummary {
+  revisions : Int
+  frames : Int
+  first_revision : Int
+  last_revision : Int
+  peak_active : Int
+  final_active : Int
+  additions : Int
+  updates : Int
+  removals : Int
+  imports : Int
+  exports : Int
+  plans : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn ReplaySummary::additions(Self) -> Int
+pub fn ReplaySummary::exports(Self) -> Int
+pub fn ReplaySummary::final_active(Self) -> Int
+pub fn ReplaySummary::first_revision(Self) -> Int
+pub fn ReplaySummary::frames(Self) -> Int
+pub fn ReplaySummary::imports(Self) -> Int
+pub fn ReplaySummary::last_revision(Self) -> Int
+pub fn ReplaySummary::peak_active(Self) -> Int
+pub fn ReplaySummary::plans(Self) -> Int
+pub fn ReplaySummary::removals(Self) -> Int
+pub fn ReplaySummary::revisions(Self) -> Int
+pub fn ReplaySummary::updates(Self) -> Int
 
 // Type aliases
 

@@ -18,6 +18,9 @@
 - `lib/reporting`、`lib/interchange`、`lib/dashboard`：文本/CSV/JSON、TSV/JSON Lines、汇总看板。
 - `lib/catalog`、`lib/calendar`、`lib/consistency`：动作目录、日期运算和重复动作的一致性分析。
 - `lib/retention`、`lib/normalization`：归档策略、隐私脱敏、去重、导入前清洗与规范化。
+- `lib/statistics`、`lib/cohort`、`lib/outcomes`、`lib/workload`：描述统计、分组分析、结果量表和负荷窗口。
+- `lib/episodes`、`lib/protocol`、`lib/operations`、`lib/workflow`：连续治疗阶段、目标协议、运营队列和病例状态机。
+- `lib/audit`、`lib/risk`、`lib/forecast`、`lib/schema`：可追溯审计、风险评分、预测区间和兼容性迁移计划。
 
 ## 快速开始
 
@@ -81,7 +84,7 @@ core types
 
 基准夹具是确定性的，不把运行时间写死在程序输出中：程序输出 checksum，外层命令负责测量实际耗时。一次 `cmd/bench` 同时覆盖 10/100/1000 会话规模，以及 1000 会话、6 动作、每动作 4 组的规范化流水线。
 
-本地实测（2026-08-19，Windows NT 10.0.26200.0，AMD Ryzen 7 5800H，`moonc v0.10.7`，PowerShell `Measure-Command`，7 次冷启动样本）：
+本地实测（2026-08-19，Windows NT 10.0.26200.0，AMD Ryzen 7 5800H，`moonc v0.10.7`，PowerShell `Measure-Command`，7 次复测）：
 
 | 场景 | 输入规模 | 稳定输出 |
 | --- | ---: | --- |
@@ -90,11 +93,13 @@ core types
 | history | 1,000 sessions × 6 movements × 4 sets | checksum `-1039633519` |
 | pipeline | 1,000 sessions × 6 movements × 4 sets，规范化 + retention | checksum `602712179` |
 
-`cmd/bench` 端到端冷启动耗时：平均 `352.04 ms`，中位数 `342.51 ms`，样本为 `406.26, 326.25, 331.07, 382.38, 342.51, 323.20, 352.58 ms`。这些数字用于复现当前环境，不代表所有机器的性能承诺；复测命令为 `moon run cmd/bench`。
+`cmd/bench` 端到端耗时：平均 `437.05 ms`，中位数 `414.14 ms`，样本为 `434.47, 529.91, 514.36, 414.14, 369.13, 409.42, 387.89 ms`。这些数字用于复现当前环境，不代表所有机器的性能承诺；复测命令为 `moon run cmd/bench`。
 
 ## 测试与质量门禁
 
-测试覆盖核心模型、边界值、日期闰年、空集合、非法 JSON、迁移告警、容量限制、隐私脱敏、归档去重、动作合并、风险分层、报告格式和确定性 checksum。当前本地 Wasm-GC 目标为 **50 个测试全部通过**。
+测试覆盖核心模型、边界值、日期闰年、空集合、非法 JSON、迁移告警、容量限制、隐私脱敏、归档去重、动作合并、风险分层、报告格式、工作流门禁和确定性 checksum。当前本地 native 与 Wasm-GC 目标为 **88 个测试全部通过**。
+
+当前生产源码规模为 **75 个 MoonBit 文件、26,038 行非空源码**；其中去除注释后的非空代码行数为 **23,142 行**。统计排除了 `_build`、`*_test.mbt` 和 `*_wbtest.mbt`，CI 使用去除注释后的代码行数执行 20,000 行门禁。
 
 常用命令：
 
@@ -107,7 +112,7 @@ moon test --target wasm-gc --deny-warn
 
 ## CI
 
-GitHub Actions 在 Ubuntu、macOS、Windows 上执行格式检查、`moon info` 接口检查、`moon check --target all --deny-warn` 和 `moon test --target all --deny-warn`；Linux 额外生成覆盖率并检查生产 MoonBit 源码规模。工具链安装脚本跟随 MoonBit stable，接口生成后的工作树必须保持干净。
+GitHub Actions 在 Ubuntu、macOS、Windows 上执行格式检查、`moon info` 接口检查、`moon check --target all --deny-warn` 和 `moon test --target all --deny-warn`；Linux 额外生成覆盖率并检查不少于 **20,000 行生产 MoonBit 源码**。工具链安装脚本跟随 MoonBit stable，接口生成后的工作树必须保持干净。
 
 ## 许可证
 

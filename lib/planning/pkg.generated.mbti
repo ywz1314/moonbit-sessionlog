@@ -12,25 +12,52 @@ pub fn active_days(TrainingPlan) -> Array[PlanDay]
 
 pub fn adherence_for(TrainingPlan, PlanDay, @core.Session) -> Double
 
+pub fn adjustment_text(PlanAdjustment) -> String
+
+pub fn adjustments_by_kind(Array[PlanAdjustment], AdjustmentKind) -> Array[PlanAdjustment]
+
 pub fn completed_target_count(TrainingPlan, PlanDay, @core.Session) -> Int
+
+pub fn default_optimization_options() -> OptimizationOptions
 
 pub fn execute(PlanItem, @core.Movement) -> PlanItemStatus
 
 pub fn execute_day(TrainingPlan, PlanDay, @core.Session) -> Array[PlanItemStatus]
 
+pub fn net_rep_change(Array[PlanAdjustment]) -> Int
+
+pub fn net_set_change(Array[PlanAdjustment]) -> Int
+
 pub fn new_plan(String) -> TrainingPlan
 
 pub fn next_day(TrainingPlan, PlanDay) -> PlanDay
 
+pub fn optimization_safe(Array[PlanAdjustment], Int) -> Bool
+
+pub fn optimization_text(Array[PlanAdjustment]) -> String
+
+pub fn optimize_plan(TrainingPlan, Array[@core.Session], OptimizationOptions) -> Result[Array[PlanAdjustment], String]
+
 pub fn plan_day_from_number(Int) -> PlanDay?
 
 pub fn plan_text(TrainingPlan) -> String
+
+pub fn propose_adjustment(PlanItem, Array[@core.Session], OptimizationOptions) -> PlanAdjustment
 
 pub fn target(String, Int, Int, Int, String, Double, Int, Int) -> ExerciseTarget
 
 // Errors
 
 // Types and methods
+pub(all) enum AdjustmentKind {
+  IncreaseVolume
+  DecreaseVolume
+  IncreaseRecovery
+  ReducePainExposure
+  KeepStable
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn AdjustmentKind::label(Self) -> String
+
 pub(all) struct ExerciseTarget {
   movement_name : String
   target_sets : Int
@@ -49,6 +76,35 @@ pub fn ExerciseTarget::resistance(Self) -> String
 pub fn ExerciseTarget::target_hold_time(Self) -> Int
 pub fn ExerciseTarget::target_reps(Self) -> Int
 pub fn ExerciseTarget::target_sets(Self) -> Int
+
+pub(all) struct OptimizationOptions {
+  increase_completion : Double
+  reduce_completion : Double
+  pain_limit : Int
+  maximum_set_change : Int
+  maximum_rep_change : Int
+  minimum_observations : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn OptimizationOptions::validate(Self) -> Array[String]
+
+pub(all) struct PlanAdjustment {
+  movement_name : String
+  kind : AdjustmentKind
+  current_sets : Int
+  proposed_sets : Int
+  current_reps : Int
+  proposed_reps : Int
+  confidence : Double
+  reasons : Array[String]
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn PlanAdjustment::confidence(Self) -> Double
+pub fn PlanAdjustment::current_reps(Self) -> Int
+pub fn PlanAdjustment::current_sets(Self) -> Int
+pub fn PlanAdjustment::kind(Self) -> AdjustmentKind
+pub fn PlanAdjustment::movement_name(Self) -> String
+pub fn PlanAdjustment::proposed_reps(Self) -> Int
+pub fn PlanAdjustment::proposed_sets(Self) -> Int
+pub fn PlanAdjustment::reasons(Self) -> Array[String]
 
 pub(all) enum PlanDay {
   Monday

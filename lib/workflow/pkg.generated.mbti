@@ -1,0 +1,180 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "ywz1314/sessionlog/lib/workflow"
+
+import {
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+  "ywz1314/sessionlog/lib/core",
+  "ywz1314/sessionlog/lib/risk",
+}
+
+// Values
+pub fn case_add_session(WorkflowCase, String) -> WorkflowCase
+
+pub fn case_event_count(WorkflowCase, CaseEvent) -> Int
+
+pub fn case_has_event(WorkflowCase, CaseEvent) -> Bool
+
+pub fn case_is_ready_for_completion(WorkflowCase, CasePolicy) -> Bool
+
+pub fn case_is_ready_for_review(WorkflowCase, CasePolicy) -> Bool
+
+pub fn case_is_stale(WorkflowCase, Int) -> Bool
+
+pub fn case_last_transition(WorkflowCase) -> CaseTransition?
+
+pub fn case_merge(WorkflowCase, WorkflowCase) -> Result[WorkflowCase, String]
+
+pub fn case_next_actions(WorkflowCase, CasePolicy) -> Array[String]
+
+pub fn case_timeline(WorkflowCase) -> Array[String]
+
+pub fn case_timeline_text(WorkflowCase) -> String
+
+pub fn case_transition_count(WorkflowCase) -> Int
+
+pub fn case_with_quality(WorkflowCase, Bool) -> WorkflowCase
+
+pub fn case_with_risk(WorkflowCase, @risk.RiskLevel) -> WorkflowCase
+
+pub fn default_case_policy() -> CasePolicy
+
+pub fn gate_report(WorkflowCase, CasePolicy) -> GateReport
+
+pub fn gate_report_text(GateReport) -> String
+
+pub fn new_case(String, String, String) -> Result[WorkflowCase, String]
+
+pub fn permissive_case_policy() -> CasePolicy
+
+pub fn queue_summary_text(CaseQueueSummary) -> String
+
+pub fn record_session(WorkflowCase, @core.Session, Bool) -> WorkflowCase
+
+pub fn summarize_cases(Array[WorkflowCase], CasePolicy) -> CaseQueueSummary
+
+pub fn transition(WorkflowCase, CaseState, String, String, CasePolicy) -> Result[WorkflowCase, TransitionError]
+
+pub fn transition_error_text(TransitionError) -> String
+
+pub fn transition_text(CaseTransition) -> String
+
+// Errors
+
+// Types and methods
+pub(all) enum CaseEvent {
+  Created
+  SessionRecorded
+  SessionImported
+  RiskRaised
+  QualityBlocked
+  ProgressReviewed
+  PausedByUser
+  ResumedByUser
+  CompletedByUser
+  ArchivedByUser
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn CaseEvent::label(Self) -> String
+
+pub(all) struct CasePolicy {
+  minimum_sessions_for_review : Int
+  require_quality_pass : Bool
+  maximum_review_risk : @risk.RiskLevel
+  require_completion_reason : Bool
+  allow_archive_from_paused : Bool
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn CasePolicy::validate(Self) -> Array[String]
+
+pub(all) struct CaseQueueSummary {
+  total : Int
+  intake : Int
+  active : Int
+  paused : Int
+  review : Int
+  completed : Int
+  archived : Int
+  blocked : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+
+pub(all) enum CaseState {
+  Intake
+  Active
+  Paused
+  Review
+  Completed
+  Archived
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn CaseState::label(Self) -> String
+pub fn CaseState::open(Self) -> Bool
+pub fn CaseState::terminal(Self) -> Bool
+
+pub(all) struct CaseTransition {
+  from : CaseState
+  to : CaseState
+  event : CaseEvent
+  reason : String
+  revision : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn CaseTransition::event(Self) -> CaseEvent
+pub fn CaseTransition::from(Self) -> CaseState
+pub fn CaseTransition::reason(Self) -> String
+pub fn CaseTransition::revision(Self) -> Int
+pub fn CaseTransition::to(Self) -> CaseState
+
+pub(all) struct GateReport {
+  case_id : String
+  state : CaseState
+  ready_for_review : Bool
+  ready_for_completion : Bool
+  quality_passed : Bool
+  risk_acceptable : Bool
+  session_count : Int
+  blockers : Array[String]
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn GateReport::blockers(Self) -> Array[String]
+pub fn GateReport::case_id(Self) -> String
+pub fn GateReport::quality_passed(Self) -> Bool
+pub fn GateReport::ready_for_completion(Self) -> Bool
+pub fn GateReport::ready_for_review(Self) -> Bool
+pub fn GateReport::risk_acceptable(Self) -> Bool
+pub fn GateReport::session_count(Self) -> Int
+pub fn GateReport::state(Self) -> CaseState
+
+pub(all) enum TransitionError {
+  TerminalCase
+  InvalidState
+  MissingReason
+  MissingSession
+  QualityGate
+  RiskGate
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn TransitionError::label(Self) -> String
+pub fn TransitionError::message(Self) -> String
+
+pub(all) struct WorkflowCase {
+  id : String
+  subject_id : String
+  state : CaseState
+  created_date : String
+  updated_date : String
+  session_ids : Array[String]
+  transitions : Array[CaseTransition]
+  last_risk : @risk.RiskLevel
+  quality_passed : Bool
+  revision : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn WorkflowCase::created_date(Self) -> String
+pub fn WorkflowCase::id(Self) -> String
+pub fn WorkflowCase::last_risk(Self) -> @risk.RiskLevel
+pub fn WorkflowCase::quality_passed(Self) -> Bool
+pub fn WorkflowCase::revision(Self) -> Int
+pub fn WorkflowCase::session_count(Self) -> Int
+pub fn WorkflowCase::session_ids(Self) -> Array[String]
+pub fn WorkflowCase::state(Self) -> CaseState
+pub fn WorkflowCase::subject_id(Self) -> String
+pub fn WorkflowCase::transitions(Self) -> Array[CaseTransition]
+pub fn WorkflowCase::updated_date(Self) -> String
+
+// Type aliases
+
+// Traits

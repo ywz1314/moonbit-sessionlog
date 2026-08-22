@@ -5,6 +5,7 @@ import {
   "moonbitlang/core/debug",
   "moonbitlang/core/json",
   "ywz1314/sessionlog/lib/core",
+  "ywz1314/sessionlog/lib/statistics",
 }
 
 // Values
@@ -18,11 +19,47 @@ pub fn below_completion(SessionSeries, Double) -> Array[SeriesPoint]
 
 pub fn best_completion(SessionSeries) -> SeriesPoint?
 
+pub fn change_point_count(Array[ChangePoint]) -> Int
+
+pub fn change_point_text(Array[ChangePoint]) -> String
+
+pub fn change_points(SessionSeries, SeriesMetric, Int, Double) -> Result[Array[ChangePoint], String]
+
+pub fn compare_windows(SeriesWindow, SeriesWindow) -> Double
+
 pub fn completion_delta(SessionSeries) -> Double
 
 pub fn completion_values(SessionSeries) -> Array[Double]
 
 pub fn count(SessionSeries) -> Int
+
+pub fn default_series_export_options() -> SeriesExportOptions
+
+pub fn exponential(SessionSeries, SeriesMetric, Double) -> Result[Array[ExponentialPoint], String]
+
+pub fn exponential_error(Array[ExponentialPoint]) -> Double
+
+pub fn exponential_values(Array[ExponentialPoint]) -> Array[Double]
+
+pub fn export_checksum(SessionSeries) -> Int
+
+pub fn export_csv(SessionSeries, SeriesExportOptions) -> Result[String, String]
+
+pub fn export_header(SeriesExportOptions) -> String
+
+pub fn export_json(SessionSeries) -> String
+
+pub fn export_page(SessionSeries, Int, Int) -> SessionSeries
+
+pub fn export_page_count(SessionSeries, Int) -> Int
+
+pub fn export_point(SeriesPoint, SeriesExportOptions) -> String
+
+pub fn export_rows(SessionSeries) -> Array[Array[String]]
+
+pub fn export_summary(SessionSeries) -> String
+
+pub fn export_window(SessionSeries, Int, Int) -> SessionSeries
 
 pub fn first(SessionSeries) -> SeriesPoint?
 
@@ -36,6 +73,10 @@ pub fn max_completion(SessionSeries) -> Double
 
 pub fn max_pain(SessionSeries) -> Double
 
+pub fn metric_summary(SessionSeries, SeriesMetric) -> @statistics.Summary
+
+pub fn metric_values(SessionSeries, SeriesMetric) -> Array[Double]
+
 pub fn min_completion(SessionSeries) -> Double
 
 pub fn min_pain(SessionSeries) -> Double
@@ -43,6 +84,32 @@ pub fn min_pain(SessionSeries) -> Double
 pub fn pain_delta(SessionSeries) -> Double
 
 pub fn pain_values(SessionSeries) -> Array[Double]
+
+pub fn resample_mean(SessionSeries, SeriesMetric, Int) -> Result[Array[SeriesWindow], String]
+
+pub fn resample_total(SessionSeries, SeriesMetric, Int) -> Result[Array[Double], String]
+
+pub fn rolling(SessionSeries, SeriesMetric, Int) -> Result[RollingSeries, String]
+
+pub fn rolling_anomalies(RollingSeries, Double) -> Array[RollingPoint]
+
+pub fn rolling_declines(RollingSeries) -> Array[RollingPoint]
+
+pub fn rolling_deltas(RollingSeries) -> Array[Double]
+
+pub fn rolling_improvements(RollingSeries) -> Array[RollingPoint]
+
+pub fn rolling_or_empty(SessionSeries, SeriesMetric, Int) -> RollingSeries
+
+pub fn rolling_report(SessionSeries, Int) -> String
+
+pub fn rolling_slope(RollingSeries) -> Double
+
+pub fn rolling_stability(RollingSeries) -> Double
+
+pub fn rolling_text(RollingSeries) -> String
+
+pub fn rolling_values(RollingSeries) -> Array[Double]
 
 pub fn select(SessionSeries, String, String) -> SessionSeries
 
@@ -54,6 +121,12 @@ pub fn total_reps(SessionSeries) -> Int
 
 pub fn total_work_units(SessionSeries) -> Int
 
+pub fn window_means(Array[SeriesWindow]) -> Array[Double]
+
+pub fn window_text(Array[SeriesWindow]) -> String
+
+pub fn windows(SessionSeries, SeriesMetric, Int) -> Result[Array[SeriesWindow], String]
+
 pub fn work_delta(SessionSeries) -> Int
 
 pub fn work_values(SessionSeries) -> Array[Int]
@@ -61,6 +134,94 @@ pub fn work_values(SessionSeries) -> Array[Int]
 // Errors
 
 // Types and methods
+pub(all) struct ChangePoint {
+  index : Int
+  date : String
+  session_id : String
+  before_mean : Double
+  after_mean : Double
+  change : Double
+  direction : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn ChangePoint::after_mean(Self) -> Double
+pub fn ChangePoint::before_mean(Self) -> Double
+pub fn ChangePoint::change(Self) -> Double
+pub fn ChangePoint::date(Self) -> String
+pub fn ChangePoint::direction(Self) -> String
+pub fn ChangePoint::index(Self) -> Int
+pub fn ChangePoint::session_id(Self) -> String
+
+pub(all) struct ExponentialPoint {
+  index : Int
+  date : String
+  session_id : String
+  metric : SeriesMetric
+  value : Double
+  smoothed : Double
+  residual : Double
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn ExponentialPoint::date(Self) -> String
+pub fn ExponentialPoint::index(Self) -> Int
+pub fn ExponentialPoint::metric(Self) -> SeriesMetric
+pub fn ExponentialPoint::residual(Self) -> Double
+pub fn ExponentialPoint::session_id(Self) -> String
+pub fn ExponentialPoint::smoothed(Self) -> Double
+pub fn ExponentialPoint::value(Self) -> Double
+
+pub(all) struct RollingPoint {
+  index : Int
+  date : String
+  session_id : String
+  metric : SeriesMetric
+  value : Double
+  window_size : Int
+  window_mean : Double
+  window_median : Double
+  window_min : Double
+  window_max : Double
+  window_stddev : Double
+  delta : Double
+  z_score : Double
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn RollingPoint::date(Self) -> String
+pub fn RollingPoint::delta(Self) -> Double
+pub fn RollingPoint::index(Self) -> Int
+pub fn RollingPoint::metric(Self) -> SeriesMetric
+pub fn RollingPoint::session_id(Self) -> String
+pub fn RollingPoint::value(Self) -> Double
+pub fn RollingPoint::window_max(Self) -> Double
+pub fn RollingPoint::window_mean(Self) -> Double
+pub fn RollingPoint::window_median(Self) -> Double
+pub fn RollingPoint::window_min(Self) -> Double
+pub fn RollingPoint::window_size(Self) -> Int
+pub fn RollingPoint::window_stddev(Self) -> Double
+pub fn RollingPoint::z_score(Self) -> Double
+
+pub(all) struct RollingSeries {
+  metric : SeriesMetric
+  window : Int
+  points : Array[RollingPoint]
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn RollingSeries::metric(Self) -> SeriesMetric
+pub fn RollingSeries::points(Self) -> Array[RollingPoint]
+pub fn RollingSeries::window(Self) -> Int
+
+pub(all) struct SeriesExportOptions {
+  include_header : Bool
+  separator : String
+  precision : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn SeriesExportOptions::validate(Self) -> Array[String]
+
+pub(all) enum SeriesMetric {
+  Reps
+  Work
+  Pain
+  Completion
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn SeriesMetric::label(Self) -> String
+pub fn SeriesMetric::value(Self, SeriesPoint) -> Double
+
 pub(all) struct SeriesPoint {
   date : String
   session_id : String
@@ -75,6 +236,29 @@ pub fn SeriesPoint::date(Self) -> String
 pub fn SeriesPoint::reps(Self) -> Int
 pub fn SeriesPoint::session_id(Self) -> String
 pub fn SeriesPoint::work_units(Self) -> Int
+
+pub(all) struct SeriesWindow {
+  start_index : Int
+  end_index : Int
+  start_date : String
+  end_date : String
+  count : Int
+  mean : Double
+  median : Double
+  minimum : Double
+  maximum : Double
+  total : Double
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn SeriesWindow::count(Self) -> Int
+pub fn SeriesWindow::end_date(Self) -> String
+pub fn SeriesWindow::end_index(Self) -> Int
+pub fn SeriesWindow::maximum(Self) -> Double
+pub fn SeriesWindow::mean(Self) -> Double
+pub fn SeriesWindow::median(Self) -> Double
+pub fn SeriesWindow::minimum(Self) -> Double
+pub fn SeriesWindow::start_date(Self) -> String
+pub fn SeriesWindow::start_index(Self) -> Int
+pub fn SeriesWindow::total(Self) -> Double
 
 pub(all) struct SessionSeries {
   points : Array[SeriesPoint]

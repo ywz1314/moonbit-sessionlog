@@ -1,0 +1,7 @@
+import {
+  "ywz1314/sessionlog/lib/core",
+  "ywz1314/sessionlog/lib/normalization",
+  "ywz1314/sessionlog/lib/retention",
+  "ywz1314/sessionlog/lib/validation",
+  "moonbitlang/core/json",
+}

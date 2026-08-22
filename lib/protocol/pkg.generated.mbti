@@ -1,0 +1,154 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "ywz1314/sessionlog/lib/protocol"
+
+import {
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+  "ywz1314/sessionlog/lib/core",
+  "ywz1314/sessionlog/lib/risk",
+}
+
+// Values
+pub fn evaluate_goals(Protocol, Array[@core.Session]) -> Array[GoalProgress]
+
+pub fn goal(String, String, GoalMetric, Double, Double, String, ProtocolPhase, Int) -> Goal
+
+pub fn goal_met(Goal, Double) -> Bool
+
+pub fn goal_progress(Goal, Double, Double) -> Double
+
+pub fn met_goals(ProtocolReview) -> Array[GoalProgress]
+
+pub fn new_protocol(String, ProtocolPhase) -> Protocol
+
+pub fn next_phase(ProtocolPhase) -> ProtocolPhase
+
+pub fn overdue_goals(ProtocolReview, String) -> Array[GoalProgress]
+
+pub fn previous_phase(ProtocolPhase) -> ProtocolPhase
+
+pub fn progress_summary(ProtocolReview) -> String
+
+pub fn review(Protocol, Array[@core.Session]) -> ProtocolReview
+
+pub fn review_text(ProtocolReview) -> String
+
+pub fn suggested_phase(ProtocolReview) -> ProtocolPhase
+
+pub fn target_distance(Goal, Double) -> Double
+
+pub fn unmet_goals(ProtocolReview) -> Array[GoalProgress]
+
+pub fn value_for(GoalMetric, @core.Session) -> Double
+
+// Errors
+
+// Types and methods
+pub(all) struct Goal {
+  id : String
+  title : String
+  metric : GoalMetric
+  target : Double
+  tolerance : Double
+  deadline : String
+  phase : ProtocolPhase
+  required_observations : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn Goal::deadline(Self) -> String
+pub fn Goal::id(Self) -> String
+pub fn Goal::metric(Self) -> GoalMetric
+pub fn Goal::phase(Self) -> ProtocolPhase
+pub fn Goal::required_observations(Self) -> Int
+pub fn Goal::target(Self) -> Double
+pub fn Goal::title(Self) -> String
+pub fn Goal::tolerance(Self) -> Double
+
+pub(all) enum GoalMetric {
+  PainAfter
+  PainDelta
+  Completion
+  Repetitions
+  WorkUnits
+  Duration
+  Readiness
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn GoalMetric::label(Self) -> String
+pub fn GoalMetric::lower_is_better(Self) -> Bool
+
+pub(all) struct GoalProgress {
+  goal : Goal
+  observations : Int
+  baseline : Double
+  current : Double
+  average : Double
+  progress : Double
+  met : Bool
+  stable : Bool
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn GoalProgress::average(Self) -> Double
+pub fn GoalProgress::baseline(Self) -> Double
+pub fn GoalProgress::current(Self) -> Double
+pub fn GoalProgress::goal(Self) -> Goal
+pub fn GoalProgress::met(Self) -> Bool
+pub fn GoalProgress::observations(Self) -> Int
+pub fn GoalProgress::progress(Self) -> Double
+pub fn GoalProgress::stable(Self) -> Bool
+
+pub(all) struct Protocol {
+  name : String
+  phase : ProtocolPhase
+  goals : Array[Goal]
+  risk_limit : @risk.RiskLevel
+  minimum_sessions : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn Protocol::add_goal(Self, Goal) -> Self
+pub fn Protocol::goal(Self, String) -> Goal?
+pub fn Protocol::goals(Self) -> Array[Goal]
+pub fn Protocol::goals_for_phase(Self, ProtocolPhase) -> Array[Goal]
+pub fn Protocol::minimum_sessions(Self) -> Int
+pub fn Protocol::name(Self) -> String
+pub fn Protocol::phase(Self) -> ProtocolPhase
+pub fn Protocol::remove_goal(Self, String) -> Self
+pub fn Protocol::risk_limit(Self) -> @risk.RiskLevel
+pub fn Protocol::validate(Self) -> Array[String]
+pub fn Protocol::with_minimum_sessions(Self, Int) -> Self
+pub fn Protocol::with_risk_limit(Self, @risk.RiskLevel) -> Self
+
+pub(all) enum ProtocolDecision {
+  Hold
+  Advance
+  Regress
+  Review
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn ProtocolDecision::label(Self) -> String
+
+pub(all) enum ProtocolPhase {
+  Assessment
+  Activation
+  Capacity
+  Function
+  Maintenance
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn ProtocolPhase::label(Self) -> String
+pub fn ProtocolPhase::rank(Self) -> Int
+
+pub(all) struct ProtocolReview {
+  protocol_name : String
+  phase : ProtocolPhase
+  decision : ProtocolDecision
+  risk : @risk.RiskScore
+  goals : Array[GoalProgress]
+  readiness : Double
+  rationale : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn ProtocolReview::decision(Self) -> ProtocolDecision
+pub fn ProtocolReview::goals(Self) -> Array[GoalProgress]
+pub fn ProtocolReview::phase(Self) -> ProtocolPhase
+pub fn ProtocolReview::protocol_name(Self) -> String
+pub fn ProtocolReview::rationale(Self) -> String
+pub fn ProtocolReview::readiness(Self) -> Double
+pub fn ProtocolReview::risk(Self) -> @risk.RiskScore
+
+// Type aliases
+
+// Traits

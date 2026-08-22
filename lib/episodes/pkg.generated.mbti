@@ -1,0 +1,147 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "ywz1314/sessionlog/lib/episodes"
+
+import {
+  "moonbitlang/core/debug",
+  "moonbitlang/core/json",
+  "ywz1314/sessionlog/lib/core",
+}
+
+// Values
+pub fn active(Array[Episode]) -> Episode?
+
+pub fn average_cadence(Array[Episode]) -> Double
+
+pub fn boundary_count(Array[Episode]) -> Int
+
+pub fn boundary_text(Array[Episode]) -> String
+
+pub fn chronological(Array[@core.Session]) -> Array[@core.Session]
+
+pub fn completed(Array[Episode]) -> Array[Episode]
+
+pub fn default_episode_options() -> EpisodeOptions
+
+pub fn episode_for_session(Array[Episode], String) -> Episode?
+
+pub fn episode_index(Array[Episode], String) -> Int?
+
+pub fn episode_text(Array[Episode]) -> String
+
+pub fn episode_window(Episode, String, String) -> Episode?
+
+pub fn flatten(Array[Episode]) -> Array[@core.Session]
+
+pub fn gap_days(@core.Session, @core.Session) -> Int?
+
+pub fn interrupted(Array[Episode]) -> Array[Episode]
+
+pub fn invalid_date_sessions(Array[@core.Session]) -> Array[@core.Session]
+
+pub fn longest_gap(Array[Episode]) -> SessionGap?
+
+pub fn merge(Array[Episode], EpisodeOptions) -> Array[Episode]
+
+pub fn overall_work_units(Array[Episode]) -> Int
+
+pub fn segment(Array[@core.Session], options? : EpisodeOptions) -> Array[Episode]
+
+pub fn segment_valid(Array[@core.Session], options? : EpisodeOptions) -> Array[Episode]
+
+pub fn session_gaps(Array[@core.Session], Int) -> Array[SessionGap]
+
+pub fn session_position(Episode, String) -> Int?
+
+pub fn sessions_in_window(Array[@core.Session], String, String) -> Array[@core.Session]
+
+pub fn sort_by_duration(Array[Episode]) -> Array[Episode]
+
+pub fn sort_by_work(Array[Episode]) -> Array[Episode]
+
+pub fn total_sessions(Array[Episode]) -> Int
+
+pub fn valid_date_sessions(Array[@core.Session]) -> Array[@core.Session]
+
+pub fn validate_options(EpisodeOptions) -> Array[String]
+
+pub fn with_gap_days(EpisodeOptions, Int) -> EpisodeOptions
+
+pub fn with_invalid_dates(EpisodeOptions, Bool) -> EpisodeOptions
+
+pub fn with_minimum_sessions(EpisodeOptions, Int) -> EpisodeOptions
+
+pub fn with_stable_pain_delta(EpisodeOptions, Int) -> EpisodeOptions
+
+// Errors
+
+// Types and methods
+pub(all) struct Episode {
+  id : String
+  sessions : Array[@core.Session]
+  gaps : Array[SessionGap]
+  start_date : String
+  end_date : String
+  total_work_units : Int
+  average_pain : Double
+  average_completion : Double
+  cadence_per_week : Double
+  status : EpisodeStatus
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn Episode::average_completion(Self) -> Double
+pub fn Episode::average_pain(Self) -> Double
+pub fn Episode::cadence_per_week(Self) -> Double
+pub fn Episode::completion_change(Self) -> Double
+pub fn Episode::duration_days(Self) -> Int
+pub fn Episode::end_date(Self) -> String
+pub fn Episode::first_session(Self) -> @core.Session?
+pub fn Episode::gaps(Self) -> Array[SessionGap]
+pub fn Episode::has_boundary(Self) -> Bool
+pub fn Episode::id(Self) -> String
+pub fn Episode::last_session(Self) -> @core.Session?
+pub fn Episode::movement_names(Self) -> Array[String]
+pub fn Episode::pain_change(Self) -> Int
+pub fn Episode::session_count(Self) -> Int
+pub fn Episode::sessions(Self) -> Array[@core.Session]
+pub fn Episode::start_date(Self) -> String
+pub fn Episode::status(Self) -> EpisodeStatus
+pub fn Episode::summary(Self) -> String
+pub fn Episode::total_work_units(Self) -> Int
+
+pub(all) struct EpisodeOptions {
+  gap_days : Int
+  minimum_sessions : Int
+  include_invalid_dates : Bool
+  stable_pain_delta : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn EpisodeOptions::gap_days(Self) -> Int
+pub fn EpisodeOptions::include_invalid_dates(Self) -> Bool
+pub fn EpisodeOptions::minimum_sessions(Self) -> Int
+pub fn EpisodeOptions::stable_pain_delta(Self) -> Int
+
+pub(all) enum EpisodeStatus {
+  Emerging
+  Active
+  Stable
+  Interrupted
+  Completed
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn EpisodeStatus::label(Self) -> String
+
+pub(all) struct SessionGap {
+  previous_id : String
+  next_id : String
+  previous_date : String
+  next_date : String
+  days : Int
+  boundary : Bool
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn SessionGap::boundary(Self) -> Bool
+pub fn SessionGap::days(Self) -> Int
+pub fn SessionGap::next_date(Self) -> String
+pub fn SessionGap::next_id(Self) -> String
+pub fn SessionGap::previous_date(Self) -> String
+pub fn SessionGap::previous_id(Self) -> String
+
+// Type aliases
+
+// Traits

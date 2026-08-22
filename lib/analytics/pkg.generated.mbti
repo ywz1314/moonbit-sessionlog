@@ -14,6 +14,8 @@ pub fn average_session_duration(Array[@core.Session]) -> Double
 
 pub fn best_completion_session(Array[@core.Session]) -> @core.Session?
 
+pub fn bootstrap_like_delta(Array[Double], Int) -> Array[Double]
+
 pub fn classify_recovery(@core.Session, AnalyticsOptions) -> RecoveryStatus
 
 pub fn compare_completion(@core.Session, @core.Session) -> Double
@@ -26,11 +28,25 @@ pub fn completion_target_met(@core.Session, options? : AnalyticsOptions) -> Bool
 
 pub fn default_analytics_options() -> AnalyticsOptions
 
+pub fn degree(MovementNetwork, String) -> Int
+
+pub fn effect_size(Array[@core.Session], Array[@core.Session]) -> Double
+
+pub fn improving_trajectories(Array[MovementTrajectory]) -> Array[MovementTrajectory]
+
+pub fn isolated_nodes(MovementNetwork) -> Array[MovementNode]
+
 pub fn longest_ready_streak(Array[@core.Session], options? : AnalyticsOptions) -> Int
 
 pub fn lowest_pain_session(Array[@core.Session]) -> @core.Session?
 
 pub fn merge_by_id(Array[@core.Session], Array[@core.Session]) -> Array[@core.Session]
+
+pub fn movement_network(Array[@core.Session]) -> MovementNetwork
+
+pub fn movement_trajectories(Array[@core.Session]) -> Array[MovementTrajectory]
+
+pub fn movement_transition_counts(Array[@core.Session]) -> Array[((String, String), Int)]
 
 pub fn moving_average(Array[Double], Int) -> Array[Double]
 
@@ -38,7 +54,29 @@ pub fn moving_average_completion(Array[@core.Session], Int) -> Array[Double]
 
 pub fn moving_average_pain(Array[@core.Session], Int) -> Array[Double]
 
+pub fn neighbors(MovementNetwork, String) -> Array[(String, Int)]
+
+pub fn network_checksum(MovementNetwork) -> Int
+
+pub fn network_components(MovementNetwork) -> Array[Array[String]]
+
+pub fn network_density(MovementNetwork) -> Double
+
+pub fn network_edge(MovementNetwork, String, String) -> MovementEdge?
+
+pub fn network_node(MovementNetwork, String) -> MovementNode?
+
+pub fn network_report(Array[@core.Session]) -> String
+
+pub fn network_text(MovementNetwork) -> String
+
 pub fn pain_improved(@core.Session, options? : AnalyticsOptions) -> Bool
+
+pub fn participant_count(Array[@core.Session]) -> Int
+
+pub fn period_compare(Array[@core.Session], Array[@core.Session]) -> (Double, Double, Double)
+
+pub fn population_text(PopulationSummary) -> String
 
 pub fn readiness_score(@core.Session, AnalyticsOptions) -> Int
 
@@ -54,9 +92,23 @@ pub fn sessions_with_flag(Array[@core.Session], String, options? : AnalyticsOpti
 
 pub fn snapshot(@core.Session, options? : AnalyticsOptions) -> DailySnapshot
 
+pub fn stalled_trajectories(Array[MovementTrajectory], tolerance? : Double) -> Array[MovementTrajectory]
+
+pub fn summarize_population(Array[@core.Session], completion_target? : Double) -> PopulationSummary
+
+pub fn top_edges(MovementNetwork, Int) -> Array[MovementEdge]
+
+pub fn top_nodes(MovementNetwork, Int) -> Array[MovementNode]
+
 pub fn total_work_units(Array[@core.Session]) -> Int
 
+pub fn trajectory_text(Array[MovementTrajectory]) -> String
+
 pub fn unique_session_ids(Array[@core.Session]) -> Array[String]
+
+pub fn weighted_degree(MovementNetwork, String) -> Int
+
+pub fn worsening_trajectories(Array[MovementTrajectory]) -> Array[MovementTrajectory]
 
 // Errors
 
@@ -93,6 +145,99 @@ pub fn DailySnapshot::session_id(Self) -> String
 pub fn DailySnapshot::total_reps(Self) -> Int
 pub fn DailySnapshot::total_sets(Self) -> Int
 pub fn DailySnapshot::work_units(Self) -> Int
+
+pub(all) struct MovementEdge {
+  left : String
+  right : String
+  weight : Int
+  shared_sessions : Int
+  first_seen : String
+  last_seen : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn MovementEdge::first_seen(Self) -> String
+pub fn MovementEdge::last_seen(Self) -> String
+pub fn MovementEdge::left(Self) -> String
+pub fn MovementEdge::right(Self) -> String
+pub fn MovementEdge::shared_sessions(Self) -> Int
+pub fn MovementEdge::weight(Self) -> Int
+
+pub(all) struct MovementNetwork {
+  nodes : Array[MovementNode]
+  edges : Array[MovementEdge]
+  session_count : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn MovementNetwork::edges(Self) -> Array[MovementEdge]
+pub fn MovementNetwork::nodes(Self) -> Array[MovementNode]
+pub fn MovementNetwork::session_count(Self) -> Int
+
+pub(all) struct MovementNode {
+  name : String
+  session_count : Int
+  occurrence_count : Int
+  total_sets : Int
+  total_reps : Int
+  average_pain : Double
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn MovementNode::average_pain(Self) -> Double
+pub fn MovementNode::name(Self) -> String
+pub fn MovementNode::occurrence_count(Self) -> Int
+pub fn MovementNode::session_count(Self) -> Int
+pub fn MovementNode::total_reps(Self) -> Int
+pub fn MovementNode::total_sets(Self) -> Int
+
+pub(all) struct MovementTrajectory {
+  movement_name : String
+  observations : Int
+  first_completion : Double
+  last_completion : Double
+  completion_change : Double
+  first_pain : Double
+  last_pain : Double
+  pain_change : Double
+  work_units : Int
+  completion_trend : Double
+  pain_trend : Double
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn MovementTrajectory::completion_change(Self) -> Double
+pub fn MovementTrajectory::completion_trend(Self) -> Double
+pub fn MovementTrajectory::first_completion(Self) -> Double
+pub fn MovementTrajectory::first_pain(Self) -> Double
+pub fn MovementTrajectory::last_completion(Self) -> Double
+pub fn MovementTrajectory::last_pain(Self) -> Double
+pub fn MovementTrajectory::movement_name(Self) -> String
+pub fn MovementTrajectory::observations(Self) -> Int
+pub fn MovementTrajectory::pain_change(Self) -> Double
+pub fn MovementTrajectory::pain_trend(Self) -> Double
+pub fn MovementTrajectory::work_units(Self) -> Int
+
+pub(all) struct PopulationSummary {
+  session_count : Int
+  participant_count : Int
+  total_reps : Int
+  total_work_units : Int
+  mean_pain : Double
+  median_pain : Double
+  mean_completion : Double
+  median_completion : Double
+  pain_improved_percent : Double
+  completion_target_percent : Double
+  mean_duration : Double
+  pain_trend : Double
+  completion_trend : Double
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn PopulationSummary::completion_target_percent(Self) -> Double
+pub fn PopulationSummary::completion_trend(Self) -> Double
+pub fn PopulationSummary::mean_completion(Self) -> Double
+pub fn PopulationSummary::mean_duration(Self) -> Double
+pub fn PopulationSummary::mean_pain(Self) -> Double
+pub fn PopulationSummary::median_completion(Self) -> Double
+pub fn PopulationSummary::median_pain(Self) -> Double
+pub fn PopulationSummary::pain_improved_percent(Self) -> Double
+pub fn PopulationSummary::pain_trend(Self) -> Double
+pub fn PopulationSummary::participant_count(Self) -> Int
+pub fn PopulationSummary::session_count(Self) -> Int
+pub fn PopulationSummary::total_reps(Self) -> Int
+pub fn PopulationSummary::total_work_units(Self) -> Int
 
 pub(all) enum RecoveryStatus {
   Ready

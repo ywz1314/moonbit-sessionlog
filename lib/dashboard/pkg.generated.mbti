@@ -4,17 +4,66 @@ package "ywz1314/sessionlog/lib/dashboard"
 import {
   "moonbitlang/core/debug",
   "moonbitlang/core/json",
+  "ywz1314/sessionlog/lib/analytics",
   "ywz1314/sessionlog/lib/core",
 }
 
 // Values
 pub fn build(Array[@core.Session]) -> Dashboard
 
+pub fn build_dashboard(String, String, Array[@core.Session], PanelFilter) -> PanelDashboard
+
+pub fn card_from_summary(@analytics.TrendReport) -> Array[MetricCard]
+
 pub fn compare(Dashboard, Dashboard) -> (Int, Int, Int, Double)
+
+pub fn completion_heatmap(Array[@core.Session]) -> Array[HeatCell]
+
+pub fn dashboard_panel(PanelDashboard, String) -> DashboardPanel?
+
+pub fn dashboard_panel_ids(PanelDashboard) -> Array[String]
+
+pub fn dashboard_text(PanelDashboard) -> String
+
+pub fn dashboard_warning_count(PanelDashboard) -> Int
 
 pub fn empty() -> Dashboard
 
+pub fn empty_filter() -> PanelFilter
+
+pub fn filter_add_tag(PanelFilter, String) -> PanelFilter
+
+pub fn filter_completion(PanelFilter, Double) -> PanelFilter
+
+pub fn filter_dates(PanelFilter, String, String) -> PanelFilter
+
+pub fn filter_matches(PanelFilter, @core.Session) -> Bool
+
+pub fn filter_movement(PanelFilter, String) -> PanelFilter
+
+pub fn filter_pain(PanelFilter, Int) -> PanelFilter
+
+pub fn filter_sessions(PanelFilter, Array[@core.Session]) -> Array[@core.Session]
+
+pub fn filter_text(PanelFilter) -> String
+
+pub fn heatmap_extrema(Array[HeatCell]) -> (HeatCell?, HeatCell?)
+
+pub fn heatmap_text(Array[HeatCell]) -> String
+
 pub fn is_improving(Dashboard) -> Bool
+
+pub fn metric_card(String, String, String, String, String, String, String) -> MetricCard
+
+pub fn pain_heatmap(Array[@core.Session]) -> Array[HeatCell]
+
+pub fn panel(String, PanelKind, String, String, PanelFilter) -> DashboardPanel
+
+pub fn panel_add_warning(DashboardPanel, String) -> DashboardPanel
+
+pub fn panel_with_cards(DashboardPanel, Array[MetricCard]) -> DashboardPanel
+
+pub fn panel_with_rows(DashboardPanel, Array[Array[String]]) -> DashboardPanel
 
 pub fn status(Dashboard) -> String
 
@@ -49,6 +98,92 @@ pub fn Dashboard::risk_score(Self) -> Int
 pub fn Dashboard::session_count(Self) -> Int
 pub fn Dashboard::total_reps(Self) -> Int
 pub fn Dashboard::total_work_units(Self) -> Int
+
+pub(all) struct DashboardPanel {
+  id : String
+  kind : PanelKind
+  title : String
+  subtitle : String
+  filter : PanelFilter
+  cards : Array[MetricCard]
+  rows : Array[Array[String]]
+  warnings : Array[String]
+  order : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn DashboardPanel::cards(Self) -> Array[MetricCard]
+pub fn DashboardPanel::filter(Self) -> PanelFilter
+pub fn DashboardPanel::id(Self) -> String
+pub fn DashboardPanel::kind(Self) -> PanelKind
+pub fn DashboardPanel::order(Self) -> Int
+pub fn DashboardPanel::rows(Self) -> Array[Array[String]]
+pub fn DashboardPanel::subtitle(Self) -> String
+pub fn DashboardPanel::title(Self) -> String
+pub fn DashboardPanel::warnings(Self) -> Array[String]
+
+pub(all) struct HeatCell {
+  key : String
+  value : Double
+  count : Int
+  level : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn HeatCell::count(Self) -> Int
+pub fn HeatCell::key(Self) -> String
+pub fn HeatCell::level(Self) -> String
+pub fn HeatCell::value(Self) -> Double
+
+pub(all) struct MetricCard {
+  key : String
+  label : String
+  value : String
+  unit : String
+  status : String
+  delta : String
+  description : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn MetricCard::delta(Self) -> String
+pub fn MetricCard::description(Self) -> String
+pub fn MetricCard::key(Self) -> String
+pub fn MetricCard::label(Self) -> String
+pub fn MetricCard::status(Self) -> String
+pub fn MetricCard::unit(Self) -> String
+pub fn MetricCard::value(Self) -> String
+
+pub(all) struct PanelDashboard {
+  title : String
+  generated_for : String
+  filter : PanelFilter
+  panels : Array[DashboardPanel]
+  session_count : Int
+  warning_count : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn PanelDashboard::filter(Self) -> PanelFilter
+pub fn PanelDashboard::generated_for(Self) -> String
+pub fn PanelDashboard::panels(Self) -> Array[DashboardPanel]
+pub fn PanelDashboard::session_count(Self) -> Int
+pub fn PanelDashboard::title(Self) -> String
+pub fn PanelDashboard::warning_count(Self) -> Int
+
+pub(all) struct PanelFilter {
+  start_date : String
+  end_date : String
+  movement : String?
+  pain_at_least : Int?
+  minimum_completion : Double?
+  tags : Array[String]
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+
+pub(all) enum PanelKind {
+  Overview
+  Trend
+  Risk
+  Quality
+  Alerts
+  Forecast
+  Workload
+  Table
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn PanelKind::label(Self) -> String
+pub fn PanelKind::priority(Self) -> Int
 
 // Type aliases
 

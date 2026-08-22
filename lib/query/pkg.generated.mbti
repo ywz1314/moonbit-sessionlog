@@ -10,6 +10,10 @@ import {
 // Values
 pub fn average_pain(Array[@core.Session], SessionQuery) -> Double
 
+pub fn bottom_by(Array[@core.Session], Int, SortField) -> Array[@core.Session]
+
+pub fn build_facets(Array[@core.Session]) -> QueryFacetReport
+
 pub fn by_completion(SessionQuery, Double, Double) -> SessionQuery
 
 pub fn by_date_range(SessionQuery, String, String) -> SessionQuery
@@ -18,11 +22,37 @@ pub fn by_movement(SessionQuery, String) -> SessionQuery
 
 pub fn by_pain(SessionQuery, Int, Int) -> SessionQuery
 
+pub fn completion_band_facet(Array[@core.Session]) -> FacetSet
+
 pub fn count(Array[@core.Session], SessionQuery) -> Int
+
+pub fn cursor_page(Array[@core.Session], String, Int) -> CursorPage
+
+pub fn date_facet(Array[@core.Session]) -> FacetSet
+
+pub fn date_histogram(Array[@core.Session]) -> Array[(String, Int)]
+
+pub fn deduplicate_by_id(Array[@core.Session]) -> Array[@core.Session]
 
 pub fn describe(SessionQuery) -> String
 
+pub fn duration_band_facet(Array[@core.Session], Int) -> FacetSet
+
 pub fn empty_query() -> SessionQuery
+
+pub fn facet_count(FacetSet, String) -> Int
+
+pub fn facet_filter(FacetSet, Int) -> FacetSet
+
+pub fn facet_keys(FacetSet) -> Array[String]
+
+pub fn facet_report_text(QueryFacetReport) -> String
+
+pub fn facet_text(FacetSet) -> String
+
+pub fn facet_top(FacetSet, Int) -> Array[FacetBucket]
+
+pub fn facet_with_selection(FacetSet, String) -> FacetSet
 
 pub fn filter(Array[@core.Session], SessionQuery) -> Array[@core.Session]
 
@@ -32,13 +62,45 @@ pub fn group_by_movement(Array[@core.Session], SessionQuery) -> Array[(String, I
 
 pub fn ids(Array[@core.Session], SessionQuery) -> Array[String]
 
+pub fn latest_by_id(Array[@core.Session]) -> Array[@core.Session]
+
 pub fn matches(SessionQuery, @core.Session) -> Bool
+
+pub fn movement_facet(Array[@core.Session]) -> FacetSet
+
+pub fn movement_histogram(Array[@core.Session]) -> Array[(String, Int)]
+
+pub fn paginate(Array[@core.Session], Int, Int) -> Page
+
+pub fn paginate_sorted(Array[@core.Session], Int, Int, SortSpec) -> Page
+
+pub fn pain_band_facet(Array[@core.Session], Int) -> FacetSet
+
+pub fn pain_histogram(Array[@core.Session]) -> Array[(Int, Int)]
+
+pub fn query_text(SessionQuery, Array[@core.Session]) -> String
+
+pub fn search_tag(Array[@core.Session], String) -> Array[@core.Session]
+
+pub fn search_text(Array[@core.Session], String) -> Array[@core.Session]
+
+pub fn sort(Array[@core.Session], SortSpec) -> Array[@core.Session]
 
 pub fn sort_by_completion(Array[@core.Session]) -> Array[@core.Session]
 
 pub fn sort_by_date(Array[@core.Session]) -> Array[@core.Session]
 
 pub fn sort_by_pain(Array[@core.Session]) -> Array[@core.Session]
+
+pub fn sort_spec(SortField, Bool) -> SortSpec
+
+pub fn stable_cursor(Array[@core.Session], Page) -> String
+
+pub fn stats(Array[@core.Session]) -> QueryStats
+
+pub fn tag_facet(Array[@core.Session]) -> FacetSet
+
+pub fn top_by(Array[@core.Session], Int, SortField) -> Array[@core.Session]
 
 pub fn total_reps(Array[@core.Session], SessionQuery) -> Int
 
@@ -47,6 +109,87 @@ pub fn valid_only(SessionQuery) -> SessionQuery
 // Errors
 
 // Types and methods
+pub(all) struct CursorPage {
+  items : Array[@core.Session]
+  next_cursor : String
+  has_next : Bool
+  total : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn CursorPage::has_next(Self) -> Bool
+pub fn CursorPage::items(Self) -> Array[@core.Session]
+pub fn CursorPage::next_cursor(Self) -> String
+pub fn CursorPage::total(Self) -> Int
+
+pub(all) struct FacetBucket {
+  key : String
+  count : Int
+  percentage : Double
+  first_date : String
+  last_date : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn FacetBucket::count(Self) -> Int
+pub fn FacetBucket::first_date(Self) -> String
+pub fn FacetBucket::key(Self) -> String
+pub fn FacetBucket::last_date(Self) -> String
+pub fn FacetBucket::percentage(Self) -> Double
+
+pub(all) struct FacetSet {
+  total : Int
+  buckets : Array[FacetBucket]
+  selected : String?
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn FacetSet::buckets(Self) -> Array[FacetBucket]
+pub fn FacetSet::selected(Self) -> String?
+pub fn FacetSet::total(Self) -> Int
+
+pub(all) struct Page {
+  items : Array[@core.Session]
+  offset : Int
+  limit : Int
+  total : Int
+  has_next : Bool
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn Page::has_next(Self) -> Bool
+pub fn Page::items(Self) -> Array[@core.Session]
+pub fn Page::limit(Self) -> Int
+pub fn Page::next_offset(Self) -> Int
+pub fn Page::offset(Self) -> Int
+pub fn Page::total(Self) -> Int
+
+pub(all) struct QueryFacetReport {
+  date : FacetSet
+  pain : FacetSet
+  duration : FacetSet
+  completion : FacetSet
+  movement : FacetSet
+  tags : FacetSet
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn QueryFacetReport::completion(Self) -> FacetSet
+pub fn QueryFacetReport::date(Self) -> FacetSet
+pub fn QueryFacetReport::duration(Self) -> FacetSet
+pub fn QueryFacetReport::movement(Self) -> FacetSet
+pub fn QueryFacetReport::pain(Self) -> FacetSet
+pub fn QueryFacetReport::tags(Self) -> FacetSet
+
+pub(all) struct QueryStats {
+  count : Int
+  total_reps : Int
+  total_work_units : Int
+  mean_pain : Double
+  median_pain : Double
+  mean_completion : Double
+  valid_count : Int
+  invalid_count : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn QueryStats::count(Self) -> Int
+pub fn QueryStats::invalid_count(Self) -> Int
+pub fn QueryStats::mean_completion(Self) -> Double
+pub fn QueryStats::mean_pain(Self) -> Double
+pub fn QueryStats::median_pain(Self) -> Double
+pub fn QueryStats::total_reps(Self) -> Int
+pub fn QueryStats::total_work_units(Self) -> Int
+pub fn QueryStats::valid_count(Self) -> Int
+
 pub(all) struct SessionQuery {
   mut id_contains : String
   mut date_from : String
@@ -59,6 +202,24 @@ pub(all) struct SessionQuery {
   mut minimum_duration : Int
   mut valid_only : Bool
 } derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+
+pub(all) enum SortField {
+  Date
+  Id
+  Pain
+  Completion
+  Duration
+  WorkUnits
+  Repetitions
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn SortField::label(Self) -> String
+
+pub(all) struct SortSpec {
+  field : SortField
+  descending : Bool
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn SortSpec::descending(Self) -> Bool
+pub fn SortSpec::field(Self) -> SortField
 
 // Type aliases
 

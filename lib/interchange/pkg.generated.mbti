@@ -8,6 +8,10 @@ import {
 }
 
 // Values
+pub fn default_stream_options() -> StreamOptions
+
+pub fn ingest_stream(String, StreamOptions) -> Result[StreamReport, String]
+
 pub fn parse_json_lines(String) -> (Array[@core.Session], Array[String])
 
 pub fn parse_row(String) -> Result[SessionRow, String]
@@ -25,6 +29,20 @@ pub fn rows_to_json(Array[SessionRow]) -> String
 pub fn rows_to_tsv(Array[SessionRow]) -> String
 
 pub fn session_json_lines(Array[@core.Session]) -> String
+
+pub fn stream_chunks(String, StreamOptions) -> Result[Array[StreamChunk], String]
+
+pub fn stream_error_codes(StreamReport) -> Array[String]
+
+pub fn stream_options(chunk_size? : Int, reject_empty_id? : Bool, deduplicate? : Bool, maximum_errors? : Int) -> StreamOptions
+
+pub fn stream_partition(StreamReport) -> (@core.Session, Array[String])
+
+pub fn stream_report_text(StreamReport) -> String
+
+pub fn stream_success_rate(StreamReport) -> Double
+
+pub fn stream_to_json_lines(StreamReport) -> String
 
 // Errors
 
@@ -49,6 +67,40 @@ pub fn SessionRow::pain_after(Self) -> Int
 pub fn SessionRow::pain_before(Self) -> Int
 pub fn SessionRow::total_reps(Self) -> Int
 pub fn SessionRow::total_sets(Self) -> Int
+
+pub(all) struct StreamChunk {
+  index : Int
+  line_count : Int
+  accepted : Array[@core.Session]
+  errors : Array[String]
+  complete : Bool
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn StreamChunk::accepted(Self) -> Array[@core.Session]
+pub fn StreamChunk::complete(Self) -> Bool
+pub fn StreamChunk::errors(Self) -> Array[String]
+pub fn StreamChunk::index(Self) -> Int
+pub fn StreamChunk::line_count(Self) -> Int
+
+pub(all) struct StreamOptions {
+  chunk_size : Int
+  reject_empty_id : Bool
+  deduplicate : Bool
+  maximum_errors : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn StreamOptions::validate(Self) -> Array[String]
+
+pub(all) struct StreamReport {
+  chunks : Int
+  lines : Int
+  accepted : Array[@core.Session]
+  errors : Array[String]
+  complete : Bool
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn StreamReport::accepted(Self) -> Array[@core.Session]
+pub fn StreamReport::chunks(Self) -> Int
+pub fn StreamReport::complete(Self) -> Bool
+pub fn StreamReport::errors(Self) -> Array[String]
+pub fn StreamReport::lines(Self) -> Int
 
 // Type aliases
 

@@ -8,21 +8,63 @@ import {
 }
 
 // Values
+pub fn affected_session_ids(Array[QualityIssue]) -> Array[String]
+
+pub fn assess_quality(@core.Session, String) -> QualityAssessment
+
+pub fn assess_quality_many(Array[@core.Session], String) -> Array[QualityAssessment]
+
+pub fn assessment_text(QualityAssessment) -> String
+
 pub fn average_score(Array[@core.Session]) -> Double
+
+pub fn blocking(Array[QualityIssue]) -> Array[QualityIssue]
 
 pub fn duplicate_movement_names(@core.Session) -> Array[String]
 
 pub fn empty_resistance_count(@core.Session) -> Int
 
+pub fn errors(Array[QualityIssue]) -> Array[QualityIssue]
+
+pub fn evaluate_rules(@core.Session) -> Array[QualityIssue]
+
+pub fn for_session(Array[QualityIssue], String) -> Array[QualityIssue]
+
 pub fn grade_counts(Array[@core.Session]) -> (Int, Int, Int, Int)
 
 pub fn invalid_completion_count(@core.Session) -> Int
 
+pub fn issue_text(QualityIssue) -> String
+
+pub fn issues(Array[@core.Session]) -> Array[QualityIssue]
+
+pub fn needs_manual_review(Array[QualityIssue]) -> Bool
+
+pub fn passes(Array[QualityIssue]) -> Bool
+
+pub fn profile(Array[@core.Session]) -> QualityProfile
+
+pub fn profile_text(QualityProfile) -> String
+
+pub fn quality_average(Array[QualityAssessment]) -> Double
+
+pub fn quality_blocked(Array[QualityAssessment]) -> Array[QualityAssessment]
+
+pub fn quality_delta(QualityProfile, QualityProfile) -> (Double, Int, Int)
+
+pub fn quality_dimension_average(Array[QualityAssessment], QualityDimension) -> Double
+
 pub fn quality_failures(Array[@core.Session]) -> Array[@core.Session]
+
+pub fn quality_passed(Array[QualityAssessment]) -> Array[QualityAssessment]
+
+pub fn quality_report_text(Array[QualityAssessment]) -> String
 
 pub fn quality_text(QualityScore) -> String
 
 pub fn quality_warnings(Array[@core.Session]) -> Array[String]
+
+pub fn rule_counts(Array[QualityIssue]) -> Array[(String, Int)]
 
 pub fn score(@core.Session) -> QualityScore
 
@@ -30,11 +72,52 @@ pub fn score_many(Array[@core.Session]) -> Array[QualityScore]
 
 pub fn valid_ratio(Array[@core.Session]) -> Double
 
+pub fn warnings(Array[QualityIssue]) -> Array[QualityIssue]
+
 pub fn zero_duration_count(Array[@core.Session]) -> Int
 
 // Errors
 
 // Types and methods
+pub(all) struct DimensionScore {
+  dimension : QualityDimension
+  score : Double
+  weight : Double
+  passed : Bool
+  reasons : Array[String]
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn DimensionScore::dimension(Self) -> QualityDimension
+pub fn DimensionScore::passed(Self) -> Bool
+pub fn DimensionScore::reasons(Self) -> Array[String]
+pub fn DimensionScore::score(Self) -> Double
+pub fn DimensionScore::weight(Self) -> Double
+
+pub(all) struct QualityAssessment {
+  session_id : String
+  overall : Double
+  dimensions : Array[DimensionScore]
+  passed : Bool
+  blocking : Bool
+  recommendations : Array[String]
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn QualityAssessment::blocking(Self) -> Bool
+pub fn QualityAssessment::dimensions(Self) -> Array[DimensionScore]
+pub fn QualityAssessment::overall(Self) -> Double
+pub fn QualityAssessment::passed(Self) -> Bool
+pub fn QualityAssessment::recommendations(Self) -> Array[String]
+pub fn QualityAssessment::session_id(Self) -> String
+
+pub(all) enum QualityDimension {
+  Identity
+  Date
+  Completeness
+  NumericRange
+  ClinicalContext
+  Consistency
+  Freshness
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn QualityDimension::label(Self) -> String
+
 pub(all) enum QualityGrade {
   Excellent
   Good
@@ -42,6 +125,59 @@ pub(all) enum QualityGrade {
   Poor
 } derive(Eq, ToJson, @debug.Debug, @json.FromJson)
 pub fn QualityGrade::label(Self) -> String
+
+pub(all) struct QualityIssue {
+  rule : QualityRule
+  severity : RuleSeverity
+  session_id : String
+  field : String
+  message : String
+  remediation : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn QualityIssue::field(Self) -> String
+pub fn QualityIssue::message(Self) -> String
+pub fn QualityIssue::remediation(Self) -> String
+pub fn QualityIssue::rule(Self) -> QualityRule
+pub fn QualityIssue::session_id(Self) -> String
+pub fn QualityIssue::severity(Self) -> RuleSeverity
+
+pub(all) struct QualityProfile {
+  session_count : Int
+  issue_count : Int
+  blocking_count : Int
+  error_count : Int
+  warning_count : Int
+  compliance : Double
+  issue_rate : Double
+  top_rules : Array[(String, Int)]
+  sessions_with_issues : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn QualityProfile::blocking_count(Self) -> Int
+pub fn QualityProfile::compliance(Self) -> Double
+pub fn QualityProfile::error_count(Self) -> Int
+pub fn QualityProfile::issue_count(Self) -> Int
+pub fn QualityProfile::issue_rate(Self) -> Double
+pub fn QualityProfile::session_count(Self) -> Int
+pub fn QualityProfile::sessions_with_issues(Self) -> Int
+pub fn QualityProfile::top_rules(Self) -> Array[(String, Int)]
+pub fn QualityProfile::warning_count(Self) -> Int
+
+pub(all) enum QualityRule {
+  RequiredIdentity
+  ValidCalendarDate
+  PositiveDuration
+  CompleteMovement
+  CompleteSet
+  SafePainRange
+  SafeEffortRange
+  CompletionRange
+  NotesForHighPain
+  UniqueMovementNames
+  ResistanceConsistency
+  WorkloadOutlier
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn QualityRule::code(Self) -> String
+pub fn QualityRule::default_severity(Self) -> RuleSeverity
 
 pub(all) struct QualityScore {
   session_id : String
@@ -59,6 +195,15 @@ pub fn QualityScore::score(Self) -> Int
 pub fn QualityScore::session_id(Self) -> String
 pub fn QualityScore::validity(Self) -> Int
 pub fn QualityScore::warnings(Self) -> Array[String]
+
+pub(all) enum RuleSeverity {
+  Info
+  Warning
+  Error
+  Blocking
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn RuleSeverity::label(Self) -> String
+pub fn RuleSeverity::rank(Self) -> Int
 
 // Type aliases
 

@@ -8,7 +8,23 @@ import {
 }
 
 // Values
+pub fn added_fields(CompatibilityReport) -> Array[String]
+
 pub fn canonical_json(String) -> Result[String, String]
+
+pub fn change_text(SchemaChange) -> String
+
+pub fn compare_schema(SchemaDescriptor, SchemaDescriptor) -> Array[SchemaChange]
+
+pub fn compatibility(SchemaDescriptor, SchemaDescriptor) -> CompatibilityReport
+
+pub fn compatibility_direction(CompatibilityReport) -> String
+
+pub fn compatibility_text(CompatibilityReport) -> String
+
+pub fn descriptor(String, String, Array[SchemaField]) -> SchemaDescriptor
+
+pub fn descriptor_deprecate(SchemaDescriptor, Array[String]) -> SchemaDescriptor
 
 pub fn encode_session(@core.Session) -> String
 
@@ -18,6 +34,8 @@ pub fn encode_sessions(Array[@core.Session]) -> String
 
 pub fn encode_sessions_pretty(Array[@core.Session]) -> String
 
+pub fn field(String, String, Bool, Bool, String?, String) -> SchemaField
+
 pub fn has_warnings(MigrationReport) -> Bool
 
 pub fn is_json_array(String) -> Bool
@@ -26,7 +44,21 @@ pub fn is_json_object(String) -> Bool
 
 pub fn migrate_with_report(String) -> Result[(@core.Session, MigrationReport), String]
 
+pub fn migration_auto_steps(MigrationPlan) -> Array[MigrationStep]
+
+pub fn migration_manual_steps(MigrationPlan) -> Array[MigrationStep]
+
+pub fn migration_plan(CompatibilityReport) -> MigrationPlan
+
+pub fn migration_required(CompatibilityReport) -> Bool
+
+pub fn migration_requires_review(MigrationPlan) -> Bool
+
+pub fn migration_safe(MigrationPlan) -> Bool
+
 pub fn migration_summary(MigrationReport) -> String
+
+pub fn migration_text(MigrationPlan) -> String
 
 pub fn migration_warning_codes(MigrationReport) -> Array[String]
 
@@ -38,7 +70,11 @@ pub fn parse_many(Array[String]) -> (Array[@core.Session], Array[String])
 
 pub fn parse_many_strict(Array[String]) -> Result[Array[@core.Session], String]
 
+pub fn removed_fields(CompatibilityReport) -> Array[String]
+
 pub fn round_trip(String) -> Result[String, String]
+
+pub fn schema_checksum(SchemaDescriptor) -> Int
 
 pub fn schema_name(Int) -> String
 
@@ -46,9 +82,50 @@ pub fn schema_version(String) -> Result[Int, String]
 
 pub fn supported_version(Int) -> Bool
 
+pub fn type_changes(CompatibilityReport) -> Array[String]
+
 // Errors
 
 // Types and methods
+pub(all) struct CompatibilityReport {
+  source : SchemaDescriptor
+  target : SchemaDescriptor
+  changes : Array[SchemaChange]
+  compatible : Bool
+  breaking : Array[SchemaChange]
+  safe_changes : Array[SchemaChange]
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn CompatibilityReport::breaking(Self) -> Array[SchemaChange]
+pub fn CompatibilityReport::changes(Self) -> Array[SchemaChange]
+pub fn CompatibilityReport::compatible(Self) -> Bool
+pub fn CompatibilityReport::safe_changes(Self) -> Array[SchemaChange]
+pub fn CompatibilityReport::source(Self) -> SchemaDescriptor
+pub fn CompatibilityReport::target(Self) -> SchemaDescriptor
+
+pub(all) enum MigrationAction {
+  AddDefault
+  Rename
+  Convert
+  DropOptional
+  Review
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn MigrationAction::label(Self) -> String
+
+pub(all) struct MigrationPlan {
+  source_version : String
+  target_version : String
+  steps : Array[MigrationStep]
+  destructive : Bool
+  reversible : Bool
+  checksum : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn MigrationPlan::checksum(Self) -> Int
+pub fn MigrationPlan::destructive(Self) -> Bool
+pub fn MigrationPlan::reversible(Self) -> Bool
+pub fn MigrationPlan::source_version(Self) -> String
+pub fn MigrationPlan::steps(Self) -> Array[MigrationStep]
+pub fn MigrationPlan::target_version(Self) -> String
+
 pub(all) struct MigrationReport {
   source_version : Int
   target_version : Int
@@ -62,6 +139,25 @@ pub fn MigrationReport::source_version(Self) -> Int
 pub fn MigrationReport::target_version(Self) -> Int
 pub fn MigrationReport::warnings(Self) -> Array[MigrationWarning]
 
+pub(all) struct MigrationStep {
+  order : Int
+  field : String
+  action : MigrationAction
+  source_type : String?
+  target_type : String?
+  argument : String?
+  reversible : Bool
+  manual : Bool
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn MigrationStep::action(Self) -> MigrationAction
+pub fn MigrationStep::argument(Self) -> String?
+pub fn MigrationStep::field(Self) -> String
+pub fn MigrationStep::manual(Self) -> Bool
+pub fn MigrationStep::order(Self) -> Int
+pub fn MigrationStep::reversible(Self) -> Bool
+pub fn MigrationStep::source_type(Self) -> String?
+pub fn MigrationStep::target_type(Self) -> String?
+
 pub(all) enum MigrationWarning {
   LegacyVersionAssumed
   EmptyMovementSet
@@ -70,6 +166,56 @@ pub(all) enum MigrationWarning {
   UnsupportedField(String)
 } derive(Eq, ToJson, @debug.Debug, @json.FromJson)
 pub fn MigrationWarning::code(Self) -> String
+
+pub(all) struct SchemaChange {
+  kind : SchemaChangeKind
+  field : String
+  before_type : String?
+  after_type : String?
+  safe : Bool
+  message : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn SchemaChange::after_type(Self) -> String?
+pub fn SchemaChange::before_type(Self) -> String?
+pub fn SchemaChange::field(Self) -> String
+pub fn SchemaChange::kind(Self) -> SchemaChangeKind
+pub fn SchemaChange::message(Self) -> String
+pub fn SchemaChange::safe(Self) -> Bool
+
+pub(all) enum SchemaChangeKind {
+  AddedField
+  RemovedField
+  RenamedField
+  TypeChanged
+  ConstraintChanged
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn SchemaChangeKind::label(Self) -> String
+
+pub(all) struct SchemaDescriptor {
+  name : String
+  version : String
+  fields : Array[SchemaField]
+  deprecated_fields : Array[String]
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn SchemaDescriptor::deprecated_fields(Self) -> Array[String]
+pub fn SchemaDescriptor::fields(Self) -> Array[SchemaField]
+pub fn SchemaDescriptor::name(Self) -> String
+pub fn SchemaDescriptor::version(Self) -> String
+
+pub(all) struct SchemaField {
+  name : String
+  type_name : String
+  required : Bool
+  nullable : Bool
+  default_value : String?
+  description : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn SchemaField::default_value(Self) -> String?
+pub fn SchemaField::description(Self) -> String
+pub fn SchemaField::name(Self) -> String
+pub fn SchemaField::nullable(Self) -> Bool
+pub fn SchemaField::required(Self) -> Bool
+pub fn SchemaField::type_name(Self) -> String
 
 pub(all) struct SessionV1 {
   id : String

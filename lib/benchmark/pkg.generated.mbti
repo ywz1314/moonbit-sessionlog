@@ -10,9 +10,35 @@ import {
 // Values
 pub fn benchmark_case(String, Int, Int, Int) -> BenchmarkCase
 
+pub fn benchmark_gate(Array[MatrixCell]) -> BenchmarkGate
+
+pub fn benchmark_gate_text(BenchmarkGate) -> String
+
 pub fn build_fixture(BenchmarkCase) -> Array[@core.Session]
 
 pub fn checksum(Array[@core.Session]) -> Int
+
+pub fn matrix_by_scale(Array[MatrixCell], Int) -> Array[MatrixCell]
+
+pub fn matrix_cell(BenchmarkProfile, Int) -> Result[MatrixCell, String]
+
+pub fn matrix_checksum(Array[MatrixCell]) -> Int
+
+pub fn matrix_failed(Array[MatrixCell]) -> Array[MatrixCell]
+
+pub fn matrix_passed(Array[MatrixCell]) -> Bool
+
+pub fn matrix_peak_work(Array[MatrixCell]) -> MatrixCell?
+
+pub fn matrix_text(Array[MatrixCell]) -> String
+
+pub fn passed_profiles(Array[ProfileResult]) -> Array[ProfileResult]
+
+pub fn profile(String, String, Int, Int, Int, Int, Array[String]) -> BenchmarkProfile
+
+pub fn profile_case(BenchmarkProfile) -> BenchmarkCase?
+
+pub fn profile_report_text(Array[ProfileResult]) -> String
 
 pub fn result_text(BenchmarkResult) -> String
 
@@ -22,7 +48,17 @@ pub fn run(BenchmarkCase) -> BenchmarkResult
 
 pub fn run_all() -> Array[BenchmarkResult]
 
+pub fn run_matrix(Array[BenchmarkProfile], Array[Int]) -> Array[MatrixCell]
+
+pub fn run_profile(BenchmarkProfile) -> Result[ProfileResult, String]
+
+pub fn run_profiles(Array[BenchmarkProfile]) -> Array[ProfileResult]
+
 pub fn standard_cases() -> Array[BenchmarkCase]
+
+pub fn standard_profiles() -> Array[BenchmarkProfile]
+
+pub fn validate_profile(BenchmarkProfile) -> Array[String]
 
 // Errors
 
@@ -37,6 +73,40 @@ pub fn BenchmarkCase::movement_count(Self) -> Int
 pub fn BenchmarkCase::name(Self) -> String
 pub fn BenchmarkCase::session_count(Self) -> Int
 pub fn BenchmarkCase::sets_per_movement(Self) -> Int
+
+pub(all) struct BenchmarkGate {
+  matrix_count : Int
+  passed_count : Int
+  failed_count : Int
+  total_sessions : Int
+  total_work_units : Int
+  checksum : Int
+  passed : Bool
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn BenchmarkGate::checksum(Self) -> Int
+pub fn BenchmarkGate::failed_count(Self) -> Int
+pub fn BenchmarkGate::matrix_count(Self) -> Int
+pub fn BenchmarkGate::passed(Self) -> Bool
+pub fn BenchmarkGate::passed_count(Self) -> Int
+pub fn BenchmarkGate::total_sessions(Self) -> Int
+pub fn BenchmarkGate::total_work_units(Self) -> Int
+
+pub(all) struct BenchmarkProfile {
+  name : String
+  case_name : String
+  repetitions : Int
+  warmup : Int
+  expected_min_sessions : Int
+  expected_min_movements : Int
+  tags : Array[String]
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn BenchmarkProfile::case_name(Self) -> String
+pub fn BenchmarkProfile::expected_min_movements(Self) -> Int
+pub fn BenchmarkProfile::expected_min_sessions(Self) -> Int
+pub fn BenchmarkProfile::name(Self) -> String
+pub fn BenchmarkProfile::repetitions(Self) -> Int
+pub fn BenchmarkProfile::tags(Self) -> Array[String]
+pub fn BenchmarkProfile::warmup(Self) -> Int
 
 pub(all) struct BenchmarkResult {
   name : String
@@ -56,6 +126,38 @@ pub fn BenchmarkResult::name(Self) -> String
 pub fn BenchmarkResult::session_count(Self) -> Int
 pub fn BenchmarkResult::total_reps(Self) -> Int
 pub fn BenchmarkResult::total_work_units(Self) -> Int
+
+pub(all) struct MatrixCell {
+  profile : String
+  scale : Int
+  session_count : Int
+  movement_count : Int
+  reps : Int
+  work_units : Int
+  checksum : Int
+  passed : Bool
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn MatrixCell::checksum(Self) -> Int
+pub fn MatrixCell::movement_count(Self) -> Int
+pub fn MatrixCell::passed(Self) -> Bool
+pub fn MatrixCell::profile(Self) -> String
+pub fn MatrixCell::reps(Self) -> Int
+pub fn MatrixCell::scale(Self) -> Int
+pub fn MatrixCell::session_count(Self) -> Int
+pub fn MatrixCell::work_units(Self) -> Int
+
+pub(all) struct ProfileResult {
+  profile : BenchmarkProfile
+  result : BenchmarkResult
+  repetitions : Int
+  passed : Bool
+  checks : Array[String]
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn ProfileResult::checks(Self) -> Array[String]
+pub fn ProfileResult::passed(Self) -> Bool
+pub fn ProfileResult::profile(Self) -> BenchmarkProfile
+pub fn ProfileResult::repetitions(Self) -> Int
+pub fn ProfileResult::result(Self) -> BenchmarkResult
 
 // Type aliases
 

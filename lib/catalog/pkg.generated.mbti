@@ -8,11 +8,59 @@ import {
 }
 
 // Values
+pub fn all_allowed(Array[SafetyCheck]) -> Bool
+
+pub fn ambiguous_names(MovementCatalog, Array[String], Int) -> Array[String]
+
+pub fn best_catalog_match(MovementCatalog, String) -> CatalogMatch?
+
+pub fn blocked(Array[SafetyCheck]) -> Array[SafetyCheck]
+
+pub fn catalog_coverage(MovementCatalog, Array[String]) -> CatalogCoverage
+
+pub fn catalog_match(MovementCatalog, String) -> MovementDefinition?
+
+pub fn catalog_region_counts(MovementCatalog) -> Array[(String, Int)]
+
+pub fn catalog_tag_index(MovementCatalog) -> Array[(String, Array[String])]
+
+pub fn check(SafetyProfile, @core.Movement, String) -> SafetyCheck
+
+pub fn check_session(SafetyProfile, @core.Session) -> Array[SafetyCheck]
+
+pub fn check_text(SafetyCheck) -> String
+
+pub fn conservative_profile(String) -> SafetyProfile
+
+pub fn coverage_text(CatalogCoverage) -> String
+
 pub fn definition(String, Array[String], BodyRegion, MovementCategory, Int, Int, Int, String, Array[String]) -> MovementDefinition
+
+pub fn import_plan_safe(CatalogImportPlan, Double) -> Bool
+
+pub fn import_plan_text(CatalogImportPlan) -> String
+
+pub fn match_catalog(MovementCatalog, String) -> Array[CatalogMatch]
+
+pub fn needs_review(Array[SafetyCheck]) -> Array[SafetyCheck]
 
 pub fn new_catalog() -> MovementCatalog
 
+pub fn performance_profile(String) -> SafetyProfile
+
+pub fn plan_catalog_import(MovementCatalog, Array[String], Int) -> CatalogImportPlan
+
+pub fn profile(String, Int, Int, Int, Int, Array[SafetyConstraint], String) -> SafetyProfile
+
+pub fn profile_text(SafetyProfile) -> String
+
 pub fn standard_catalog() -> MovementCatalog
+
+pub fn standard_profile(String) -> SafetyProfile
+
+pub fn unmatched_names(MovementCatalog, Array[String]) -> Array[String]
+
+pub fn violation_counts(Array[SafetyCheck]) -> Array[(String, Int)]
 
 // Errors
 
@@ -26,6 +74,51 @@ pub(all) enum BodyRegion {
   Breathing
 } derive(Eq, ToJson, @debug.Debug, @json.FromJson)
 pub fn BodyRegion::label(Self) -> String
+
+pub(all) struct CatalogCoverage {
+  catalog_size : Int
+  used_names : Int
+  covered_names : Int
+  unused_definitions : Array[String]
+  coverage_percent : Double
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn CatalogCoverage::catalog_size(Self) -> Int
+pub fn CatalogCoverage::coverage_percent(Self) -> Double
+pub fn CatalogCoverage::covered_names(Self) -> Int
+pub fn CatalogCoverage::unused_definitions(Self) -> Array[String]
+pub fn CatalogCoverage::used_names(Self) -> Int
+
+pub(all) struct CatalogImportPlan {
+  input_count : Int
+  matched_count : Int
+  unmatched : Array[String]
+  ambiguous : Array[String]
+  mappings : Array[(String, String, Int)]
+  confidence : Double
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn CatalogImportPlan::ambiguous(Self) -> Array[String]
+pub fn CatalogImportPlan::confidence(Self) -> Double
+pub fn CatalogImportPlan::input_count(Self) -> Int
+pub fn CatalogImportPlan::mappings(Self) -> Array[(String, String, Int)]
+pub fn CatalogImportPlan::matched_count(Self) -> Int
+pub fn CatalogImportPlan::unmatched(Self) -> Array[String]
+
+pub(all) struct CatalogMatch {
+  query : String
+  name : String
+  score : Int
+  exact : Bool
+  alias_match : Bool
+  region : BodyRegion
+  category : MovementCategory
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn CatalogMatch::alias_match(Self) -> Bool
+pub fn CatalogMatch::category(Self) -> MovementCategory
+pub fn CatalogMatch::exact(Self) -> Bool
+pub fn CatalogMatch::name(Self) -> String
+pub fn CatalogMatch::query(Self) -> String
+pub fn CatalogMatch::region(Self) -> BodyRegion
+pub fn CatalogMatch::score(Self) -> Int
 
 pub(all) struct MovementCatalog {
   mut items : Array[MovementDefinition]
@@ -72,6 +165,60 @@ pub fn MovementDefinition::description(Self) -> String
 pub fn MovementDefinition::name(Self) -> String
 pub fn MovementDefinition::region(Self) -> BodyRegion
 pub fn MovementDefinition::tags(Self) -> Array[String]
+
+pub(all) struct SafetyCheck {
+  movement_name : String
+  decision : SafetyDecision
+  violations : Array[String]
+  observed_pain : Int
+  observed_rpe : Int
+  observed_sets : Int
+  observed_reps : Int
+  recommendation : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn SafetyCheck::decision(Self) -> SafetyDecision
+pub fn SafetyCheck::movement_name(Self) -> String
+pub fn SafetyCheck::observed_pain(Self) -> Int
+pub fn SafetyCheck::observed_reps(Self) -> Int
+pub fn SafetyCheck::observed_rpe(Self) -> Int
+pub fn SafetyCheck::observed_sets(Self) -> Int
+pub fn SafetyCheck::recommendation(Self) -> String
+pub fn SafetyCheck::violations(Self) -> Array[String]
+
+pub(all) enum SafetyConstraint {
+  AvoidHighPain
+  AvoidHighEffort
+  LimitVolume
+  RequireWarmup
+  RequireNotes
+  RequireReview
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn SafetyConstraint::label(Self) -> String
+
+pub(all) enum SafetyDecision {
+  Allowed
+  Reduce
+  Review
+  Blocked
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn SafetyDecision::label(Self) -> String
+
+pub(all) struct SafetyProfile {
+  movement_name : String
+  maximum_pain : Int
+  maximum_rpe : Int
+  maximum_sets : Int
+  maximum_reps : Int
+  constraints : Array[SafetyConstraint]
+  rationale : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn SafetyProfile::constraints(Self) -> Array[SafetyConstraint]
+pub fn SafetyProfile::maximum_pain(Self) -> Int
+pub fn SafetyProfile::maximum_reps(Self) -> Int
+pub fn SafetyProfile::maximum_rpe(Self) -> Int
+pub fn SafetyProfile::maximum_sets(Self) -> Int
+pub fn SafetyProfile::movement_name(Self) -> String
+pub fn SafetyProfile::rationale(Self) -> String
 
 // Type aliases
 

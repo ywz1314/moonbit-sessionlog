@@ -10,9 +10,29 @@ import {
 // Values
 pub fn amber_reports(Array[SafetyReport]) -> Array[SafetyReport]
 
+pub fn apply_guardrails(@core.Session, GuardrailPolicy) -> GuardrailResult
+
+pub fn default_guardrail_policy() -> GuardrailPolicy
+
 pub fn evaluate(@core.Session) -> SafetyReport
 
 pub fn evaluate_many(Array[@core.Session]) -> Array[SafetyReport]
+
+pub fn guardrail_blocked(Array[GuardrailResult]) -> Array[GuardrailResult]
+
+pub fn guardrail_decision_counts(Array[GuardrailResult]) -> Array[(String, Int)]
+
+pub fn guardrail_hold(GuardrailResult) -> Bool
+
+pub fn guardrail_many(Array[@core.Session], GuardrailPolicy) -> Array[GuardrailResult]
+
+pub fn guardrail_report_text(Array[GuardrailResult]) -> String
+
+pub fn guardrail_review(Array[GuardrailResult]) -> Array[GuardrailResult]
+
+pub fn guardrail_safe(GuardrailResult) -> Bool
+
+pub fn guardrail_text(GuardrailResult) -> String
 
 pub fn red_reports(Array[SafetyReport]) -> Array[SafetyReport]
 
@@ -23,6 +43,38 @@ pub fn text(SafetyReport) -> String
 // Errors
 
 // Types and methods
+pub(all) enum GuardrailDecision {
+  Allow
+  AllowWithReview
+  Hold
+  Reject
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn GuardrailDecision::label(Self) -> String
+
+pub(all) struct GuardrailPolicy {
+  allow_amber : Bool
+  maximum_red_score : Int
+  require_notes_for_high_pain : Bool
+  maximum_duration : Int
+  maximum_movements : Int
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn GuardrailPolicy::validate(Self) -> Array[String]
+
+pub(all) struct GuardrailResult {
+  session_id : String
+  decision : GuardrailDecision
+  safety : SafetyReport
+  blockers : Array[String]
+  warnings : Array[String]
+  next_action : String
+} derive(Eq, ToJson, @debug.Debug, @json.FromJson)
+pub fn GuardrailResult::blockers(Self) -> Array[String]
+pub fn GuardrailResult::decision(Self) -> GuardrailDecision
+pub fn GuardrailResult::next_action(Self) -> String
+pub fn GuardrailResult::safety(Self) -> SafetyReport
+pub fn GuardrailResult::session_id(Self) -> String
+pub fn GuardrailResult::warnings(Self) -> Array[String]
+
 pub(all) struct SafetyFinding {
   rule : SafetyRule
   level : SafetyLevel
