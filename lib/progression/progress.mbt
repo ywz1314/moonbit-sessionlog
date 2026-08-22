@@ -29,7 +29,7 @@ pub impl Show for ProgressionAdvice with fn output(self, logger) {
   logger.write_string("ProgressionAdvice{")
   logger.write_string("movement_name: " + self.movement_name + ", ")
   logger.write_string("state: ")
-  self.state.output(logger)
+  Show::output(self.state, logger)
   logger.write_string(", reason: " + self.reason + ", ")
   logger.write_string(
     "suggested_reps: " + self.suggested_reps.to_string() + ", ",

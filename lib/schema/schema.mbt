@@ -184,12 +184,12 @@ pub fn schema_name(version : Int) -> String {
 
 ///|
 pub fn encode_session(session : @core.Session) -> String {
-  SessionV2::from_core_session(session).to_json().stringify()
+  ToJson::to_json(SessionV2::from_core_session(session)).stringify()
 }
 
 ///|
 pub fn encode_session_pretty(session : @core.Session) -> String {
-  SessionV2::from_core_session(session).to_json().stringify(indent=2)
+  ToJson::to_json(SessionV2::from_core_session(session)).stringify(indent=2)
 }
 
 ///|
